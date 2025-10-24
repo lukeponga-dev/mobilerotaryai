@@ -1,6 +1,5 @@
 import React from 'react';
 import { DownloadIcon, MenuIcon, RotorIcon } from './icons';
-import ThemeToggle from './ThemeToggle';
 
 interface HeaderProps {
   sessionName: string;
@@ -23,7 +22,6 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <ThemeToggle />
         {onExportPDF && (
           <button
             onClick={onExportPDF}

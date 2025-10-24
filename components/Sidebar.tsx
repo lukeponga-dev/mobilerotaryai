@@ -1,5 +1,6 @@
 import React from 'react';
 import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
+import ThemeToggle from './ThemeToggle';
 
 interface SidebarProps {
   onNewSession: () => void;
@@ -71,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                     </a>
                 ))}
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto pt-2 space-y-1 border-t border-slate-200 dark:border-slate-700/50">
                 <a href="#/privacy" onClick={onToggleSidebar}
                     className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
                         getIsActive('#/privacy') 
@@ -81,6 +82,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                     <ShieldCheckIcon className="w-5 h-5" />
                     <span>Privacy Policy</span>
                 </a>
+                <div className="flex items-center justify-between rounded-md p-2 text-slate-600 dark:text-slate-400">
+                    <span className="text-sm font-medium">Appearance</span>
+                    <ThemeToggle />
+                </div>
             </div>
         </nav>
       </div>
