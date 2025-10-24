@@ -5,6 +5,7 @@ import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext } from './services/geminiService';
 
 declare global {
@@ -200,6 +201,8 @@ const App: React.FC = () => {
                 return <SessionsListPage sessions={sessions} onDeleteSession={handleDeleteSession} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;
             case '#/knowledge':
                 return <KnowledgeBasePage onToggleSidebar={onToggleSidebar} />;
+            case '#/privacy':
+                return <PrivacyPolicyPage onToggleSidebar={onToggleSidebar} />;
             case '#/':
             default:
                 return <DashboardPage sessions={sessions} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;

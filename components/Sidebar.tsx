@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon } from './icons';
+import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
 
 interface SidebarProps {
   onNewSession: () => void;
@@ -57,16 +57,27 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
           </button>
         </div>
 
-        <nav className="flex-1 p-2 space-y-1">
-            {navItems.map(item => (
-                <a href={item.route} key={item.route} onClick={onToggleSidebar}
+        <nav className="flex-1 p-2 flex flex-col">
+            <div className="space-y-1">
+                {navItems.map(item => (
+                    <a href={item.route} key={item.route} onClick={onToggleSidebar}
+                        className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
+                            getIsActive(item.route) ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700/80 hover:text-slate-100'
+                        }`}>
+                        {item.icon}
+                        <span>{item.label}</span>
+                    </a>
+                ))}
+            </div>
+            <div className="mt-auto">
+                <a href="#/privacy" onClick={onToggleSidebar}
                     className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
-                        getIsActive(item.route) ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700/80 hover:text-slate-100'
+                        getIsActive('#/privacy') ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700/80 hover:text-slate-100'
                     }`}>
-                    {item.icon}
-                    <span>{item.label}</span>
+                    <ShieldCheckIcon className="w-5 h-5" />
+                    <span>Privacy Policy</span>
                 </a>
-            ))}
+            </div>
         </nav>
       </div>
     </>

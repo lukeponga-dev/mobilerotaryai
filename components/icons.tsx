@@ -74,6 +74,12 @@ export const HomeIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+export const ShieldCheckIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286Zm0 13.036h.008v.016h-.008v-.016Z" />
+    </svg>
+);
+
 export const RotorIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className || 'w-6 h-6'}>
     <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM9.854 9.175a.75.75 0 0 0 1.06 0 6 6 0 0 1 7.086 7.086.75.75 0 1 0 1.06 1.06 7.5 7.5 0 0 0-8.146-8.146.75.75 0 0 0 0 1.06Zm-2.018-.49a.75.75 0 0 0-1.06 0 7.5 7.5 0 0 0 8.146 8.146.75.75 0 1 0 1.06-1.06 6 6 0 0 1-7.086-7.086.75.75 0 0 0 0-1.06Zm4.31-2.943a.75.75 0 0 0 0 1.06 6 6 0 0 1 7.086 7.086.75.75 0 1 0 1.06 1.06 7.5 7.5 0 0 0-8.146-8.146.75.75 0 0 0-.001 1.061Z" clipRule="evenodd" />
