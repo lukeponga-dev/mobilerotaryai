@@ -1,15 +1,20 @@
-import express from 'express';
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 
-const app = express();
-const port = process.env.PORT || 3000;
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', '');
 
-app.use(express.static(path.join(__dirname, 'dist')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-  });
-
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-    });
+    return {
+        plugins: [react()],
+            define: {
+                  'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+                        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+                            },
+                                resolve: {
+                                      alias: {
+                                              '@': path.resolve(__dirname, '.'),
+                                                    },
+                                                        },
+                                                          };
+                                                          });
