@@ -1,0 +1,7 @@
+{
+  "name": "RotorWise AI2",
+  "description": "A specialized diagnostic assistant for Mazda RX-8 owners. It uses the Gemini API with expert knowledge from workshop manuals to help troubleshoot, diagnose, and understand the Renesis rotary engine through text, image, and voice inputs.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
