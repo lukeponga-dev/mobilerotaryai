@@ -210,7 +210,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-slate-900 text-slate-200 font-sans relative overflow-hidden">
+        <div className="h-screen w-screen flex bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans relative overflow-hidden">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"

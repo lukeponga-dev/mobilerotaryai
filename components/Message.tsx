@@ -16,14 +16,14 @@ const LoadingDots = () => (
 );
 
 const BlinkingCursor = () => (
-    <span className="inline-block w-2 h-4 bg-slate-300 ml-1 animate-pulse align-bottom"></span>
+    <span className="inline-block w-2 h-4 bg-slate-500 dark:bg-slate-300 ml-1 animate-pulse align-bottom"></span>
 );
 
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
     ? 'bg-rose-600 text-white rounded-br-none'
-    : 'bg-slate-700 text-slate-200 rounded-bl-none';
+    : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-none';
 
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 

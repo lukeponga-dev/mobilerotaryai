@@ -75,17 +75,17 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
   };
 
   return (
-    <div className="p-3 md:p-4 bg-slate-800 border-t border-slate-700/50">
+    <div className="p-3 md:p-4 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
       <form onSubmit={handleSubmit} className="w-full">
         {(imagePreview || videoPreview) && (
             <div className="relative w-full max-w-xs mb-3">
-                <div className="relative bg-slate-900/50 p-2 rounded-lg">
+                <div className="relative bg-slate-200/50 dark:bg-slate-900/50 p-2 rounded-lg">
                     {imagePreview && <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover rounded-lg max-h-48" />}
                     {videoPreview && <video src={videoPreview} muted autoPlay loop className="w-full h-auto object-contain rounded-lg max-h-48" />}
                     <button
                         type="button"
                         onClick={clearAttachments}
-                        className="absolute -top-2 -right-2 bg-slate-600 text-white rounded-full p-1 flex items-center justify-center border-2 border-slate-800 hover:bg-rose-600 transition-colors"
+                        className="absolute -top-2 -right-2 bg-slate-500 dark:bg-slate-600 text-white rounded-full p-1 flex items-center justify-center border-2 border-slate-100 dark:border-slate-800 hover:bg-rose-600 transition-colors"
                         aria-label="Remove attachment"
                     >
                         <XIcon className="w-4 h-4" />
@@ -97,15 +97,15 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
             <div className="relative group">
                 <button
                     type="button"
-                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                    className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                     aria-label="Attach file"
                     disabled={isLoading}
                 >
                     <PlusIcon className="w-6 h-6" />
                 </button>
-                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-focus-within:flex group-hover:flex bg-slate-700 rounded-lg p-1 space-x-1">
-                    <button type="button" onClick={() => imageInputRef.current?.click()} className="p-2 text-slate-300 hover:text-white hover:bg-slate-600 rounded-md"><PaperclipIcon className="w-5 h-5"/></button>
-                    <button type="button" onClick={() => videoInputRef.current?.click()} className="p-2 text-slate-300 hover:text-white hover:bg-slate-600 rounded-md"><VideoCameraIcon className="w-5 h-5"/></button>
+                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-focus-within:flex group-hover:flex bg-slate-300 dark:bg-slate-700 rounded-lg p-1 space-x-1">
+                    <button type="button" onClick={() => imageInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><PaperclipIcon className="w-5 h-5"/></button>
+                    <button type="button" onClick={() => videoInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><VideoCameraIcon className="w-5 h-5"/></button>
                 </div>
             </div>
             <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
@@ -120,14 +120,14 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                 }
             }}
             placeholder="Describe your issue..."
-            className="flex-1 bg-slate-700 text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-32 transition"
+            className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-32 transition"
             rows={1}
             disabled={isLoading}
             />
             <button
             type="button"
             onClick={toggleListening}
-            className={`p-2 transition-colors relative ${isListening ? 'text-rose-500' : 'text-slate-400 hover:text-white'}`}
+            className={`p-2 transition-colors relative ${isListening ? 'text-rose-500' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
             aria-label={isListening ? 'Stop listening' : 'Start listening'}
             disabled={isLoading}
             >
@@ -136,7 +136,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
             </button>
             <button
             type="submit"
-            className="p-2 text-white bg-rose-600 rounded-full hover:bg-rose-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
+            className="p-2 text-white bg-rose-600 rounded-full hover:bg-rose-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
             disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
             aria-label="Send message"
             >

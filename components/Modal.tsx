@@ -32,16 +32,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       onClick={onClose}
     >
       <div
-        className="relative bg-slate-800 rounded-lg shadow-xl border border-slate-700/50 w-full max-w-md p-6 m-4"
+        className="relative bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 w-full max-w-md p-6 m-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between">
-          <h3 className="text-xl font-semibold text-white" id="modal-title">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white" id="modal-title">
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white transition-colors"
+            className="p-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors"
             aria-label="Close modal"
           >
             <XIcon className="w-6 h-6" />

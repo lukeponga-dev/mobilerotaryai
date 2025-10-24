@@ -33,11 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
     <>
       <div className={`
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        fixed inset-y-0 left-0 z-30 w-64 bg-slate-800 text-slate-100 flex flex-col border-r border-slate-700/50
+        fixed inset-y-0 left-0 z-30 w-64 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 flex flex-col border-r border-slate-200 dark:border-slate-700/50
         transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:flex-shrink-0
       `}>
-        <div className="flex items-center justify-between p-4 border-b border-slate-700/50">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
             <RotorIcon className="w-7 h-7 text-rose-500"/>
             <h2 className="text-lg font-semibold">RotorWise AI</h2>
@@ -47,10 +47,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
           </button>
         </div>
 
-        <div className="p-4 border-b border-slate-700/50">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-700/50">
           <button
             onClick={onNewSession}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-rose-600 rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-rose-500 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-rose-600 rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-800 focus:ring-rose-500 transition-colors"
           >
             <PlusIcon className="w-5 h-5" />
             New Diagnosis
@@ -62,7 +62,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                 {navItems.map(item => (
                     <a href={item.route} key={item.route} onClick={onToggleSidebar}
                         className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
-                            getIsActive(item.route) ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700/80 hover:text-slate-100'
+                            getIsActive(item.route) 
+                            ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white' 
+                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                         }`}>
                         {item.icon}
                         <span>{item.label}</span>
@@ -72,7 +74,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
             <div className="mt-auto">
                 <a href="#/privacy" onClick={onToggleSidebar}
                     className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
-                        getIsActive('#/privacy') ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700/80 hover:text-slate-100'
+                        getIsActive('#/privacy') 
+                        ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white' 
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                     }`}>
                     <ShieldCheckIcon className="w-5 h-5" />
                     <span>Privacy Policy</span>
