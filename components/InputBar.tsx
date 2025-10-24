@@ -15,7 +15,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
   const videoInputRef = useRef<HTMLInputElement>(null);
 
   const handleTranscriptChange = (transcript: string) => {
-    setText(prev => prev + transcript);
+    setText(prev => (prev.trim() ? prev.trim() + ' ' : '') + transcript);
   };
 
   const { isListening, startListening, stopListening } = useSpeechRecognition(handleTranscriptChange);
