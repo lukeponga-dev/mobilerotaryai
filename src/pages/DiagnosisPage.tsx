@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Session } from '../types/diagnosis';
+import { Session } from '../types';
 import Header from '../components/Header';
 import ChatWindow from '../components/ChatWindow';
 import InputBar from '../components/InputBar';

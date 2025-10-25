@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
-import { Session } from '../types/diagnosis';
+import { Session } from '../types';
 import { PlusIcon, BookmarkSquareIcon } from '../components/icons';
 
 interface DashboardPageProps {

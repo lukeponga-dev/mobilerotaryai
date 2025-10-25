@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
-import { Session } from '../types/diagnosis';
+import { Session } from '../types';
 import { TrashIcon, PlusIcon } from '../components/icons';
 import Modal from '../components/Modal';
 

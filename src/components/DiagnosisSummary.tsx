@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContextData } from '../types/diagnosis';
+import { ContextData } from '../types';
 import { XIcon } from './icons';
 
 interface DiagnosisSummaryProps {

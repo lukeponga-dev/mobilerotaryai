@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Session, Message } from './types/diagnosis';
+import { Session, Message } from './types';
 import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import { getDiagnosticResponseStream, generateSessionTitle } from './services/geminiService';
-import { extractConversationContext } from './utils/extractContext';
+import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext } from './services/geminiService';
 
 declare global {
     interface Window {

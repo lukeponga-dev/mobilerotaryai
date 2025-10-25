@@ -1,5 +1,6 @@
 // FIX: Changed CommonJS `require` imports to ES module `import` syntax.
-import express from 'express';
+// FIX: Import `Request` and `Response` types from express to avoid type conflicts.
+import express, { Request, Response } from 'express';
 import path from 'path';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -17,13 +18,15 @@ app.use(helmet());
 app.use(compression());
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'dist'), {
+// FIX: Explicitly provide the path to resolve an Express type overload issue.
+app.use('/', express.static(path.join(__dirname, 'dist'), {
   maxAge: '1y',
   etag: false
 }));
 
 // SPA fallback
-app.get('*', (req, res) => {
+// FIX: Explicitly type `req` and `res` to ensure correct type inference.
+app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
