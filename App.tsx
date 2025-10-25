@@ -89,7 +89,7 @@ const App: React.FC = () => {
         ));
     };
 
-    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string) => {
+    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean) => {
         const currentSession = sessions.find(s => s.id === sessionId);
         if (!currentSession) return;
 
@@ -110,7 +110,7 @@ const App: React.FC = () => {
         const history = currentSession.messages.slice(1);
         
         try {
-            const stream = getDiagnosticResponseStream(history, userMessage);
+            const stream = getDiagnosticResponseStream(history, userMessage, isDeepAnalysis);
             let fullResponse = '';
             for await (const chunk of stream) {
                 fullResponse += chunk;

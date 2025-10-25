@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Session } from '../types';
 import Header from '../components/Header';
 import ChatWindow from '../components/ChatWindow';
@@ -8,7 +8,7 @@ import ContextPanel from '../components/ContextPanel';
 interface DiagnosisPageProps {
   session: Session;
   isLoading: boolean;
-  onSendMessage: (sessionId: string, text: string, image?: string, video?: string) => void;
+  onSendMessage: (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean) => void;
   onExportPDF: (sessionId: string) => void;
   onToggleSidebar: () => void;
 }
@@ -20,8 +20,10 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
   onExportPDF,
   onToggleSidebar,
 }) => {
+  const [isDeepAnalysis, setIsDeepAnalysis] = useState(false);
+
   const handleSendMessage = (text: string, image?: string, video?: string) => {
-    onSendMessage(session.id, text, image, video);
+    onSendMessage(session.id, text, image, video, isDeepAnalysis);
   };
   
   const handleExport = () => {
@@ -38,7 +40,12 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
         <div className="flex-1 flex min-h-0">
             <div className="flex-1 flex flex-col min-w-0">
                 <ChatWindow messages={session.messages} isLoading={isLoading} />
-                <InputBar onSendMessage={handleSendMessage} isLoading={isLoading} />
+                <InputBar 
+                  onSendMessage={handleSendMessage} 
+                  isLoading={isLoading} 
+                  isDeepAnalysis={isDeepAnalysis}
+                  onToggleDeepAnalysis={() => setIsDeepAnalysis(prev => !prev)}
+                />
             </div>
             <ContextPanel context={session.context} isLoading={isLoading} />
         </div>

@@ -17,12 +17,14 @@ const getSpeechRecognition = () => {
 
 export const useSpeechRecognition = (onTranscriptChange: (transcript: string) => void) => {
   const [isListening, setIsListening] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     const SpeechRecognition = getSpeechRecognition();
     if (!SpeechRecognition) {
       console.warn('Speech Recognition API not supported in this browser.');
+      setError('Speech recognition is not supported in your browser.');
       return;
     }
 
@@ -47,6 +49,13 @@ export const useSpeechRecognition = (onTranscriptChange: (transcript: string) =>
     recognition.onend = () => setIsListening(false);
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error', event.error);
+       if (event.error === 'not-allowed') {
+        setError('Microphone permission denied. Please enable it in your browser settings.');
+      } else if (event.error === 'no-speech') {
+        setError('No speech was detected. Try speaking again.');
+      } else {
+        setError(`Speech recognition error: ${event.error}`);
+      }
       setIsListening(false);
     };
 
@@ -55,7 +64,13 @@ export const useSpeechRecognition = (onTranscriptChange: (transcript: string) =>
 
   const startListening = () => {
     if (recognitionRef.current && !isListening) {
-      recognitionRef.current.start();
+      setError(null); // Clear previous errors
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error("Error starting speech recognition:", err);
+        setError("Could not start voice input.");
+      }
     }
   };
 
@@ -65,5 +80,5 @@ export const useSpeechRecognition = (onTranscriptChange: (transcript: string) =>
     }
   };
 
-  return { isListening, startListening, stopListening };
+  return { isListening, startListening, stopListening, error };
 };

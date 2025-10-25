@@ -1,17 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
+import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import Button from './Button';
 
 interface InputBarProps {
   onSendMessage: (text: string, image?: string, video?: string) => void;
   isLoading: boolean;
+  isDeepAnalysis?: boolean;
+  onToggleDeepAnalysis?: () => void;
 }
 
-const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
+const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAnalysis, onToggleDeepAnalysis }) => {
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -20,11 +23,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
     setText(prev => (prev.trim() ? prev.trim() + ' ' : '') + transcript);
   };
 
-  const { isListening, startListening, stopListening } = useSpeechRecognition(handleTranscriptChange);
+  const { isListening, startListening, stopListening, error: speechError } = useSpeechRecognition(handleTranscriptChange);
 
   const clearAttachments = () => {
     setImagePreview(null);
     setVideoPreview(null);
+    setFileError(null);
     if (imageInputRef.current) imageInputRef.current.value = '';
     if (videoInputRef.current) videoInputRef.current.value = '';
   };
@@ -56,16 +60,26 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       clearAttachments();
-      const base64 = await fileToBase64(e.target.files[0]);
-      setImagePreview(base64);
+      try {
+        const base64 = await fileToBase64(e.target.files[0]);
+        setImagePreview(base64);
+      } catch (err) {
+        console.error("Error converting image to base64", err);
+        setFileError("Could not load image. Please try another file.");
+      }
     }
   };
 
   const handleVideoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
         clearAttachments();
-        const base64 = await fileToBase64(e.target.files[0]);
-        setVideoPreview(base64);
+        try {
+            const base64 = await fileToBase64(e.target.files[0]);
+            setVideoPreview(base64);
+        } catch (err) {
+            console.error("Error converting video to base64", err);
+            setFileError("Could not load video. Please try another file.");
+        }
     }
   };
 
@@ -82,6 +96,8 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
   }
+
+  const errorMessage = speechError || fileError;
 
   return (
     <div className="bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
@@ -101,6 +117,11 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                           <XIcon className="w-4 h-4" />
                       </button>
                   </div>
+              </div>
+          )}
+          {errorMessage && (
+              <div className="text-rose-500 text-xs text-center mb-2 px-2">
+                  {errorMessage}
               </div>
           )}
           <div className="flex items-end gap-2 md:gap-3">
@@ -145,6 +166,19 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                 type="button"
                 variant="ghost"
                 size="icon"
+                onClick={onToggleDeepAnalysis}
+                className={`relative rounded-full ${isDeepAnalysis ? 'text-rose-500' : ''}`}
+                aria-label={isDeepAnalysis ? 'Disable deep analysis' : 'Enable deep analysis'}
+                title={isDeepAnalysis ? 'Deep analysis enabled' : 'Enable deep analysis for complex issues'}
+                disabled={isLoading}
+              >
+                {isDeepAnalysis && <div className="absolute inset-0 bg-rose-500/20 rounded-full animate-pulse"></div>}
+                <BrainIcon className="w-6 h-6" />
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
                 onClick={toggleListening}
                 className={`relative rounded-full ${isListening ? 'text-rose-500' : ''}`}
                 aria-label={isListening ? 'Stop listening' : 'Start listening'}
@@ -157,7 +191,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                 type="submit"
                 variant="primary"
                 size="icon"
-                className="rounded-full"
+                className="rounded-full transform transition-transform duration-150 ease-out active:scale-90 active:-translate-y-0.5"
                 disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
                 aria-label="Send message"
               >

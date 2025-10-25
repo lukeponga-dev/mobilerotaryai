@@ -20,7 +20,7 @@ const BlinkingCursor = () => (
     <span className="inline-block w-2 h-4 bg-slate-500 dark:bg-slate-300 ml-1 animate-pulse align-bottom"></span>
 );
 
-const MessageContent: React.FC<{ text: string }> = ({ text }) => {
+export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
     return (
       <div>
         {text.split('\n').map((line, index) => {

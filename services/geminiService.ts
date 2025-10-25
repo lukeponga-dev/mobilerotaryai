@@ -73,7 +73,7 @@ const fileToGenerativePart = (base64Data: string, mimeType: string) => {
   };
 };
 
-export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message): AsyncGenerator<string> {
+export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message, isDeepAnalysis?: boolean): AsyncGenerator<string> {
     const contents = history.map(msg => ({
       role: msg.role,
       parts: [{ text: msg.text }],
@@ -87,16 +87,25 @@ export async function* getDiagnosticResponseStream(history: Message[], latestMes
       const mimeType = latestMessage.video.match(/data:(.*);base64,/)?.[1] || 'video/mp4';
       latestUserParts.push(fileToGenerativePart(latestMessage.video, mimeType) as any);
     }
+    
+    let modelName = 'gemini-2.5-flash';
+    const config: any = { systemInstruction: SYSTEM_INSTRUCTION };
+
+    if (isDeepAnalysis) {
+        modelName = 'gemini-2.5-pro';
+        config.thinkingConfig = { thinkingBudget: 32768 };
+    } else if (latestMessage.video) {
+        // Use Pro for video analysis as it's more complex
+        modelName = 'gemini-2.5-pro';
+    }
      
     const request: GenerateContentParameters = {
-      model: 'gemini-2.5-flash',
+      model: modelName,
       contents: [
         ...contents,
         { role: 'user', parts: latestUserParts }
       ],
-      config: {
-          systemInstruction: SYSTEM_INSTRUCTION
-      }
+      config: config
     };
     
     try {
@@ -169,5 +178,32 @@ export const extractConversationContext = async (history: Message[]): Promise<Co
     } catch (error) {
         console.error("Error extracting context:", error);
         return { symptoms: [], parts: [], actions: [] };
+    }
+};
+
+export const generateKnowledgeArticle = async (topic: string): Promise<string> => {
+    const prompt = `You are AI Mazda Mechanic, an expert on the Mazda RX-8 and its Renesis rotary engine.
+    Write a detailed knowledge base article on the following topic for a Mazda RX-8 enthusiast: "${topic}".
+    The article should be easy to understand but comprehensive.
+    Structure your response clearly using Markdown for formatting. Use bold text for headings (e.g., **My Heading**) and bullet points for lists (e.g., * My list item).
+    
+    Include the following sections:
+    - **Overview**: A brief summary of the topic.
+    - **Common Symptoms**: A list of signs that this issue is occurring.
+    - **Diagnostic Steps**: How to confirm the problem.
+    - **Common Causes**: Why this problem happens.
+    - **Solutions & Repairs**: Step-by-step guide to fixing it.
+    - **Required Tools**: A list of necessary tools.
+    - **Preventative Maintenance**: Tips to avoid the issue in the future.`;
+
+    try {
+        const result = await model.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
+        return result.text.trim();
+    } catch (error) {
+        console.error("Error generating knowledge article:", error);
+        return "Sorry, I was unable to generate an article on that topic. Please try again.";
     }
 };
