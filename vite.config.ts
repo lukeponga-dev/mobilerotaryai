@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => {
       'process.env.API_KEY': JSON.stringify(env.API_KEY)
     },
     server: {
-      allowedHosts: 'all'
+      // FIX: Changed 'all' to true to match the type definition for allowedHosts.
+      allowedHosts: true,
     }
   };
 });
