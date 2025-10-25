@@ -1,0 +1,10 @@
+services:
+    - type: web
+        name: ai-mechanic
+            env: static
+                buildCommand: npm install && npm run build
+                    staticPublishPath: dist
+                        pullRequestPreviewsEnabled: true
+                            envVars:
+                                  - key: GEMINI_API_KEY
+                                          sync: false
