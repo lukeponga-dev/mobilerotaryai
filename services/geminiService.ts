@@ -1,5 +1,5 @@
-import { GoogleGenAI, GenerateContentParameters, Type } from "@google/genai";
-import { Message, ContextData } from "../types";
+import { GoogleGenAI, GenerateContentParameters, Type, Modality, LiveServerMessage, Blob } from "@google/genai";
+import { Message, ContextData, GroundingSource, ArticleData, LiveTranscript } from "../types";
 
 const API_KEY = process.env.API_KEY;
 
@@ -9,6 +9,59 @@ if (!API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 const model = ai.models;
+
+// --- Live Audio Utilities ---
+function encode(bytes: Uint8Array) {
+    let binary = '';
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
+
+function decode(base64: string) {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
+async function decodeAudioData(
+    data: Uint8Array,
+    ctx: AudioContext,
+    sampleRate: number,
+    numChannels: number,
+): Promise<AudioBuffer> {
+    const dataInt16 = new Int16Array(data.buffer);
+    const frameCount = dataInt16.length / numChannels;
+    const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
+
+    for (let channel = 0; channel < numChannels; channel++) {
+        const channelData = buffer.getChannelData(channel);
+        for (let i = 0; i < frameCount; i++) {
+            channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
+        }
+    }
+    return buffer;
+}
+
+function createBlob(data: Float32Array): Blob {
+    const l = data.length;
+    const int16 = new Int16Array(l);
+    for (let i = 0; i < l; i++) {
+        int16[i] = data[i] * 32768;
+    }
+    return {
+        data: encode(new Uint8Array(int16.buffer)),
+        mimeType: 'audio/pcm;rate=16000',
+    };
+}
+// --- End Live Audio Utilities ---
+
 
 const SYSTEM_INSTRUCTION = `You are AI Mazda Mechanic, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
 Your role is to act as a professional RX-8 mechanic with deep expertise in the 13B-MSP Renesis rotary engine.
@@ -225,7 +278,7 @@ export const generateQuickReplies = async (history: Message[]): Promise<string[]
     }
 };
 
-export const generateKnowledgeArticle = async (topic: string): Promise<string> => {
+export const generateKnowledgeArticle = async (topic: string): Promise<ArticleData> => {
     const prompt = `You are AI Mazda Mechanic, an expert on the Mazda RX-8 and its Renesis rotary engine.
     Write a detailed knowledge base article on the following topic for a Mazda RX-8 enthusiast: "${topic}".
     The article should be easy to understand but comprehensive.
@@ -241,13 +294,60 @@ export const generateKnowledgeArticle = async (topic: string): Promise<string> =
     - **Preventative Maintenance**: Tips to avoid the issue in the future.`;
 
     try {
-        const result = await model.generateContent({
+        const result = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
+            config: {
+              tools: [{googleSearch: {}}],
+            },
         });
-        return result.text.trim();
+        
+        const sources: GroundingSource[] = result.candidates?.[0]?.groundingMetadata?.groundingChunks
+            ?.map((chunk: any) => chunk.web)
+            .filter(Boolean) || [];
+
+        return {
+            text: result.text.trim(),
+            sources: sources
+        };
     } catch (error) {
         console.error("Error generating knowledge article:", error);
-        return "Sorry, I was unable to generate an article on that topic. Please try again.";
+        return {
+            text: "Sorry, I was unable to generate an article on that topic. Please try again.",
+            sources: []
+        };
     }
+};
+
+export const startLiveSession = (
+    onMessage: (message: LiveServerMessage) => void,
+    onOpen: () => void,
+    onError: (e: ErrorEvent) => void,
+    onClose: (e: CloseEvent) => void
+) => {
+    return ai.live.connect({
+        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+        callbacks: {
+            onopen: onOpen,
+            onmessage: onMessage,
+            onerror: onError,
+            onclose: onClose,
+        },
+        config: {
+            responseModalities: [Modality.AUDIO],
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
+            systemInstruction: `You are AI Mazda Mechanic. Be concise and conversational. Keep your answers brief and to the point, as if you're speaking to someone working on their car.`,
+            outputAudioTranscription: {},
+            inputAudioTranscription: {},
+        },
+    });
+};
+
+export const live = {
+    startSession: startLiveSession,
+    utils: {
+        decode,
+        decodeAudioData,
+        createBlob,
+    },
 };

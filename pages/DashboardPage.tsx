@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import { Session } from '../types';
-import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon } from '../components/icons';
+import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon, WaveformIcon } from '../components/icons';
 import WarningLightGuideModal from '../components/WarningLightGuideModal';
 import Button from '../components/Button';
 
@@ -47,6 +47,29 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
+            <div className="lg:col-span-3 bg-gradient-to-br from-rose-500 to-rose-700 p-6 sm:p-8 rounded-lg border border-rose-600 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 transition-shadow hover:shadow-2xl hover:shadow-rose-500/30">
+                <div className="flex items-center gap-5 text-center md:text-left">
+                    <div className="p-3 bg-white/20 rounded-full flex-shrink-0">
+                        <WaveformIcon className="w-9 h-9 text-white" />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-white">Live Voice Diagnosis</h2>
+                        <p className="text-sm text-rose-100 mt-1 max-w-xl">
+                            Speak directly with the AI mechanic for real-time, hands-free troubleshooting.
+                        </p>
+                    </div>
+                </div>
+                <Button
+                    onClick={() => window.location.hash = '#/live'}
+                    variant="secondary"
+                    size="md"
+                    className="w-full md:w-auto flex-shrink-0 !bg-white/90 !text-rose-600 hover:!bg-white"
+                >
+                    Start Conversation
+                </Button>
+            </div>
+
+
           <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm transition-shadow hover:shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Recent Sessions</h2>
             {recentSessions.length > 0 ? (

@@ -6,6 +6,7 @@ import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import LivePage from './pages/LivePage';
 import AdBanner from './components/AdBanner';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext, generateQuickReplies } from './services/geminiService';
 
@@ -216,6 +217,8 @@ const App: React.FC = () => {
                 return <SessionsListPage sessions={sessions} onDeleteSession={handleDeleteSession} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;
             case '#/knowledge':
                 return <KnowledgeBasePage onToggleSidebar={onToggleSidebar} />;
+            case '#/live':
+                return <LivePage onToggleSidebar={onToggleSidebar} />;
             case '#/privacy':
                 return <PrivacyPolicyPage onToggleSidebar={onToggleSidebar} />;
             case '#/':

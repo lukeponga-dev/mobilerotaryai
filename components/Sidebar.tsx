@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
+import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon, WaveformIcon } from './icons';
 import ThemeToggle from './ThemeToggle';
 import Button from './Button';
 
@@ -15,6 +15,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
   const navItems = [
     { route: '#/', icon: <HomeIcon className="w-5 h-5" />, label: 'Dashboard' },
     { route: '#/sessions', icon: <ChatBubbleLeftRightIcon className="w-5 h-5" />, label: 'My Sessions' },
+    { route: '#/live', icon: <WaveformIcon className="w-5 h-5" />, label: 'Live Diagnosis' },
     { route: '#/knowledge', icon: <BookmarkSquareIcon className="w-5 h-5" />, label: 'Knowledge Base' },
   ];
 

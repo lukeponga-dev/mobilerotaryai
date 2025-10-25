@@ -3,7 +3,8 @@ import Header from '../components/Header';
 import { MessageContent } from '../components/Message';
 import { generateKnowledgeArticle } from '../services/geminiService';
 import Button from '../components/Button';
-import { SearchIcon, XIcon } from '../components/icons';
+import { SearchIcon, XIcon, LinkIcon } from '../components/icons';
+import { ArticleData } from '../types';
 
 interface KnowledgeBasePageProps {
   onToggleSidebar: () => void;
@@ -63,7 +64,7 @@ const LoadingSkeleton = () => (
 const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [article, setArticle] = useState<string | null>(null);
+  const [article, setArticle] = useState<ArticleData | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +91,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
         <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
             <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">
-                Browse common issues or search for a specific topic to get a detailed, AI-generated article.
+                Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
             </p>
             <form onSubmit={handleSearch} className="flex gap-2">
                 <input
@@ -116,7 +117,27 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
                     Back to Common Issues
                 </Button>
                 <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200">
-                    <MessageContent text={article} />
+                    <MessageContent text={article.text} />
+                     {article.sources && article.sources.length > 0 && (
+                        <div className="mt-8 pt-4 border-t border-slate-300 dark:border-slate-600">
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Sources</h3>
+                            <ul className="space-y-2 list-none p-0">
+                                {article.sources.map((source, index) => (
+                                    <li key={index} className="flex items-start gap-3">
+                                        <LinkIcon className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                                        <a 
+                                            href={source.uri} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="text-rose-500 hover:underline text-sm"
+                                        >
+                                            {source.title || source.uri}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
         )}
