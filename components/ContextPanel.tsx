@@ -47,9 +47,9 @@ const getItemVisuals = (text: string, type: ItemType): ItemVisuals => {
     }
     return { 
         Icon: InformationCircleIcon, 
-        iconColor: 'text-accent2',
-        borderColor: 'border-accent2',
-        bgColor: 'bg-accent2/10'
+        iconColor: 'text-teal',
+        borderColor: 'border-teal',
+        bgColor: 'bg-teal/10'
     };
 };
 

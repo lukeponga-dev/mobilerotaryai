@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
     'inline-flex items-center justify-center font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent dark:focus:ring-offset-dark-bg disabled:opacity-60 disabled:cursor-not-allowed transform hover:-translate-y-px active:scale-95';
 
   const variantClasses = {
-    primary: 'bg-accent text-white hover:brightness-110 shadow-sm',
+    primary: 'bg-accent text-gray-900 hover:brightness-105 shadow-sm',
     secondary: 'bg-light-panel-muted text-light-text hover:bg-light-border dark:bg-dark-panel-muted dark:text-dark-text dark:hover:bg-dark-border',
     ghost: 'bg-transparent text-light-muted hover:bg-light-panel-muted/70 dark:text-dark-muted dark:hover:bg-dark-panel-muted/70',
     destructive: 'bg-danger text-white hover:brightness-110 shadow-sm',

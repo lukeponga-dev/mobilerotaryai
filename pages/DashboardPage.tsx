@@ -30,18 +30,18 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNewSession }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Main Action Card */}
-          <div className="relative overflow-hidden bg-accent2 p-6 rounded-lg border border-accent2/20 shadow-xl h-full flex flex-col justify-between">
+          <div className="relative overflow-hidden bg-gradient-to-br from-accent to-warning p-6 rounded-lg border border-accent/20 shadow-xl h-full flex flex-col justify-between">
               <LightBulbIcon className="absolute -right-6 -bottom-10 w-36 h-36 text-white/10 transform rotate-[-15deg] pointer-events-none" />
               <div>
                   <h2 className="text-2xl font-bold text-white mb-2">Pro Tip of the Day</h2>
-                  <p className="text-teal-100 mb-4 max-w-md">
+                  <p className="text-white/80 mb-4 max-w-md">
                       To prevent engine flooding, always allow your RX-8 to reach normal operating temperature before shutting it off.
                   </p>
               </div>
               <Button
                   onClick={onNewSession}
                   size="lg"
-                  className="w-full sm:w-auto bg-white/90 text-accent2 hover:bg-white shadow-lg !ring-offset-accent2"
+                  className="w-full sm:w-auto bg-white/90 text-gray-900 hover:bg-white shadow-lg !ring-offset-warning"
               >
                   Start First Diagnosis
               </Button>
@@ -66,8 +66,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNewSession }) => {
         <div className="mt-8">
            <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-lg border border-light-border dark:border-dark-border shadow-sm">
               <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-accent2/10 rounded-full">
-                      <BookmarkSquareIcon className="w-6 h-6 text-accent2" />
+                  <div className="p-2 bg-teal/10 rounded-full">
+                      <BookmarkSquareIcon className="w-6 h-6 text-teal" />
                   </div>
                   <h2 className="text-xl font-semibold text-light-text dark:text-dark-text">Quick Knowledge</h2>
               </div>
