@@ -16,8 +16,7 @@ export default defineConfig(({ mode }) => {
       'process.env.API_KEY': JSON.stringify(env.API_KEY)
     },
     server: {
-      // FIX: Changed 'all' to true to match the type definition for allowedHosts.
-      allowedHosts: 'https://ai-mechanic-0gyf.onrender.com/',
+  allowedHosts: ['ai-mechanic-0gyf.onrender.com']
     }
   };
 });
