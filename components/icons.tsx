@@ -97,3 +97,65 @@ export const MoonIcon = ({ className }: { className?: string }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
     </svg>
 );
+
+export const InformationCircleIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+    </svg>
+);
+
+export const CheckEngineIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M11.983 3.003L5.25 6.75v7.5l6.733 3.75 6.733-3.75v-7.5L11.983 3.003zM8.25 9.75h7.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9.75v3" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 14.25h4.5" />
+    </svg>
+);
+
+export const OilPressureIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h12l1.875 3.75H4.125L6 6zm-1.875 3.75h15.75m0 0v5.625c0 .621-.504 1.125-1.125 1.125H5.25c-.621 0-1.125-.504-1.125-1.125V9.75m14.625 3-1.875 3.75" />
+    </svg>
+);
+
+export const CoolantTempIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 12.75V3m0 9.75a3.75 3.75 0 0 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.75h16.5v8.25a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75V9.75z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 13.5h1.5m3 0h1.5m3 0h1.5" />
+    </svg>
+);
+
+export const BatteryWarningIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9v10.5a2.25 2.25 0 0 0 2.25 2.25h12a2.25 2.25 0 0 0 2.25-2.25V9A2.25 2.25 0 0 0 18 6.75h-1.5a2.25 2.25 0 0 0-2.25-2.25H9.75A2.25 2.25 0 0 0 7.5 6.75H6A2.25 2.25 0 0 0 3.75 9z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 13.5h6" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5h-6" />
+    </svg>
+);
+
+export const AbsIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+        <circle cx="12" cy="12" r="9" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15.75V8.25h1.5a1.5 1.5 0 0 1 1.5 1.5v4.5a1.5 1.5 0 0 1-1.5 1.5h-1.5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 12h1.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15.75V8.25L15 12l-2.25 3.75z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75h1.5a1.5 1.5 0 0 0 1.5-1.5v-4.5a1.5 1.5 0 0 0-1.5-1.5h-1.5" />
+    </svg>
+);
+
+export const DscIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h.008v.008h-.008v-.008zm-3 0h-6m9 0h3.375a1.125 1.125 0 0 0 1.125-1.125V14.25" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l1.5-4.5m-3 4.5l1.5-4.5M15 12l-1.5-4.5m3 4.5l-1.5-4.5" />
+    </svg>
+);
+
+export const PowerSteeringIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path d="M12 11.25a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15V3.75m0 16.5v-1.875m-3.375 0h6.75" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 7.5l-1.875 1.875M7.5 7.5l1.875 1.875" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5v.75c0 .621-.504 1.125-1.125 1.125H6.375a1.125 1.125 0 0 1-1.125-1.125V19.5" />
+    </svg>
+);
