@@ -12,6 +12,7 @@ export interface Session {
   messages: Message[];
   createdAt: string;
   context?: ContextData;
+  quickReplies?: string[];
 }
 
 export interface ContextData {

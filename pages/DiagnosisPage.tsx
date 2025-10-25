@@ -26,6 +26,11 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
     onSendMessage(session.id, text, image, video, isDeepAnalysis);
   };
   
+  const handleQuickReply = (replyText: string) => {
+    // A quick reply should not be a deep analysis
+    onSendMessage(session.id, replyText, undefined, undefined, false);
+  };
+
   const handleExport = () => {
     onExportPDF(session.id);
   }
@@ -39,7 +44,12 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
         />
         <div className="flex-1 flex min-h-0">
             <div className="flex-1 flex flex-col min-w-0">
-                <ChatWindow messages={session.messages} isLoading={isLoading} />
+                <ChatWindow
+                    messages={session.messages}
+                    isLoading={isLoading}
+                    quickReplies={session.quickReplies}
+                    onQuickReply={handleQuickReply}
+                />
                 <InputBar 
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 

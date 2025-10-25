@@ -7,7 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import AdBanner from './components/AdBanner';
-import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext } from './services/geminiService';
+import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext, generateQuickReplies } from './services/geminiService';
 
 declare global {
     interface Window {
@@ -42,7 +42,8 @@ const App: React.FC = () => {
             text: 'Welcome to AI Mazda Mechanic. How can I help you with your Mazda RX-8 today? Please describe the issue you are experiencing.'
         }],
         createdAt: new Date().toISOString(),
-        context: {symptoms: [], parts: [], actions: []}
+        context: {symptoms: [], parts: [], actions: []},
+        quickReplies: []
     }), []);
 
     useEffect(() => {
@@ -101,6 +102,9 @@ const App: React.FC = () => {
     const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean) => {
         const currentSession = sessions.find(s => s.id === sessionId);
         if (!currentSession) return;
+        
+        // Clear previous quick replies when user sends a new message
+        updateSessionData(sessionId, { quickReplies: [] });
 
         const userMessage: Message = { id: `msg_user_${Date.now()}`, role: 'user', text, image, video };
         const messagesWithUser = [...currentSession.messages, userMessage];
@@ -139,7 +143,8 @@ const App: React.FC = () => {
             
             const finalMessages = [...messagesWithUser, { ...modelMessagePlaceholder, text: fullResponse }];
             const context = await extractConversationContext(finalMessages);
-            updateSessionData(sessionId, { context });
+            const replies = await generateQuickReplies(finalMessages);
+            updateSessionData(sessionId, { context, quickReplies: replies });
 
         } catch (error) {
             console.error("Error handling stream in App.tsx", error);

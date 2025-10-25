@@ -181,6 +181,50 @@ export const extractConversationContext = async (history: Message[]): Promise<Co
     }
 };
 
+export const generateQuickReplies = async (history: Message[]): Promise<string[]> => {
+    if (history.length === 0) return [];
+    
+    const lastMessage = history[history.length - 1];
+    if (lastMessage.role !== 'model' || !lastMessage.text) return [];
+
+    const prompt = `Based on the following AI response to a Mazda RX-8 query, suggest 3 brief and relevant follow-up questions or actions a user might take. Keep each suggestion under 6 words.
+
+    AI Response: "${lastMessage.text.substring(0, 500)}..." 
+    
+    Provide the suggestions as a JSON object.`;
+
+    try {
+        const result = await model.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        replies: {
+                            type: Type.ARRAY,
+                            items: {
+                                type: Type.STRING,
+                                description: "A short, relevant follow-up question or action."
+                            },
+                            description: "An array of 3 suggested replies for the user."
+                        }
+                    },
+                    required: ["replies"]
+                }
+            }
+        });
+
+        const jsonText = result.text.trim();
+        const parsed = JSON.parse(jsonText);
+        return (parsed.replies || []).slice(0, 3); // Ensure we only get up to 3
+    } catch (error) {
+        console.error("Error generating quick replies:", error);
+        return [];
+    }
+};
+
 export const generateKnowledgeArticle = async (topic: string): Promise<string> => {
     const prompt = `You are AI Mazda Mechanic, an expert on the Mazda RX-8 and its Renesis rotary engine.
     Write a detailed knowledge base article on the following topic for a Mazda RX-8 enthusiast: "${topic}".
