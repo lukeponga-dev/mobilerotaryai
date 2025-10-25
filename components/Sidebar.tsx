@@ -34,13 +34,13 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
     <>
       <div className={`
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        fixed inset-y-0 left-0 z-30 w-72 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 flex flex-col border-r border-slate-200 dark:border-slate-700/50
+        fixed inset-y-0 left-0 z-30 w-72 bg-light-surface dark:bg-dark-surface text-light-text dark:text-dark-text flex flex-col border-r border-light-border dark:border-dark-border
         transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:flex-shrink-0
       `}>
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50">
+        <div className="flex items-center justify-between p-4 border-b border-light-border dark:border-dark-border">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
-            <WrenchIcon className="w-7 h-7 text-orange-500"/>
+            <WrenchIcon className="w-7 h-7 text-accent"/>
             <h2 className="text-lg font-semibold">AI Mazda Mechanic</h2>
           </a>
           <button onClick={onToggleSidebar} className="md:hidden p-1" aria-label="Close sidebar">
@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
           </button>
         </div>
 
-        <div className="p-4 border-b border-slate-200 dark:border-slate-700/50">
+        <div className="p-4 border-b border-light-border dark:border-dark-border">
           <Button
             onClick={onNewSession}
             variant="primary"
@@ -65,8 +65,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
                     <a href={`#/session/${session.id}`} key={session.id} onClick={onToggleSidebar}
                         className={`group flex items-center justify-between gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                             activeSessionId === session.id
-                            ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500' 
-                            : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
+                            ? 'bg-accent/10 text-accent border-accent' 
+                            : 'text-light-muted dark:text-dark-muted border-transparent hover:bg-light-panel-muted dark:hover:bg-dark-panel-muted hover:text-light-text dark:hover:text-dark-text'
                         }`}>
                         <div className="flex items-center gap-3 min-w-0">
                              <ChatBubbleLeftRightIcon className="w-5 h-5 flex-shrink-0" />
@@ -74,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
                         </div>
                         <button
                             onClick={(e) => handleDeleteClick(e, session)}
-                            className="p-1 rounded-md text-slate-400 dark:text-slate-500 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-opacity"
+                            className="p-1 rounded-md text-light-muted dark:text-dark-muted opacity-0 group-hover:opacity-100 hover:bg-danger/10 hover:text-danger transition-opacity"
                             aria-label={`Delete session ${session.name}`}
                         >
                             <TrashIcon className="w-4 h-4" />
@@ -82,8 +82,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
                     </a>
                 ))}
             </div>
-            <div className="mt-auto pt-4 space-y-1 border-t border-slate-200 dark:border-slate-700/50">
-                 <div className="flex items-center justify-between rounded-md px-3 py-2 text-slate-600 dark:text-slate-400">
+            <div className="mt-auto pt-4 space-y-1 border-t border-light-border dark:border-dark-border">
+                 <div className="flex items-center justify-between rounded-md px-3 py-2 text-light-muted dark:text-dark-muted">
                     <span className="text-sm font-medium">Appearance</span>
                     <ThemeToggle />
                 </div>
@@ -96,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
         onClose={() => setSessionToDelete(null)}
         title="Confirm Deletion"
       >
-        <p className="text-slate-700 dark:text-slate-300">
+        <p className="text-light-text dark:text-dark-text">
           Are you sure you want to permanently delete the session "{sessionToDelete?.name}"? This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-3">

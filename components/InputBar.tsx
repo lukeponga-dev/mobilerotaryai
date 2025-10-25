@@ -140,18 +140,18 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
   const errorMessage = speechError || fileError;
 
   return (
-    <div className="bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
+    <div className="bg-light-surface dark:bg-dark-surface border-t border-light-border dark:border-dark-border">
       <div className="pt-4 pl-[calc(0.75rem+env(safe-area-inset-left,0rem))] md:pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(0.75rem+env(safe-area-inset-right,0rem))] md:pr-[calc(1rem+env(safe-area-inset-right,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]">
         <form onSubmit={handleSubmit} className="w-full">
           {(imagePreview || videoPreview) && (
               <div className="relative w-full max-w-xs mb-3">
-                  <div className="relative bg-slate-200/50 dark:bg-slate-900/50 p-2 rounded-lg">
+                  <div className="relative bg-light-panel-muted/50 dark:bg-dark-panel-muted/50 p-2 rounded-lg">
                       {imagePreview && <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover rounded-lg max-h-48" />}
                       {videoPreview && <video src={videoPreview} muted autoPlay loop className="w-full h-auto object-contain rounded-lg max-h-48" />}
                       <button
                           type="button"
                           onClick={clearAttachments}
-                          className="absolute -top-2 -right-2 bg-slate-500 dark:bg-slate-600 text-white rounded-full p-1 flex items-center justify-center border-2 border-slate-100 dark:border-slate-800 hover:bg-red-600 transition-colors"
+                          className="absolute -top-2 -right-2 bg-light-muted dark:bg-dark-muted text-white rounded-full p-1 flex items-center justify-center border-2 border-light-surface dark:border-dark-surface hover:bg-danger transition-colors"
                           aria-label="Remove attachment"
                       >
                           <XIcon className="w-4 h-4" />
@@ -162,13 +162,13 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
           {(errorMessage || isAttaching) && (
               <div className="mb-2 px-2">
                 {errorMessage && 
-                    <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 p-2 rounded-md animate-fade-in-up" style={{animationDuration: '0.2s'}}>
+                    <div className="flex items-center gap-2 text-sm text-danger bg-danger/10 p-2 rounded-md animate-fade-in-up" style={{animationDuration: '0.2s'}}>
                         <XCircleIcon className="w-5 h-5 flex-shrink-0" />
                         <span>{errorMessage}</span>
                     </div>
                 }
                 {isAttaching && !errorMessage && 
-                    <div className="text-sm text-center text-slate-500 dark:text-slate-400">
+                    <div className="text-sm text-center text-light-muted dark:text-dark-muted">
                         Loading attachment preview...
                     </div>
                 }
@@ -188,13 +188,13 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 </Button>
                 {isAttachmentMenuOpen && (
                     <div 
-                        className="absolute bottom-full mb-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 z-10 p-2 animate-fade-in-up"
+                        className="absolute bottom-full mb-2 w-48 bg-light-surface dark:bg-dark-surface rounded-lg shadow-xl border border-light-border dark:border-dark-border z-10 p-2 animate-fade-in-up"
                         style={{animationDuration: '0.2s'}}
                     >
                         <button
                             type="button"
                             onClick={() => { imageInputRef.current?.click(); setIsAttachmentMenuOpen(false); }}
-                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-light-text dark:text-dark-text hover:bg-light-panel-muted dark:hover:bg-dark-panel-muted transition-colors"
                         >
                             <PhotoIcon className="w-5 h-5" />
                             <span>Attach Image</span>
@@ -202,7 +202,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                         <button
                             type="button"
                             onClick={() => { videoInputRef.current?.click(); setIsAttachmentMenuOpen(false); }}
-                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-light-text dark:text-dark-text hover:bg-light-panel-muted dark:hover:bg-dark-panel-muted transition-colors"
                         >
                             <VideoCameraIcon className="w-5 h-5" />
                             <span>Attach Video</span>
@@ -224,7 +224,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                       }
                   }}
                   placeholder="Describe your issue..."
-                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
+                  className="flex-1 bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-accent max-h-40 transition overflow-y-auto border border-light-border dark:border-dark-border"
                   rows={1}
                   disabled={isLoading}
               />
@@ -233,12 +233,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={onToggleDeepAnalysis}
-                className={`relative rounded-full ${isDeepAnalysis ? 'text-orange-500' : ''}`}
+                className={`relative rounded-full ${isDeepAnalysis ? 'text-accent' : ''}`}
                 aria-label={isDeepAnalysis ? 'Disable deep analysis' : 'Enable deep analysis'}
                 title={isDeepAnalysis ? 'Deep analysis enabled' : 'Enable deep analysis for complex issues'}
                 disabled={isLoading}
               >
-                {isDeepAnalysis && <div className="absolute inset-0 bg-orange-500/20 rounded-full animate-pulse"></div>}
+                {isDeepAnalysis && <div className="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>}
                 <BrainIcon className="w-6 h-6" />
               </Button>
               <Button
@@ -246,11 +246,11 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={toggleListening}
-                className={`relative rounded-full ${isListening ? 'text-orange-500' : ''}`}
+                className={`relative rounded-full ${isListening ? 'text-accent' : ''}`}
                 aria-label={isListening ? 'Stop listening' : 'Start listening'}
                 disabled={isLoading}
               >
-                {isListening && <div className="absolute inset-0 bg-orange-500/20 rounded-full animate-pulse"></div>}
+                {isListening && <div className="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>}
                 <MicrophoneIcon className="w-6 h-6" />
               </Button>
               <Button

@@ -39,18 +39,18 @@ const commonIssues = [
 ];
 
 const LoadingSkeleton = () => (
-    <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg animate-pulse">
-        <div className="h-8 bg-slate-300 dark:bg-slate-700 rounded w-3/4 mb-6"></div>
+    <div className="bg-light-surface dark:bg-dark-surface p-4 sm:p-6 rounded-lg border border-light-border dark:border-dark-border shadow-lg animate-pulse">
+        <div className="h-8 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-3/4 mb-6"></div>
         <div className="space-y-4">
-            <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded w-1/4 mb-2"></div>
-            <div className="h-3.5 bg-slate-300 dark:bg-slate-700 rounded w-full"></div>
-            <div className="h-3.5 bg-slate-300 dark:bg-slate-700 rounded w-5/6"></div>
+            <div className="h-4 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-1/4 mb-2"></div>
+            <div className="h-3.5 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-full"></div>
+            <div className="h-3.5 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-5/6"></div>
         </div>
         <div className="space-y-4 mt-6">
-            <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded w-1/4 mb-2"></div>
-            <div className="h-3.5 bg-slate-300 dark:bg-slate-700 rounded w-full"></div>
-            <div className="h-3.5 bg-slate-300 dark:bg-slate-700 rounded w-full"></div>
-            <div className="h-3.5 bg-slate-300 dark:bg-slate-700 rounded w-2/3"></div>
+            <div className="h-4 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-1/4 mb-2"></div>
+            <div className="h-3.5 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-full"></div>
+            <div className="h-3.5 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-full"></div>
+            <div className="h-3.5 bg-light-panel-muted dark:bg-dark-panel-muted rounded w-2/3"></div>
         </div>
     </div>
 );
@@ -77,10 +77,10 @@ const KnowledgeBasePage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth bg-slate-50 dark:bg-slate-900">
-      <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">
+    <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth bg-light-bg dark:bg-dark-bg">
+      <div className="sticky top-0 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
+          <h1 className="text-3xl font-bold text-light-text dark:text-dark-text mb-4">Renesis Knowledge Base</h1>
+          <p className="text-light-muted dark:text-dark-muted mb-6 max-w-3xl">
               Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
           </p>
           <form onSubmit={handleSearch} className="flex gap-2">
@@ -89,7 +89,7 @@ const KnowledgeBasePage: React.FC = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search for a topic (e.g., 'SOHN adapter benefits')..."
-                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                  className="flex-1 bg-light-surface dark:bg-dark-surface text-light-text dark:text-dark-text rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent transition border border-light-border dark:border-dark-border"
                   disabled={isLoading}
               />
               <Button type="submit" variant="primary" size="icon" disabled={isLoading || !searchTerm.trim()} aria-label="Search">
@@ -106,20 +106,20 @@ const KnowledgeBasePage: React.FC = () => {
                   <XIcon className="w-4 h-4" />
                   Back to Common Issues
               </Button>
-              <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200">
+              <div className="bg-light-surface dark:bg-dark-surface p-4 sm:p-6 rounded-lg border border-light-border dark:border-dark-border shadow-lg prose-slate dark:prose-invert max-w-none text-light-text dark:text-dark-text">
                   <MessageContent text={article.text} />
                    {article.sources && article.sources.length > 0 && (
-                      <div className="mt-8 pt-4 border-t border-slate-300 dark:border-slate-600">
-                          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Sources</h3>
+                      <div className="mt-8 pt-4 border-t border-light-border dark:border-dark-border">
+                          <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-3">Sources</h3>
                           <ul className="space-y-2 list-none p-0">
                               {article.sources.map((source, index) => (
                                   <li key={index} className="flex items-start gap-3">
-                                      <LinkIcon className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                                      <LinkIcon className="w-4 h-4 text-dark-muted mt-1 flex-shrink-0" />
                                       <a 
                                           href={source.uri} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
-                                          className="text-orange-500 hover:underline text-sm"
+                                          className="text-accent hover:underline text-sm"
                                       >
                                           {source.title || source.uri}
                                       </a>
@@ -135,23 +135,23 @@ const KnowledgeBasePage: React.FC = () => {
       {!article && !isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {commonIssues.map((issue, index) => (
-              <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10">
-                  <h2 className="text-xl font-semibold text-orange-500 mb-4">{issue.title}</h2>
+              <div key={index} className="bg-light-surface dark:bg-dark-surface p-4 sm:p-6 rounded-lg border border-light-border dark:border-dark-border flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/10">
+                  <h2 className="text-xl font-semibold text-accent mb-4">{issue.title}</h2>
                   
                   <div className="space-y-4 flex-grow">
                       <div>
-                          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Symptoms</h3>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">{issue.description}</p>
+                          <h3 className="text-sm font-bold text-light-text dark:text-dark-text mb-1.5 uppercase tracking-wider">Symptoms</h3>
+                          <p className="text-sm text-light-muted dark:text-dark-muted">{issue.description}</p>
                       </div>
                       <div>
-                          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Solution</h3>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">{issue.solution}</p>
+                          <h3 className="text-sm font-bold text-light-text dark:text-dark-text mb-1.5 uppercase tracking-wider">Solution</h3>
+                          <p className="text-sm text-light-muted dark:text-dark-muted">{issue.solution}</p>
                       </div>
                   </div>
                   
-                  <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700/70">
-                      <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 italic">{issue.imageSuggestion}</p>
+                  <div className="mt-5 pt-4 border-t border-light-border dark:border-dark-border/70">
+                      <h3 className="text-sm font-bold text-light-text dark:text-dark-text mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
+                      <p className="text-sm text-light-muted dark:text-dark-muted italic">{issue.imageSuggestion}</p>
                   </div>
               </div>
           ))}

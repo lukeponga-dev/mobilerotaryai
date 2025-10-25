@@ -178,31 +178,31 @@ const LivePage: React.FC = () => {
 
     const renderStatusIndicator = () => {
         switch (status) {
-            case 'connecting': return <span className="text-orange-500">Connecting...</span>;
-            case 'live': return <span className="text-green-500 flex items-center gap-2"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>Live</span>;
-            case 'ended': return <span className="text-slate-500">Session Ended</span>;
-            case 'error': return <span className="text-rose-500">Error</span>;
-            default: return <span className="text-slate-500">Idle</span>;
+            case 'connecting': return <span className="text-accent">Connecting...</span>;
+            case 'live': return <span className="text-success flex items-center gap-2"><div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>Live</span>;
+            case 'ended': return <span className="text-light-muted dark:text-dark-muted">Session Ended</span>;
+            case 'error': return <span className="text-danger">Error</span>;
+            default: return <span className="text-light-muted dark:text-dark-muted">Idle</span>;
         }
     };
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-6 lg:p-8 bg-slate-50 dark:bg-slate-950">
+        <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-6 lg:p-8 bg-light-bg dark:bg-dark-bg">
             <div className="w-full max-w-3xl text-center">
                 <h1 className="text-xl font-bold mb-1">Status: {renderStatusIndicator()}</h1>
-                {error && <p className="text-rose-500 text-sm">{error}</p>}
+                {error && <p className="text-danger text-sm">{error}</p>}
             </div>
 
-            <div className="flex-1 w-full max-w-3xl my-4 overflow-y-auto bg-slate-100 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700/50">
+            <div className="flex-1 w-full max-w-3xl my-4 overflow-y-auto bg-light-surface dark:bg-dark-surface rounded-lg p-4 border border-light-border dark:border-dark-border">
                 {transcript.length === 0 && (
-                    <p className="text-slate-400 dark:text-slate-500 text-center italic mt-4">
+                    <p className="text-light-muted dark:text-dark-muted text-center italic mt-4">
                         {status === 'idle' ? 'Start the session to begin conversation.' : 'Transcript will appear here...'}
                     </p>
                 )}
                 <div className="space-y-4">
                     {transcript.map((item) => (
                         <div key={item.id} className={`flex ${item.speaker === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-red-500 text-white' : 'bg-slate-200 dark:bg-slate-700'}`}>
+                            <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-accent text-white' : 'bg-light-panel-muted dark:bg-dark-panel-muted'}`}>
                                 <p style={{ opacity: item.isFinal ? 1 : 0.7 }}>{item.text}</p>
                             </div>
                         </div>
@@ -212,7 +212,7 @@ const LivePage: React.FC = () => {
 
             <div className="flex flex-col items-center gap-4">
                  {status === 'live' && (
-                    <div className="text-center text-slate-500 dark:text-slate-400">
+                    <div className="text-center text-light-muted dark:text-dark-muted">
                         <p>Speak into your microphone now.</p>
                         <p className="text-xs">The AI will respond automatically.</p>
                     </div>

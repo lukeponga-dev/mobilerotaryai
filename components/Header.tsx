@@ -16,13 +16,13 @@ const NavMenu: React.FC<{onClose: () => void}> = ({ onClose }) => {
     ];
 
     return (
-        <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 z-20 p-2 animate-fade-in-up" style={{ animationDuration: '0.2s' }}>
+        <div className="absolute top-full right-0 mt-2 w-56 bg-light-surface dark:bg-dark-surface rounded-lg shadow-xl border border-light-border dark:border-dark-border z-20 p-2 animate-fade-in-up" style={{ animationDuration: '0.2s' }}>
             {navItems.map(item => (
                 <a
                     key={item.route}
                     href={item.route}
                     onClick={onClose}
-                    className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-light-text dark:text-dark-text hover:bg-light-panel-muted dark:hover:bg-dark-panel-muted transition-colors"
                 >
                     {item.icon}
                     <span>{item.label}</span>
@@ -52,8 +52,8 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
   }, [isMenuOpen]);
 
   return (
-    <header className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 flex-shrink-0">
-      <div className="flex items-center justify-between text-slate-900 dark:text-slate-200 py-3 pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] pt-[calc(0.75rem+env(safe-area-inset-top,0rem))]">
+    <header className="bg-light-surface dark:bg-dark-surface border-b border-light-border dark:border-dark-border flex-shrink-0">
+      <div className="flex items-center justify-between text-light-text dark:text-dark-text py-3 pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] pt-[calc(0.75rem+env(safe-area-inset-top,0rem))]">
         <div className="flex items-center min-w-0">
           <Button 
             variant="ghost" 
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
               <MenuIcon className="w-6 h-6" />
           </Button>
           <div className="mr-4 flex-shrink-0 hidden md:block">
-            <WrenchIcon className="w-7 h-7 sm:w-8 sm:h-8 text-orange-500" />
+            <WrenchIcon className="w-7 h-7 sm:w-8 sm:h-8 text-accent" />
           </div>
           <div className="min-w-0">
               <h1 className="text-lg sm:text-xl font-bold truncate" title={sessionName}>{sessionName}</h1>

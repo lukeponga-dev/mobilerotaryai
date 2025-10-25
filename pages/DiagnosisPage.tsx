@@ -27,7 +27,7 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
   };
 
   return (
-    <div className="flex-1 flex min-h-0 bg-slate-50 dark:bg-slate-900">
+    <div className="flex-1 flex min-h-0 bg-light-bg dark:bg-dark-bg">
         <div className="flex-1 flex flex-col min-w-0">
             <ChatWindow
                 messages={session.messages}

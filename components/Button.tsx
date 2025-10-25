@@ -17,14 +17,14 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-slate-900 disabled:opacity-60 disabled:cursor-not-allowed transform hover:-translate-y-px active:scale-95';
+    'inline-flex items-center justify-center font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent dark:focus:ring-offset-dark-bg disabled:opacity-60 disabled:cursor-not-allowed transform hover:-translate-y-px active:scale-95';
 
   const variantClasses = {
-    primary: 'bg-orange-500 text-white hover:bg-orange-600 shadow-sm',
-    secondary: 'bg-slate-200 text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600',
-    ghost: 'bg-transparent text-slate-500 hover:bg-slate-200/70 dark:text-slate-400 dark:hover:bg-slate-700/70',
-    destructive: 'bg-red-500 text-white hover:bg-red-600 shadow-sm',
-    warning: 'bg-orange-500 text-white hover:bg-orange-600 shadow-sm',
+    primary: 'bg-accent text-white hover:brightness-110 shadow-sm',
+    secondary: 'bg-light-panel-muted text-light-text hover:bg-light-border dark:bg-dark-panel-muted dark:text-dark-text dark:hover:bg-dark-border',
+    ghost: 'bg-transparent text-light-muted hover:bg-light-panel-muted/70 dark:text-dark-muted dark:hover:bg-dark-panel-muted/70',
+    destructive: 'bg-danger text-white hover:brightness-110 shadow-sm',
+    warning: 'bg-warning text-white hover:brightness-110 shadow-sm',
   };
 
   const sizeClasses = {

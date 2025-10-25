@@ -29,31 +29,26 @@
               'lg': '16px',
             },
             colors: {
-              slate: {
-                50: '#f8fafc',
-                100: '#f1f5f9',
-                200: '#e2e8f0', // ~Text
-                300: '#cbd5e1',
-                400: '#9ca3af', // Muted
-                500: '#64748b',
-                600: '#475569',
-                700: '#334155',
-                800: '#1e293b', // ~Surface
-                900: '#0f172a', // ~Bg
-                950: '#020617',
-              },
-              orange: { // Accent
-                400: '#fb923c',
-                500: '#f97316',
-                600: '#ea580c',
-              },
-              red: { // Danger
-                500: '#ef4444',
-                600: '#dc2626',
-              },
-              teal: { // Accent2 (for informational sections)
-                500: '#2dd4bf',
-              },
+              'light-bg': '#F7FAFC',
+              'light-surface': '#FFFFFF',
+              'light-text': '#0F1724',
+              'light-muted': '#64748b',
+              'light-panel-muted': '#f1f5f9',
+              'light-border': '#e2e8f0',
+  
+              'dark-bg': '#071427',
+              'dark-surface': '#0B1220',
+              'dark-text': '#E6EEF3',
+              'dark-muted': '#9CA3AF',
+              'dark-panel-muted': '#111827',
+              'dark-border': '#1F2937',
+  
+              accent: '#F59E0B',
+              accent2: '#2DD4BF',
+              success: '#10B981',
+              warning: '#F97316',
+              danger: '#EF4444',
+              info: '#60A5FA',
             },
             keyframes: {
               'fade-in-up': {
@@ -83,7 +78,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 dark:bg-slate-900">
+  <body class="bg-light-bg dark:bg-dark-bg">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

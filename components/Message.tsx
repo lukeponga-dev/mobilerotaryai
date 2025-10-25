@@ -12,14 +12,14 @@ interface MessageProps {
 
 const LoadingDots = () => (
     <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
     </div>
 );
 
 const BlinkingCursor = () => (
-    <span className="inline-block w-2 h-4 bg-slate-500 dark:bg-slate-300 ml-1 animate-pulse align-bottom"></span>
+    <span className="inline-block w-2 h-4 bg-light-muted dark:bg-dark-muted ml-1 animate-pulse align-bottom"></span>
 );
 
 export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
@@ -32,7 +32,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                 if (part.startsWith('```') && part.endsWith('```')) {
                     const code = part.slice(3, -3).trim();
                     return (
-                        <pre key={index} className="bg-slate-300 dark:bg-slate-900/70 text-slate-800 dark:text-slate-200 p-3 rounded-md my-2 font-mono text-xs overflow-x-auto">
+                        <pre key={index} className="bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text p-3 rounded-md my-2 font-mono text-xs overflow-x-auto">
                             <code>{code}</code>
                         </pre>
                     );
@@ -101,9 +101,9 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
             aria-label={isPlaying ? "Stop audio" : "Play audio"}
         >
             {isLoading ? (
-                <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-light-muted border-t-transparent rounded-full animate-spin"></div>
             ) : isPlaying ? (
-                <StopCircleIcon className="w-6 h-6 text-orange-500" />
+                <StopCircleIcon className="w-6 h-6 text-accent" />
             ) : (
                 <SpeakerWaveIcon className="w-6 h-6" />
             )}
@@ -115,15 +115,15 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-tr-lg'
-    : 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-lg';
+    ? 'bg-gradient-to-br from-accent to-warning text-white rounded-tr-lg'
+    : 'bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text rounded-tl-lg';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
   return (
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
         {!isUser && (
-            <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center flex-shrink-0 mt-1 self-start">
-                <WrenchIcon className="w-5 h-5 text-orange-500" />
+            <div className="w-8 h-8 rounded-full bg-light-panel-muted dark:bg-dark-panel-muted flex items-center justify-center flex-shrink-0 mt-1 self-start">
+                <WrenchIcon className="w-5 h-5 text-accent" />
             </div>
         )}
       <div className={`max-w-[85%] sm:max-w-md md:max-w-xl rounded-lg shadow-md ${bubbleClasses}`}>

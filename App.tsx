@@ -231,7 +231,7 @@ const App: React.FC = () => {
     const activeSessionId = route.startsWith('#/session/') ? route.split('/')[2] : null;
 
     return (
-        <div className="h-screen w-screen flex bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-200 font-sans relative">
+        <div className="h-screen w-screen flex bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text font-sans relative">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
