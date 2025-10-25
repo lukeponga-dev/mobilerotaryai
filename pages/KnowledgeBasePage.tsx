@@ -99,7 +99,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search for a topic (e.g., 'SOHN adapter benefits')..."
-                    className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 transition"
+                    className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
                     disabled={isLoading}
                 />
                 <Button type="submit" variant="primary" size="icon" disabled={isLoading || !searchTerm.trim()} aria-label="Search">
@@ -129,7 +129,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
                                             href={source.uri} 
                                             target="_blank" 
                                             rel="noopener noreferrer"
-                                            className="text-amber-500 hover:underline text-sm"
+                                            className="text-orange-500 hover:underline text-sm"
                                         >
                                             {source.title || source.uri}
                                         </a>
@@ -145,8 +145,8 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
         {!article && !isLoading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {commonIssues.map((issue, index) => (
-                <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10">
-                    <h2 className="text-xl font-semibold text-amber-500 mb-4">{issue.title}</h2>
+                <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10">
+                    <h2 className="text-xl font-semibold text-orange-500 mb-4">{issue.title}</h2>
                     
                     <div className="space-y-4 flex-grow">
                         <div>

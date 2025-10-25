@@ -45,18 +45,18 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
             {/* Main Content */}
             <div className="lg:col-span-3">
               {hasRecentSessions && latestSession ? (
-                <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-amber-600 p-6 rounded-lg border border-amber-500/20 shadow-xl h-full flex flex-col justify-between">
+                <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-lg border border-orange-500/20 shadow-xl h-full flex flex-col justify-between">
                    <WrenchIcon className="absolute -right-6 -bottom-10 w-36 h-36 text-white/10 transform rotate-[-15deg] pointer-events-none" />
                    <div>
                         <h2 className="text-2xl font-bold text-white mb-2">Continue Your Diagnosis</h2>
-                        <p className="text-amber-100 mb-4 max-w-md">
+                        <p className="text-orange-100 mb-4 max-w-md">
                             You were last working on: <strong className="font-semibold">{latestSession.name}</strong>
                         </p>
                    </div>
                    <Button
                         onClick={() => window.location.hash = `#/session/${latestSession.id}`}
                         size="lg"
-                        className="w-full sm:w-auto bg-white/90 text-amber-600 hover:bg-white shadow-lg !ring-offset-amber-500"
+                        className="w-full sm:w-auto bg-white/90 text-orange-600 hover:bg-white shadow-lg !ring-offset-orange-500"
                     >
                         Jump Back In
                     </Button>
@@ -107,14 +107,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
                     <a
                       key={session.id}
                       href={`#/session/${session.id}`}
-                      className="group block p-5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 transition-all duration-300 hover:shadow-xl hover:ring-2 hover:ring-amber-500/80 hover:-translate-y-1"
+                      className="group block p-5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 transition-all duration-300 hover:shadow-xl hover:ring-2 hover:ring-orange-500/80 hover:-translate-y-1"
                     >
-                      <p className="font-semibold truncate text-slate-800 dark:text-slate-100 group-hover:text-amber-500 dark:group-hover:text-amber-400">{session.name}</p>
+                      <p className="font-semibold truncate text-slate-800 dark:text-slate-100 group-hover:text-orange-500 dark:group-hover:text-orange-400">{session.name}</p>
                       <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{`Last updated: ${new Date(session.createdAt).toLocaleDateString()}`}</p>
                     </a>
                   ))}
                   {sessions.length > 3 && (
-                    <a href="#/sessions" className="flex items-center justify-center p-5 bg-slate-100/50 dark:bg-slate-800/50 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-amber-500 hover:text-amber-500 transition-colors">
+                    <a href="#/sessions" className="flex items-center justify-center p-5 bg-slate-100/50 dark:bg-slate-800/50 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-orange-500 hover:text-orange-500 transition-colors">
                         View All Sessions...
                     </a>
                   )}
@@ -137,14 +137,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
                     <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Quick Knowledge</h2>
                 </div>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                    Browse these common topics or search the full <a href="#/knowledge" className="text-amber-500 hover:underline font-medium">Knowledge Base</a> for more info.
+                    Browse these common topics or search the full <a href="#/knowledge" className="text-orange-500 hover:underline font-medium">Knowledge Base</a> for more info.
                 </p>
                 <div className="flex flex-wrap gap-3">
                     {quickLinks.map(link => (
                       <a
                         key={link.title}
                         href={link.href}
-                        className="px-4 py-2 text-sm font-medium bg-slate-200 text-slate-700 rounded-full transition-all duration-200 transform hover:-translate-y-px hover:shadow-md hover:bg-amber-400/30 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-amber-500/20"
+                        className="px-4 py-2 text-sm font-medium bg-slate-200 text-slate-700 rounded-full transition-all duration-200 transform hover:-translate-y-px hover:shadow-md hover:bg-orange-400/30 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-orange-500/20"
                       >
                         {link.title}
                       </a>

@@ -67,7 +67,9 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
 
     const handleMessage = useCallback(async (message: LiveServerMessage) => {
         if (message.serverContent?.inputTranscription) {
-            const { text, isFinal } = message.serverContent.inputTranscription;
+            // FIX: The 'isFinal' property does not exist on 'Transcription'. Use 'done' instead.
+            const { text, done } = message.serverContent.inputTranscription;
+            const isFinal = !!done;
             if (!currentInputIdRef.current) {
                  currentInputIdRef.current = `transcript_${Date.now()}`;
                  setTranscript(prev => [...prev, {id: currentInputIdRef.current!, speaker: 'user', text, isFinal}]);
@@ -78,7 +80,9 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
         }
 
         if (message.serverContent?.outputTranscription) {
-            const { text, isFinal } = message.serverContent.outputTranscription;
+            // FIX: The 'isFinal' property does not exist on 'Transcription'. Use 'done' instead.
+            const { text, done } = message.serverContent.outputTranscription;
+            const isFinal = !!done;
             if (!currentOutputIdRef.current) {
                  currentOutputIdRef.current = `transcript_${Date.now()}`;
                  setTranscript(prev => [...prev, {id: currentOutputIdRef.current!, speaker: 'model', text, isFinal}]);
@@ -168,7 +172,7 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
 
     const renderStatusIndicator = () => {
         switch (status) {
-            case 'connecting': return <span className="text-amber-500">Connecting...</span>;
+            case 'connecting': return <span className="text-orange-500">Connecting...</span>;
             case 'live': return <span className="text-green-500 flex items-center gap-2"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>Live</span>;
             case 'ended': return <span className="text-slate-500">Session Ended</span>;
             case 'error': return <span className="text-rose-500">Error</span>;
@@ -194,7 +198,7 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
                     <div className="space-y-4">
                         {transcript.map((item) => (
                             <div key={item.id} className={`flex ${item.speaker === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-rose-500 text-white' : 'bg-slate-200 dark:bg-slate-700'}`}>
+                                <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-red-500 text-white' : 'bg-slate-200 dark:bg-slate-700'}`}>
                                     <p style={{ opacity: item.isFinal ? 1 : 0.7 }}>{item.text}</p>
                                 </div>
                             </div>

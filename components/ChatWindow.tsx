@@ -35,7 +35,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, quickRepli
                   {quickReplies.map((reply, i) => (
                       <button
                           key={i}
-                          className="px-4 py-2 text-sm font-medium bg-slate-200 text-slate-700 rounded-full transition-all duration-200 transform hover:-translate-y-px hover:shadow-md hover:bg-amber-400/30 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-amber-500/20"
+                          className="px-4 py-2 text-sm font-medium bg-slate-200 text-slate-700 rounded-full transition-all duration-200 transform hover:-translate-y-px hover:shadow-md hover:bg-orange-400/30 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-orange-500/20"
                           onClick={() => onQuickReply(reply)}
                       >
                           {reply}

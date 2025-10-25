@@ -12,9 +12,9 @@ interface MessageProps {
 
 const LoadingDots = () => (
     <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
     </div>
 );
 
@@ -23,44 +23,56 @@ const BlinkingCursor = () => (
 );
 
 export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
+    // Split by code blocks first to isolate them
+    const parts = text.split(/(```[\s\S]*?```)/g).filter(Boolean);
+
     return (
-      <div>
-        {text.split('\n').map((line, index) => {
-          // Handle lists
-          if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
-            const content = line.substring(line.indexOf(' ') + 1);
-            const parts = content.split(/(\*\*.*?\*\*)/g);
-            return (
-              <div key={index} className="flex items-start pl-4">
-                <span className="mr-2 mt-1">•</span>
-                <span className="flex-1">
-                  {parts.map((part, i) =>
-                    part.startsWith('**') && part.endsWith('**') ? (
-                      <strong key={i}>{part.slice(2, -2)}</strong>
-                    ) : (
-                      part
-                    )
-                  )}
-                </span>
-              </div>
-            );
-          }
-  
-          // Handle bold text and headers
-          const parts = line.split(/(\*\*.*?\*\*)/g);
-          return (
-            <p key={index} className={line.trim() === '' ? 'h-4' : ''}>
-              {parts.map((part, i) =>
-                part.startsWith('**') && part.endsWith('**') ? (
-                  <strong key={i}>{part.slice(2, -2)}</strong>
-                ) : (
-                  part
-                )
-              )}
-            </p>
-          );
-        })}
-      </div>
+        <div className="text-sm leading-relaxed">
+            {parts.map((part, index) => {
+                if (part.startsWith('```') && part.endsWith('```')) {
+                    const code = part.slice(3, -3).trim();
+                    return (
+                        <pre key={index} className="bg-slate-300 dark:bg-slate-900/70 text-slate-800 dark:text-slate-200 p-3 rounded-md my-2 font-mono text-xs overflow-x-auto">
+                            <code>{code}</code>
+                        </pre>
+                    );
+                }
+
+                // Process regular text with other markdown
+                return part.split('\n').map((line, lineIndex) => {
+                    // Handle Headings like **Title:**
+                    if (line.match(/^\*\*.*:\*\*$/) || line.match(/^\*\*.*:\*\*/)) {
+                        return <h3 key={`${index}-${lineIndex}`} className="font-semibold mt-3 mb-1.5">{line.replace(/\*\*/g, '')}</h3>;
+                    }
+
+                    // Handle list items
+                    if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
+                        const content = line.substring(line.indexOf(' ') + 1);
+                        const boldParts = content.split(/(\*\*.*?\*\*)/g);
+                        return (
+                            <div key={`${index}-${lineIndex}`} className="flex items-start pl-2 my-1">
+                                <span className="mr-2 mt-1 shrink-0">•</span>
+                                <span className="flex-1">
+                                    {boldParts.map((p, i) =>
+                                        p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{p.slice(2, -2)}</strong> : p
+                                    )}
+                                </span>
+                            </div>
+                        );
+                    }
+
+                    // Handle paragraphs with bold text
+                    const boldParts = line.split(/(\*\*.*?\*\*)/g);
+                    return (
+                        <p key={`${index}-${lineIndex}`} className={line.trim() === '' ? 'h-4' : 'my-0.5'}>
+                            {boldParts.map((p, i) =>
+                                p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{p.slice(2, -2)}</strong> : p
+                            )}
+                        </p>
+                    );
+                });
+            })}
+        </div>
     );
 };
 
@@ -91,7 +103,7 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
             {isLoading ? (
                 <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
             ) : isPlaying ? (
-                <StopCircleIcon className="w-6 h-6 text-amber-500" />
+                <StopCircleIcon className="w-6 h-6 text-orange-500" />
             ) : (
                 <SpeakerWaveIcon className="w-6 h-6" />
             )}
@@ -103,7 +115,7 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-tr-lg'
+    ? 'bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-tr-lg'
     : 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-lg';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
@@ -111,10 +123,10 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
         {!isUser && (
             <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center flex-shrink-0 mt-1 self-start">
-                <WrenchIcon className="w-5 h-5 text-amber-500" />
+                <WrenchIcon className="w-5 h-5 text-orange-500" />
             </div>
         )}
-      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl rounded-2xl shadow-md ${bubbleClasses}`}>
+      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl rounded-lg shadow-md ${bubbleClasses}`}>
         {message.image && (
           <img src={message.image} alt="User upload" className={`rounded-lg max-h-64 ${message.text ? 'mb-2' : ''}`} />
         )}

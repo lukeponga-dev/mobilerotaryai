@@ -17,10 +17,10 @@ const getItemVisuals = (text: string, type: ItemType): { Icon: React.FC<any>, co
     }
 
     if (/\b(stop|immediately|failure|fail|overheat|critical|danger|do not drive|catastrophic|severe damage)\b/.test(lowerText)) {
-        return { Icon: XCircleIcon, color: 'text-rose-500' };
+        return { Icon: XCircleIcon, color: 'text-red-500' };
     }
     if (/\b(check|inspect|replace|misfire|leak|caution|warning|poor|low|weak|fault|scan)\b/.test(lowerText)) {
-        return { Icon: ExclamationTriangleIcon, color: 'text-amber-500' };
+        return { Icon: ExclamationTriangleIcon, color: 'text-orange-500' };
     }
     return { Icon: InformationCircleIcon, color: 'text-sky-500' };
 };

@@ -224,7 +224,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                       }
                   }}
                   placeholder="Describe your issue..."
-                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
+                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
                   rows={1}
                   disabled={isLoading}
               />
@@ -233,12 +233,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={onToggleDeepAnalysis}
-                className={`relative rounded-full ${isDeepAnalysis ? 'text-amber-500' : ''}`}
+                className={`relative rounded-full ${isDeepAnalysis ? 'text-orange-500' : ''}`}
                 aria-label={isDeepAnalysis ? 'Disable deep analysis' : 'Enable deep analysis'}
                 title={isDeepAnalysis ? 'Deep analysis enabled' : 'Enable deep analysis for complex issues'}
                 disabled={isLoading}
               >
-                {isDeepAnalysis && <div className="absolute inset-0 bg-amber-500/20 rounded-full animate-pulse"></div>}
+                {isDeepAnalysis && <div className="absolute inset-0 bg-orange-500/20 rounded-full animate-pulse"></div>}
                 <BrainIcon className="w-6 h-6" />
               </Button>
               <Button
@@ -246,11 +246,11 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={toggleListening}
-                className={`relative rounded-full ${isListening ? 'text-amber-500' : ''}`}
+                className={`relative rounded-full ${isListening ? 'text-orange-500' : ''}`}
                 aria-label={isListening ? 'Stop listening' : 'Start listening'}
                 disabled={isLoading}
               >
-                {isListening && <div className="absolute inset-0 bg-amber-500/20 rounded-full animate-pulse"></div>}
+                {isListening && <div className="absolute inset-0 bg-orange-500/20 rounded-full animate-pulse"></div>}
                 <MicrophoneIcon className="w-6 h-6" />
               </Button>
               <Button

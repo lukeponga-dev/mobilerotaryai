@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
       `}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
-            <WrenchIcon className="w-7 h-7 text-amber-500"/>
+            <WrenchIcon className="w-7 h-7 text-orange-500"/>
             <h2 className="text-lg font-semibold">AI Mazda Mechanic</h2>
           </a>
           <button onClick={onToggleSidebar} className="md:hidden p-1" aria-label="Close sidebar">
@@ -64,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                     <a href={item.route} key={item.route} onClick={onToggleSidebar}
                         className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                             getIsActive(item.route) 
-                            ? 'bg-amber-500/10 text-amber-500 dark:text-amber-400 border-amber-500' 
+                            ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500' 
                             : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                         }`}>
                         {item.icon}
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                 <a href="#/privacy" onClick={onToggleSidebar}
                     className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                         getIsActive('#/privacy') 
-                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500' 
+                        ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500' 
                         : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                     }`}>
                     <ShieldCheckIcon className="w-5 h-5" />
