@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
-import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import React, { useState, useRef } from 'react';
+import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from '@/components/icons';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 
 interface InputBarProps {
   onSendMessage: (text: string, image?: string, video?: string) => void;
@@ -97,15 +97,15 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
             <div className="relative group">
                 <button
                     type="button"
-                    className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                    className="p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                     aria-label="Attach file"
                     disabled={isLoading}
                 >
                     <PlusIcon className="w-6 h-6" />
                 </button>
                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-focus-within:flex group-hover:flex bg-slate-300 dark:bg-slate-700 rounded-lg p-1 space-x-1">
-                    <button type="button" onClick={() => imageInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><PaperclipIcon className="w-5 h-5"/></button>
-                    <button type="button" onClick={() => videoInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><VideoCameraIcon className="w-5 h-5"/></button>
+                    <button type="button" onClick={() => imageInputRef.current?.click()} className="p-2.5 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><PaperclipIcon className="w-5 h-5"/></button>
+                    <button type="button" onClick={() => videoInputRef.current?.click()} className="p-2.5 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><VideoCameraIcon className="w-5 h-5"/></button>
                 </div>
             </div>
             <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
@@ -127,7 +127,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
             <button
             type="button"
             onClick={toggleListening}
-            className={`p-2 transition-colors relative ${isListening ? 'text-rose-500' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+            className={`p-2.5 transition-colors relative ${isListening ? 'text-rose-500' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
             aria-label={isListening ? 'Stop listening' : 'Start listening'}
             disabled={isLoading}
             >
@@ -136,7 +136,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
             </button>
             <button
             type="submit"
-            className="p-2 text-white bg-rose-600 rounded-full hover:bg-rose-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
+            className="p-2.5 text-white bg-rose-600 rounded-full hover:bg-rose-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
             disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
             aria-label="Send message"
             >

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Session } from '../types';
-import Header from '../components/Header';
-import ChatWindow from '../components/ChatWindow';
-import InputBar from '../components/InputBar';
-import ContextPanel from '../components/ContextPanel';
+import { Session } from '@/types/diagnosis';
+import Header from '@/components/Header';
+import ChatWindow from '@/components/ChatWindow';
+import InputBar from '@/components/InputBar';
+import DiagnosisSummary from '@/components/DiagnosisSummary';
 
 interface DiagnosisPageProps {
   session: Session;
@@ -43,7 +43,7 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
                 <ChatWindow messages={session.messages} isLoading={isLoading} />
                 <InputBar onSendMessage={handleSendMessage} isLoading={isLoading} />
             </div>
-            <ContextPanel
+            <DiagnosisSummary
               context={session.context}
               isLoading={isLoading}
               isOpen={isContextPanelOpen}
