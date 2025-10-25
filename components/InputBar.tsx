@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon } from './icons';
+import React, { useState, useRef, useEffect } from 'react';
+import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon, PhotoIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import Button from './Button';
 
@@ -21,13 +21,30 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [isAttaching, setIsAttaching] = useState(false);
+  const [isAttachmentMenuOpen, setIsAttachmentMenuOpen] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const attachmentContainerRef = useRef<HTMLDivElement>(null);
 
   const handleTranscriptChange = (transcript: string) => {
     setText(prev => (prev.trim() ? prev.trim() + ' ' : '') + transcript);
   };
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (attachmentContainerRef.current && !attachmentContainerRef.current.contains(event.target as Node)) {
+            setIsAttachmentMenuOpen(false);
+        }
+    };
+    if (isAttachmentMenuOpen) {
+        document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isAttachmentMenuOpen]);
+
 
   const { isListening, startListening, stopListening, error: speechError } = useSpeechRecognition(handleTranscriptChange);
 
@@ -149,26 +166,42 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
               </div>
           )}
           <div className="flex items-end gap-2 md:gap-3">
-              <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => imageInputRef.current?.click()}
-                  aria-label="Attach image"
-                  disabled={isLoading || isAttaching}
-              >
-                  <PaperclipIcon className="w-6 h-6" />
-              </Button>
-               <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => videoInputRef.current?.click()}
-                  aria-label="Attach video"
-                  disabled={isLoading || isAttaching}
-              >
-                  <VideoCameraIcon className="w-6 h-6" />
-              </Button>
+              <div className="relative" ref={attachmentContainerRef}>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsAttachmentMenuOpen(prev => !prev)}
+                    aria-label="Attach file"
+                    disabled={isLoading || isAttaching}
+                >
+                    <PaperclipIcon className="w-6 h-6" />
+                </Button>
+                {isAttachmentMenuOpen && (
+                    <div 
+                        className="absolute bottom-full mb-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 z-10 p-2 animate-fade-in-up"
+                        style={{animationDuration: '0.2s'}}
+                    >
+                        <button
+                            type="button"
+                            onClick={() => { imageInputRef.current?.click(); setIsAttachmentMenuOpen(false); }}
+                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            <PhotoIcon className="w-5 h-5" />
+                            <span>Attach Image</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { videoInputRef.current?.click(); setIsAttachmentMenuOpen(false); }}
+                            className="w-full text-left flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            <VideoCameraIcon className="w-5 h-5" />
+                            <span>Attach Video</span>
+                        </button>
+                    </div>
+                )}
+              </div>
+
               <input type="file" accept="image/*" ref={imageInputRef} onChange={(e) => handleFileChange(e, 'image')} className="hidden" />
               <input type="file" accept="video/*" ref={videoInputRef} onChange={(e) => handleFileChange(e, 'video')} className="hidden" />
               <textarea
