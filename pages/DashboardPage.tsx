@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
-import { Session } from '../types';
+// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
+import { Session } from '../src/types';
 import { PlusIcon, BookmarkSquareIcon } from '../components/icons';
 
 interface DashboardPageProps {

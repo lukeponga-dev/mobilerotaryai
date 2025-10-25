@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Message as MessageType } from '../types';
+// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
+import { Message as MessageType } from '../../src/types';
 import Message from './Message';
 
 interface ChatWindowProps {

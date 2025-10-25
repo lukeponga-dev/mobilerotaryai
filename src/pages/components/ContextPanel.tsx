@@ -1,5 +1,6 @@
 import React from 'react';
-import { ContextData } from '../types';
+// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
+import { ContextData } from '../../src/types';
 import { XIcon } from './icons';
 
 interface ContextPanelProps {

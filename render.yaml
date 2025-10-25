@@ -6,5 +6,5 @@ services:
     staticPublishPath: dist
     pullRequestPreviewsEnabled: true
     envVars:
-      - key: GEMINI_API_KEY
+      - key: API_KEY
         sync: false

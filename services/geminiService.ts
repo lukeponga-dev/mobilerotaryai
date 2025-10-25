@@ -1,5 +1,6 @@
 import { GoogleGenAI, GenerateContentParameters, Type } from "@google/genai";
-import { Message, ContextData } from "../types";
+// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
+import { Message, ContextData } from "./src/types";
 
 const API_KEY = process.env.API_KEY;
 

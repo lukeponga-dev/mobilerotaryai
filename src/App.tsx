@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Session, Message } from './types';
+import { Session, Message, ContextData } from './types';
 import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
