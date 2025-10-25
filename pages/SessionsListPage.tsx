@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import { Session } from '../types';
 import { TrashIcon, PlusIcon } from '../components/icons';
 import Modal from '../components/Modal';
+import Button from '../components/Button';
 
 interface SessionsListPageProps {
   sessions: Session[];
@@ -68,16 +69,18 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
                             Created on {new Date(session.createdAt).toLocaleDateString()}
                         </p>
                     </a>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteClick(session);
                         }}
-                        className="text-slate-500 dark:text-slate-500 hover:text-rose-500 transition-colors ml-4 flex-shrink-0 p-2"
+                        className="text-slate-500 dark:text-slate-500 hover:text-rose-500 ml-4 flex-shrink-0"
                         aria-label={`Delete session ${session.name}`}
                     >
                         <TrashIcon className="w-5 h-5" />
-                    </button>
+                    </Button>
                 </div>
             ))}
             </div>
@@ -85,13 +88,15 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
           <div className="text-center py-12">
             <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-300">No Sessions Found</h2>
             <p className="text-slate-500 dark:text-slate-500 mt-2 mb-6">Get started by creating a new diagnosis session.</p>
-            <button
+            <Button
               onClick={onNewSession}
-              className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition-colors"
+              variant="primary"
+              size="md"
+              className="gap-2"
             >
               <PlusIcon className="w-5 h-5" />
               <span>New Diagnosis</span>
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -105,18 +110,18 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
           Are you sure you want to permanently delete the session "{sessionToDelete?.name}"? This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-3">
-          <button
+          <Button
             onClick={cancelDelete}
-            className="px-4 py-2 text-sm font-medium text-slate-800 dark:text-slate-200 bg-slate-200 dark:bg-slate-600 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors"
+            variant="secondary"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={confirmDelete}
-            className="px-4 py-2 text-sm font-medium text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition-colors"
+            variant="destructive"
           >
             Delete Session
-          </button>
+          </Button>
         </div>
       </Modal>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import Button from './Button';
 
 interface InputBarProps {
   onSendMessage: (text: string, image?: string, video?: string) => void;
@@ -30,8 +31,6 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      // FIX: Add a runtime check to ensure the file is a Blob. This prevents the
-      // "parameter 1 is not of type 'Blob'" error if an invalid value is passed.
       if (!file || !(file instanceof Blob)) {
         return reject(new Error("Attempted to read a non-Blob file."));
       }
@@ -105,24 +104,26 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
               </div>
           )}
           <div className="flex items-end gap-2 md:gap-3">
-              <button
+              <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => imageInputRef.current?.click()}
-                  className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50"
                   aria-label="Attach image"
                   disabled={isLoading}
               >
                   <PaperclipIcon className="w-6 h-6" />
-              </button>
-               <button
+              </Button>
+               <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => videoInputRef.current?.click()}
-                  className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50"
                   aria-label="Attach video"
                   disabled={isLoading}
               >
                   <VideoCameraIcon className="w-6 h-6" />
-              </button>
+              </Button>
               <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
               <input type="file" accept="video/*" ref={videoInputRef} onChange={handleVideoChange} className="hidden" />
               <textarea
@@ -140,24 +141,28 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                   rows={1}
                   disabled={isLoading}
               />
-              <button
-              type="button"
-              onClick={toggleListening}
-              className={`p-2 transition-colors relative ${isListening ? 'text-rose-500' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-              aria-label={isListening ? 'Stop listening' : 'Start listening'}
-              disabled={isLoading}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={toggleListening}
+                className={`relative rounded-full ${isListening ? 'text-rose-500' : ''}`}
+                aria-label={isListening ? 'Stop listening' : 'Start listening'}
+                disabled={isLoading}
               >
-              {isListening && <div className="absolute inset-0 bg-rose-500/20 rounded-full animate-pulse"></div>}
-              <MicrophoneIcon className="w-6 h-6" />
-              </button>
-              <button
-              type="submit"
-              className="p-2 text-white bg-rose-600 rounded-full hover:bg-rose-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
-              disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
-              aria-label="Send message"
+                {isListening && <div className="absolute inset-0 bg-rose-500/20 rounded-full animate-pulse"></div>}
+                <MicrophoneIcon className="w-6 h-6" />
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="icon"
+                className="rounded-full"
+                disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
+                aria-label="Send message"
               >
-              <SendIcon className="w-6 h-6" />
-              </button>
+                <SendIcon className="w-6 h-6" />
+              </Button>
           </div>
         </form>
       </div>

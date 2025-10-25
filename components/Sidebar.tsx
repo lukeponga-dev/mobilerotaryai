@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
 import ThemeToggle from './ThemeToggle';
+import Button from './Button';
 
 interface SidebarProps {
   onNewSession: () => void;
@@ -19,14 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
 
   const getIsActive = (route: string) => {
     if (route === '#/sessions') {
-      // This correctly highlights "My Sessions" for both the list page and individual session pages.
       return activeRoute === '#/sessions' || activeRoute.startsWith('#/session/');
     }
     if (route === '#/') {
-      // Exact match for the dashboard to prevent it from being active on other pages.
       return activeRoute === '#/';
     }
-    // For other routes like '#/knowledge'.
     return activeRoute.startsWith(route);
   }
 
@@ -49,13 +47,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
         </div>
 
         <div className="p-4 border-b border-slate-200 dark:border-slate-700/50">
-          <button
+          <Button
             onClick={onNewSession}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-rose-600 rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-800 focus:ring-rose-500 transition-colors"
+            variant="primary"
+            className="w-full gap-2"
           >
             <PlusIcon className="w-5 h-5" />
             New Diagnosis
-          </button>
+          </Button>
         </div>
 
         <nav className="flex-1 p-2 flex flex-col">

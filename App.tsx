@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Session, Message, ContextData } from './types';
+import { Session, Message } from './types';
 import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import AdBanner from './components/AdBanner';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext } from './services/geminiService';
 
 declare global {
@@ -210,7 +211,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans relative overflow-hidden">
+        <div className="h-screen w-screen flex bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans relative">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
@@ -223,9 +224,12 @@ const App: React.FC = () => {
                 isSidebarOpen={isSidebarOpen}
                 onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
             />
-            <main className="flex-1 flex flex-col min-w-0">
-                {renderPage()}
-            </main>
+            <div className="flex-1 flex flex-col min-w-0">
+                <main className="flex-1 flex flex-col min-w-0">
+                    {renderPage()}
+                </main>
+                <AdBanner />
+            </div>
         </div>
     );
 };
