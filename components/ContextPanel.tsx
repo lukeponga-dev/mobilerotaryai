@@ -9,20 +9,48 @@ interface ContextPanelProps {
 
 type ItemType = 'symptom' | 'action' | 'part';
 
-const getItemVisuals = (text: string, type: ItemType): { Icon: React.FC<any>, color: string } => {
+// REFACTORED: This function now returns a richer visual style object for color-coding.
+type ItemVisuals = {
+    Icon: React.FC<any>;
+    iconColor: string;
+    borderColor: string;
+    bgColor: string;
+};
+
+const getItemVisuals = (text: string, type: ItemType): ItemVisuals => {
     const lowerText = text.toLowerCase();
     
     if (type === 'part') {
-        return { Icon: Cog6ToothIcon, color: 'text-info' };
+        return { 
+            Icon: Cog6ToothIcon, 
+            iconColor: 'text-info', 
+            borderColor: 'border-info',
+            bgColor: 'bg-info/10'
+        };
     }
 
     if (/\b(stop|immediately|failure|fail|overheat|critical|danger|do not drive|catastrophic|severe damage)\b/.test(lowerText)) {
-        return { Icon: XCircleIcon, color: 'text-danger' };
+        return { 
+            Icon: XCircleIcon, 
+            iconColor: 'text-danger',
+            borderColor: 'border-danger',
+            bgColor: 'bg-danger/10'
+        };
     }
     if (/\b(check|inspect|replace|misfire|leak|caution|warning|poor|low|weak|fault|scan)\b/.test(lowerText)) {
-        return { Icon: ExclamationTriangleIcon, color: 'text-warning' };
+        return { 
+            Icon: ExclamationTriangleIcon, 
+            iconColor: 'text-warning',
+            borderColor: 'border-warning',
+            bgColor: 'bg-warning/10'
+        };
     }
-    return { Icon: InformationCircleIcon, color: 'text-accent2' };
+    return { 
+        Icon: InformationCircleIcon, 
+        iconColor: 'text-accent2',
+        borderColor: 'border-accent2',
+        bgColor: 'bg-accent2/10'
+    };
 };
 
 const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
@@ -33,12 +61,14 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
     return (
       <div>
         <h3 className="text-sm font-semibold text-light-muted dark:text-dark-muted mb-3 uppercase tracking-wider">{title}</h3>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {items.map((item, index) => {
-             const { Icon, color } = getItemVisuals(item, type);
+             // REFACTORED: Destructure the new visual style object
+             const { Icon, iconColor, borderColor, bgColor } = getItemVisuals(item, type);
              return (
-                <div key={index} className="flex items-start gap-3 bg-light-panel-muted dark:bg-dark-panel-muted p-4 rounded-lg border border-light-border dark:border-dark-border shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${color}`} />
+                // REFACTORED: Apply new styling with colored border and background for better scannability
+                <div key={index} className={`flex items-start gap-3 p-3 rounded-md border-l-4 transition-colors duration-200 ${borderColor} ${bgColor}`}>
+                    <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${iconColor}`} />
                     <p className="flex-1 text-sm text-light-text dark:text-dark-text">{item}</p>
                 </div>
              );
