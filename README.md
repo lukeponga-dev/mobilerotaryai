@@ -1,20 +1,41 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# AI Mazda Mechanic
 
-# Run and deploy your AI Studio app
+![React](https://img.shields.io/badge/Frontend-React-blue)
+![TypeScript](https://img.shields.io/badge/Language-TypeScript-blueviolet)
+![Vite](https://img.shields.io/badge/Build-Vite-ff69b4)
+![Gemini AI](https://img.shields.io/badge/AI-Gemini-lightgrey)
+![Render](https://img.shields.io/badge/Hosting-Render-green)
+![AdMob](https://img.shields.io/badge/Ads-AdMob-yellow)
+![Status](https://img.shields.io/badge/Status-In_Development-orange)
 
-This contains everything you need to run your app locally.
+AI Mazda Mechanic is a mobile-first diagnostic dashboard designed for Mazda RX-series vehicles. Powered by Gemini AI, it helps drivers and enthusiasts troubleshoot rotary engine issues, decode fault codes, and access expert guidance—all in real time.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1WQiSiTIaK02zqPadWG6t6FEo29LTaPBT
+## Key Features
 
-## Run Locally
+- Intelligent fault code analysis for RX-7 and RX-8 models  
+- Session history and diagnosis tracking  
+- Mobile-optimized interface with dark mode  
+- Modular React components and clean architecture  
+- Role-based access support (coming soon)
 
-**Prerequisites:**  Node.js
+## Tech Stack
 
+- **Frontend:** React, TypeScript, Vite  
+- **AI Integration:** Gemini API  
+- **Deployment:** Render  
+- **Styling:** Tailwind CSS (optional)  
+- **Ads:** AdMob banner integration (partner bidding supported)
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Add your Gemini API key
+echo "GEMINI_API_KEY=your_key_here" > .env.local
+
+# Run the app locally
+npm run dev
+---
+```
