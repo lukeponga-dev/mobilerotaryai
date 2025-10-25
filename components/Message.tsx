@@ -115,18 +115,13 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-accent to-warning text-white rounded-tr-lg'
-    : 'bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text rounded-tl-lg';
+    ? 'bg-gradient-to-br from-accent to-warning text-white rounded-xl rounded-br-none'
+    : 'bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text rounded-xl rounded-bl-none';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
   return (
-    <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
-        {!isUser && (
-            <div className="w-8 h-8 rounded-full bg-light-panel-muted dark:bg-dark-panel-muted flex items-center justify-center flex-shrink-0 mt-1 self-start">
-                <WrenchIcon className="w-5 h-5 text-accent" />
-            </div>
-        )}
-      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl rounded-lg shadow-md ${bubbleClasses}`}>
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
+      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl shadow-md ${bubbleClasses}`}>
         {message.image && (
           <img src={message.image} alt="User upload" className={`rounded-lg max-h-64 ${message.text ? 'mb-2' : ''}`} />
         )}

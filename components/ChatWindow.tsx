@@ -31,7 +31,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, quickRepli
               isLastMessage={isLastMessage}
             />
             {showQuickReplies && (
-              <div className="flex flex-wrap gap-2 mt-3 ml-11 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="flex flex-wrap gap-2 mt-3 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                   {quickReplies.map((reply, i) => (
                       <button
                           key={i}

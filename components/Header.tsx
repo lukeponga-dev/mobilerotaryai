@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DownloadIcon, MenuIcon, WrenchIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon } from './icons';
+import { DownloadIcon, MenuIcon, WrenchIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon, PlusIcon } from './icons';
 import Button from './Button';
 
 interface HeaderProps {
@@ -83,6 +83,15 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
               <span className="hidden sm:inline">Export</span>
             </Button>
           )}
+           <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => window.location.hash = '#/'}
+                aria-label="Start new diagnosis"
+                title="New Diagnosis"
+            >
+                <PlusIcon className="w-6 h-6" />
+            </Button>
            <div className="relative" ref={menuRef}>
                 <Button
                     variant="ghost"

@@ -16,6 +16,20 @@ declare global {
     }
 }
 
+// Helper function to get image dimensions from base64 string
+const getImageDimensions = (base64: string): Promise<{ width: number, height: number }> => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            resolve({ width: img.naturalWidth, height: img.naturalHeight });
+        };
+        img.onerror = (err) => {
+            reject(err);
+        };
+        img.src = base64;
+    });
+};
+
 const App: React.FC = () => {
     const [sessions, setSessions] = useState<Session[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -167,7 +181,7 @@ const App: React.FC = () => {
     };
 
     // --- PDF Export ---
-    const handleExportPDF = (sessionId: string) => {
+    const handleExportPDF = async (sessionId: string) => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const session = sessions.find(s => s.id === sessionId);
@@ -180,15 +194,76 @@ const App: React.FC = () => {
         doc.line(14, 32, 196, 32);
         let y = 40;
 
-        session.messages.forEach(message => {
-            if (y > 280) { doc.addPage(); y = 20; }
+        for (const message of session.messages) {
+            if (y > 270) {
+                doc.addPage();
+                y = 20;
+            }
+
             doc.setFont(undefined, message.role === 'user' ? 'bold' : 'normal');
             doc.setTextColor(message.role === 'user' ? '#d97706' : '#333333');
             const prefix = message.role === 'user' ? 'You:' : 'AI:';
-            const splitText = doc.splitTextToSize(`${prefix} ${message.text}`, 180);
-            doc.text(splitText, 14, y);
-            y += (splitText.length * 5) + 5;
-        });
+
+            if (message.text) {
+                const splitText = doc.splitTextToSize(`${prefix} ${message.text}`, 180);
+                const textHeight = splitText.length * 5;
+                if (y + textHeight > 280) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(splitText, 14, y);
+                y += textHeight;
+            } else {
+                doc.text(prefix, 14, y);
+                y += 5;
+            }
+
+            if (message.text && (message.image || message.video)) {
+                y += 3;
+            }
+
+            if (message.image) {
+                try {
+                    const dims = await getImageDimensions(message.image);
+                    const maxWidth = 80;
+                    const ratio = dims.width / dims.height;
+                    const width = Math.min(dims.width, maxWidth);
+                    const height = width / ratio;
+
+                    if (y + height > 280) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.addImage(message.image, undefined, 14, y, width, height);
+                    y += height + 5;
+                } catch (e) {
+                    console.error("Could not add image to PDF", e);
+                    if (y > 280) { doc.addPage(); y = 20; }
+                    doc.saveState();
+                    doc.setFont(undefined, 'italic');
+                    doc.setTextColor('#888888');
+                    doc.text('[Image failed to load]', 14, y);
+                    doc.restoreState();
+                    y += 10;
+                }
+            }
+
+            if (message.video) {
+                if (y > 280) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.saveState();
+                doc.setFont(undefined, 'italic');
+                doc.setTextColor('#888888');
+                doc.text('[Video Attached - Not viewable in PDF]', 14, y);
+                doc.restoreState();
+                y += 10;
+            }
+
+            y += 10; // Spacing between messages
+        }
         
         doc.save(`AI-Mazda-Mechanic-Report-${session.id}.pdf`);
     };
