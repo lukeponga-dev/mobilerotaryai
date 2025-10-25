@@ -65,31 +65,38 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
         }
     }, [cleanup]);
 
+    // FIX: Refactored to correctly handle transcription streams and finality.
+    // The 'done' property does not exist on 'Transcription'. Finality is signaled by 'turnComplete'.
     const handleMessage = useCallback(async (message: LiveServerMessage) => {
         if (message.serverContent?.inputTranscription) {
-            // FIX: The 'isFinal' property does not exist on 'Transcription'. Use 'done' instead.
-            const { text, done } = message.serverContent.inputTranscription;
-            const isFinal = !!done;
+            const { text } = message.serverContent.inputTranscription;
             if (!currentInputIdRef.current) {
                  currentInputIdRef.current = `transcript_${Date.now()}`;
-                 setTranscript(prev => [...prev, {id: currentInputIdRef.current!, speaker: 'user', text, isFinal}]);
+                 setTranscript(prev => [...prev, {id: currentInputIdRef.current!, speaker: 'user', text, isFinal: false}]);
             } else {
-                 setTranscript(prev => prev.map(t => t.id === currentInputIdRef.current! ? {...t, text: t.text + text, isFinal} : t));
+                 setTranscript(prev => prev.map(t => t.id === currentInputIdRef.current! ? {...t, text: t.text + text } : t));
             }
-             if (isFinal) currentInputIdRef.current = null;
         }
 
         if (message.serverContent?.outputTranscription) {
-            // FIX: The 'isFinal' property does not exist on 'Transcription'. Use 'done' instead.
-            const { text, done } = message.serverContent.outputTranscription;
-            const isFinal = !!done;
+            const { text } = message.serverContent.outputTranscription;
             if (!currentOutputIdRef.current) {
                  currentOutputIdRef.current = `transcript_${Date.now()}`;
-                 setTranscript(prev => [...prev, {id: currentOutputIdRef.current!, speaker: 'model', text, isFinal}]);
+                 setTranscript(prev => [...prev, {id: currentOutputIdRef.current!, speaker: 'model', text, isFinal: false}]);
             } else {
-                 setTranscript(prev => prev.map(t => t.id === currentOutputIdRef.current! ? {...t, text: t.text + text, isFinal} : t));
+                 setTranscript(prev => prev.map(t => t.id === currentOutputIdRef.current! ? {...t, text: t.text + text } : t));
             }
-             if (isFinal) currentOutputIdRef.current = null;
+        }
+        
+        if (message.serverContent?.turnComplete) {
+            setTranscript(prev => prev.map(t => {
+                if ((t.id === currentInputIdRef.current || t.id === currentOutputIdRef.current) && !t.isFinal) {
+                    return { ...t, isFinal: true };
+                }
+                return t;
+            }));
+            currentInputIdRef.current = null;
+            currentOutputIdRef.current = null;
         }
         
         const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData.data;
