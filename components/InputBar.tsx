@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
+import React, { useState, useRef } from 'react';
+import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 interface InputBarProps {
@@ -13,6 +13,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTranscriptChange = (transcript: string) => {
     setText(prev => (prev.trim() ? prev.trim() + ' ' : '') + transcript);
@@ -47,6 +48,9 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
       onSendMessage(text, imagePreview || undefined, videoPreview || undefined);
       setText('');
       clearAttachments();
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -74,6 +78,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
     }
   };
 
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+    e.target.style.height = 'auto';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }
+
   return (
     <div className="p-3 md:p-4 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
       <form onSubmit={handleSubmit} className="w-full">
@@ -93,36 +103,41 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading }) => {
                 </div>
             </div>
         )}
-        <div className="flex items-start gap-2 md:gap-3">
-            <div className="relative group">
-                <button
-                    type="button"
-                    className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    aria-label="Attach file"
-                    disabled={isLoading}
-                >
-                    <PlusIcon className="w-6 h-6" />
-                </button>
-                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-focus-within:flex group-hover:flex bg-slate-300 dark:bg-slate-700 rounded-lg p-1 space-x-1">
-                    <button type="button" onClick={() => imageInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><PaperclipIcon className="w-5 h-5"/></button>
-                    <button type="button" onClick={() => videoInputRef.current?.click()} className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-400/50 dark:hover:bg-slate-600 rounded-md"><VideoCameraIcon className="w-5 h-5"/></button>
-                </div>
-            </div>
+        <div className="flex items-end gap-2 md:gap-3">
+            <button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50"
+                aria-label="Attach image"
+                disabled={isLoading}
+            >
+                <PaperclipIcon className="w-6 h-6" />
+            </button>
+             <button
+                type="button"
+                onClick={() => videoInputRef.current?.click()}
+                className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50"
+                aria-label="Attach video"
+                disabled={isLoading}
+            >
+                <VideoCameraIcon className="w-6 h-6" />
+            </button>
             <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
             <input type="file" accept="video/*" ref={videoInputRef} onChange={handleVideoChange} className="hidden" />
             <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e);
-                }
-            }}
-            placeholder="Describe your issue..."
-            className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-32 transition"
-            rows={1}
-            disabled={isLoading}
+                ref={textareaRef}
+                value={text}
+                onChange={handleTextChange}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                    }
+                }}
+                placeholder="Describe your issue..."
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-40 transition overflow-y-auto"
+                rows={1}
+                disabled={isLoading}
             />
             <button
             type="button"

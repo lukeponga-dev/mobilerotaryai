@@ -9,6 +9,13 @@ interface DashboardPageProps {
   onToggleSidebar: () => void;
 }
 
+const quickLinks = [
+    { title: 'Engine Flooding', href: '#/knowledge' },
+    { title: 'Ignition Coil Failure', href: '#/knowledge' },
+    { title: 'Low Compression / Apex Seal Wear', href: '#/knowledge' },
+    { title: 'Oil Consumption', href: '#/knowledge' },
+];
+
 const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, onToggleSidebar }) => {
   const recentSessions = sessions.slice(0, 3);
 
@@ -21,7 +28,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         
         {/* Main Call to Action Section */}
-        <div className="text-center py-12 md:py-16">
+        <div className="text-center py-10 md:py-12">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
           <p className="text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
             Click the button below to start a new session with RotorWise AI and get expert help for your Mazda RX-8.
@@ -35,10 +42,10 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
           </button>
         </div>
 
-        {/* Secondary Information Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8 max-w-5xl mx-auto w-full">
-          {/* Recent Sessions */}
-          <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
+          {/* Recent Sessions (takes 2 columns on lg) */}
+          <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Recent Sessions</h2>
             {recentSessions.length > 0 ? (
               <ul className="space-y-3">
@@ -57,22 +64,37 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
             ) : (
               <p className="text-slate-500 dark:text-slate-500 italic">No recent sessions found.</p>
             )}
-            {sessions.length > 3 && (
+            {sessions.length > 0 && (
                 <a href="#/sessions" className="block text-center mt-4 text-sm text-rose-500 hover:underline font-medium">View all sessions</a>
             )}
           </div>
           
-          {/* Knowledge Base */}
-          <a href="#/knowledge" className="group bg-slate-100 dark:bg-slate-800 p-6 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-900/20 flex flex-col items-center justify-center text-center border border-slate-200 dark:border-slate-700/50 shadow-lg hover:border-rose-500/50">
-            <div className="p-4 bg-white dark:bg-slate-700/50 rounded-full mb-4 transition-colors duration-300 group-hover:bg-rose-500/10 dark:group-hover:bg-rose-500/20">
-                <BookmarkSquareIcon className="w-10 h-10 text-rose-500 transition-colors duration-300 group-hover:text-rose-400" />
+          {/* Knowledge Base & Quick Links */}
+          <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-white dark:bg-slate-700/50 rounded-full">
+                    <BookmarkSquareIcon className="w-6 h-6 text-rose-500" />
+                </div>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Knowledge Base</h2>
             </div>
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Knowledge Base</h2>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">Browse common RX-8 issues.</p>
-          </a>
-
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                Browse common issues or use these quick links to learn more.
+            </p>
+             <ul className="space-y-2">
+                {quickLinks.map(link => (
+                  <li key={link.title}>
+                    <a 
+                      href={link.href} 
+                      className="block p-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700/50 rounded-md hover:bg-slate-200/60 dark:hover:bg-slate-700 hover:text-rose-500 transition-colors"
+                    >
+                      {link.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            <a href="#/knowledge" className="block text-center mt-4 text-sm text-rose-500 hover:underline font-medium">View all articles</a>
+          </div>
         </div>
-
       </div>
     </div>
   );
