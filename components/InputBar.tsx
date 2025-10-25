@@ -10,11 +10,17 @@ interface InputBarProps {
   onToggleDeepAnalysis?: () => void;
 }
 
+const MAX_IMAGE_SIZE_MB = 10;
+const MAX_VIDEO_SIZE_MB = 25;
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
+
 const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAnalysis, onToggleDeepAnalysis }) => {
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [isAttaching, setIsAttaching] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -56,30 +62,47 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
       }
     }
   };
+  
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fileType: 'image' | 'video') => {
+    const file = e.target.files?.[0];
+    const inputRef = fileType === 'image' ? imageInputRef : videoInputRef;
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      clearAttachments();
-      try {
-        const base64 = await fileToBase64(e.target.files[0]);
-        setImagePreview(base64);
-      } catch (err) {
-        console.error("Error converting image to base64", err);
-        setFileError("Could not load image. Please try another file.");
-      }
+    if (!file) return;
+
+    clearAttachments();
+    setFileError(null);
+
+    const isImage = fileType === 'image';
+    const maxSize = isImage ? MAX_IMAGE_SIZE_BYTES : MAX_VIDEO_SIZE_BYTES;
+    const maxSizeMB = isImage ? MAX_IMAGE_SIZE_MB : MAX_VIDEO_SIZE_MB;
+    const expectedType = isImage ? 'image/' : 'video/';
+    const friendlyTypeName = isImage ? 'Image' : 'Video';
+
+    if (file.size > maxSize) {
+        setFileError(`${friendlyTypeName} file is too large. Maximum size is ${maxSizeMB}MB.`);
+        if (inputRef.current) inputRef.current.value = '';
+        return;
     }
-  };
 
-  const handleVideoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-        clearAttachments();
-        try {
-            const base64 = await fileToBase64(e.target.files[0]);
+    if (!file.type.startsWith(expectedType)) {
+        setFileError(`Invalid file type. Please select a${isImage ? 'n' : ''} ${fileType}.`);
+        if (inputRef.current) inputRef.current.value = '';
+        return;
+    }
+
+    setIsAttaching(true);
+    try {
+        const base64 = await fileToBase64(file);
+        if (isImage) {
+            setImagePreview(base64);
+        } else {
             setVideoPreview(base64);
-        } catch (err) {
-            console.error("Error converting video to base64", err);
-            setFileError("Could not load video. Please try another file.");
         }
+    } catch (err) {
+        console.error(`Error converting ${fileType} to base64`, err);
+        setFileError(`Could not load ${fileType}. Please try another file.`);
+    } finally {
+        setIsAttaching(false);
     }
   };
 
@@ -119,9 +142,10 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                   </div>
               </div>
           )}
-          {errorMessage && (
-              <div className="text-rose-500 text-xs text-center mb-2 px-2">
-                  {errorMessage}
+          {(errorMessage || isAttaching) && (
+              <div className="text-xs text-center mb-2 px-2">
+                  {errorMessage && <span className="text-rose-500">{errorMessage}</span>}
+                  {isAttaching && !errorMessage && <span className="text-slate-500 dark:text-slate-400">Loading attachment preview...</span>}
               </div>
           )}
           <div className="flex items-end gap-2 md:gap-3">
@@ -131,7 +155,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                   size="icon"
                   onClick={() => imageInputRef.current?.click()}
                   aria-label="Attach image"
-                  disabled={isLoading}
+                  disabled={isLoading || isAttaching}
               >
                   <PaperclipIcon className="w-6 h-6" />
               </Button>
@@ -141,12 +165,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                   size="icon"
                   onClick={() => videoInputRef.current?.click()}
                   aria-label="Attach video"
-                  disabled={isLoading}
+                  disabled={isLoading || isAttaching}
               >
                   <VideoCameraIcon className="w-6 h-6" />
               </Button>
-              <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
-              <input type="file" accept="video/*" ref={videoInputRef} onChange={handleVideoChange} className="hidden" />
+              <input type="file" accept="image/*" ref={imageInputRef} onChange={(e) => handleFileChange(e, 'image')} className="hidden" />
+              <input type="file" accept="video/*" ref={videoInputRef} onChange={(e) => handleFileChange(e, 'video')} className="hidden" />
               <textarea
                   ref={textareaRef}
                   value={text}
@@ -192,7 +216,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="primary"
                 size="icon"
                 className="rounded-full"
-                disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
+                disabled={isLoading || isAttaching || (!text.trim() && !imagePreview && !videoPreview)}
                 aria-label="Send message"
               >
                 <SendIcon className="w-6 h-6" />
