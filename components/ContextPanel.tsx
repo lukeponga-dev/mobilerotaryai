@@ -37,7 +37,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
           {items.map((item, index) => {
              const { Icon, color } = getItemVisuals(item, type);
              return (
-                <div key={index} className="flex items-start gap-3 bg-slate-200/50 dark:bg-slate-700/50 p-2.5 rounded-md border border-slate-200 dark:border-slate-700">
+                <div key={index} className="flex items-start gap-3 bg-white dark:bg-slate-800/80 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
                     <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${color}`} />
                     <p className="flex-1 text-sm text-slate-700 dark:text-slate-300">{item}</p>
                 </div>

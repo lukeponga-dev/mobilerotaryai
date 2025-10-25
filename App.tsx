@@ -60,12 +60,21 @@ const App: React.FC = () => {
         }
     }, [createNewSession]);
 
+    // Auto-save sessions with debounce
     useEffect(() => {
-        if (sessions.length > 0) {
-            localStorage.setItem('rotorwise_sessions', JSON.stringify(sessions));
-        } else {
-            localStorage.removeItem('rotorwise_sessions');
-        }
+        const autoSave = setTimeout(() => {
+            if (sessions.length > 0) {
+                try {
+                    localStorage.setItem('rotorwise_sessions', JSON.stringify(sessions));
+                } catch (error) {
+                    console.error("Failed to auto-save sessions to localStorage", error);
+                }
+            } else {
+                localStorage.removeItem('rotorwise_sessions');
+            }
+        }, 1000); // Debounce save by 1 second
+
+        return () => clearTimeout(autoSave);
     }, [sessions]);
     
     const handleNewSession = () => {
@@ -211,7 +220,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans relative">
+        <div className="h-screen w-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans relative">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"

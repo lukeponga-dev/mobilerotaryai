@@ -13,14 +13,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
         const savedTheme = localStorage.getItem('rotorwise_theme');
-        if (savedTheme === 'light' || savedTheme === 'dark') {
-            return savedTheme;
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'dark';
+        if (savedTheme === 'light') {
+            return 'light';
         }
     }
-    return 'light';
+    return 'dark';
   });
 
   useEffect(() => {

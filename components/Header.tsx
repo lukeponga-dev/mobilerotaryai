@@ -11,7 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSidebar }) => {
   return (
     <header className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 flex-shrink-0">
-      <div className="flex items-center justify-between text-slate-900 dark:text-slate-100 pb-3 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))]">
+      <div className="flex items-center justify-between text-slate-900 dark:text-slate-100 py-3 pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] pt-[calc(0.75rem+env(safe-area-inset-top,0rem))]">
         <div className="flex items-center min-w-0">
           <Button 
             variant="ghost" 

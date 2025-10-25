@@ -40,7 +40,7 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
   };
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-slate-900">
+    <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950">
       <Header
         sessionName="My Sessions"
         onToggleSidebar={onToggleSidebar}
@@ -54,7 +54,7 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
                     key={session.id} 
                     className={`
                         group relative bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 flex items-center justify-between p-4 
-                        transition-all duration-300 ease-in-out
+                        transition-all duration-300 ease-in-out hover:bg-slate-200/60 dark:hover:bg-slate-700/60 hover:ring-2 hover:ring-rose-500/50
                         ${deletingId === session.id ? 'opacity-0 scale-95 -translate-x-8' : 'opacity-100'}
                     `}
                 >

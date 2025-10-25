@@ -15,7 +15,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading }) => {
   }, [messages, isLoading]);
 
   return (
-    <div className="flex-1 p-4 md:p-6 overflow-y-auto bg-white dark:bg-slate-900 scroll-smooth">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto bg-slate-50 dark:bg-slate-950 scroll-smooth">
       {messages.map((msg, index) => (
         <Message 
           key={msg.id} 

@@ -101,7 +101,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
 
   return (
     <div className="bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700/50">
-      <div className="pt-3 md:pt-4 pl-[calc(0.75rem+env(safe-area-inset-left,0rem))] md:pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(0.75rem+env(safe-area-inset-right,0rem))] md:pr-[calc(1rem+env(safe-area-inset-right,0rem))] pb-[calc(0.75rem+env(safe-area-inset-bottom,0rem))] md:pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]">
+      <div className="pt-4 pl-[calc(0.75rem+env(safe-area-inset-left,0rem))] md:pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(0.75rem+env(safe-area-inset-right,0rem))] md:pr-[calc(1rem+env(safe-area-inset-right,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]">
         <form onSubmit={handleSubmit} className="w-full">
           {(imagePreview || videoPreview) && (
               <div className="relative w-full max-w-xs mb-3">
@@ -158,7 +158,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                       }
                   }}
                   placeholder="Describe your issue..."
-                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-40 transition overflow-y-auto"
+                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
                   rows={1}
                   disabled={isLoading}
               />
@@ -191,7 +191,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 type="submit"
                 variant="primary"
                 size="icon"
-                className="rounded-full transform transition-transform duration-150 ease-out active:scale-90 active:-translate-y-0.5"
+                className="rounded-full"
                 disabled={isLoading || (!text.trim() && !imagePreview && !videoPreview)}
                 aria-label="Send message"
               >

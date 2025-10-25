@@ -65,19 +65,19 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-br-none'
-    : 'bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-none';
+    ? 'bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-tr-lg'
+    : 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-lg';
 
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
   return (
-    <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
         {!isUser && (
             <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center flex-shrink-0 mt-1 self-start">
                 <RotorIcon className="w-5 h-5 text-rose-500" />
             </div>
         )}
-      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl px-4 py-3 rounded-xl shadow-md ${bubbleClasses}`}>
+      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl px-4 py-3 rounded-2xl shadow-md ${bubbleClasses}`}>
         {message.image && (
           <img src={message.image} alt="User upload" className="rounded-lg mb-2 max-h-64" />
         )}

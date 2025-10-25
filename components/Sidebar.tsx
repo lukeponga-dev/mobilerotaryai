@@ -61,10 +61,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
             <div className="space-y-1">
                 {navItems.map(item => (
                     <a href={item.route} key={item.route} onClick={onToggleSidebar}
-                        className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                             getIsActive(item.route) 
-                            ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white' 
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
+                            ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500' 
+                            : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                         }`}>
                         {item.icon}
                         <span>{item.label}</span>
@@ -73,15 +73,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
             </div>
             <div className="mt-auto pt-2 space-y-1 border-t border-slate-200 dark:border-slate-700/50">
                 <a href="#/privacy" onClick={onToggleSidebar}
-                    className={`flex items-center gap-3 p-2 text-sm font-medium rounded-md cursor-pointer transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                         getIsActive('#/privacy') 
-                        ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white' 
-                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
+                        ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500' 
+                        : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                     }`}>
                     <ShieldCheckIcon className="w-5 h-5" />
                     <span>Privacy Policy</span>
                 </a>
-                <div className="flex items-center justify-between rounded-md p-2 text-slate-600 dark:text-slate-400">
+                <div className="flex items-center justify-between rounded-md px-3 py-2 text-slate-600 dark:text-slate-400">
                     <span className="text-sm font-medium">Appearance</span>
                     <ThemeToggle />
                 </div>
