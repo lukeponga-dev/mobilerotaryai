@@ -1,84 +1,39 @@
-# Privacy Policy
+# Privacy Policy for AI Mazda Mechanic
 
-**Effective Date:** 2025-10-25  
-**Application:** Ai Mazda Mechanic  
-**Service Provider:** ORBASA  
-**Contact:** developmentdesignsltd@gmail.com
+**Last updated:** October 25, 2025
 
-This Privacy Policy applies to the Ai Mazda Mechanic mobile application (the "Application") created by ORBASA (the "Service Provider") as an open-source service. This service is provided "AS IS".
+AI Mazda Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
 
----
+## Information We Collect
 
-## Information Collection and Use
+We may collect information about you in a variety of ways. The information we may collect via the Application includes:
 
-The Application may collect certain information when you download and use it, including:
+-   **Session Data:** All diagnostic sessions, including text messages, uploaded images, and videos, are stored locally on your device's browser storage (localStorage). We do not have access to this data.
+-   **Voice Data:** If you use the voice-to-text feature, your audio is processed by your browser's native Speech Recognition API. We do not store or transmit your voice data to our servers.
+-   **Anonymous Usage Data:** We may collect anonymous data about your interaction with the application to improve our services. This data is not personally identifiable.
 
-- Your device's Internet Protocol (IP) address  
-- Pages visited within the Application  
-- Time and date of visits  
-- Duration of use  
-- Your mobile device's operating system
+## How We Use Your Information
 
-> **Note:** The Application does **not** collect precise location data.
+The data you provide is used for the following purposes:
 
-The Service Provider may use this information to:
+-   To provide the core functionality of the diagnostic assistant.
+-   To persist your diagnostic sessions for future reference on your device.
+-   To improve the application's performance and features based on anonymous usage patterns.
 
-- Improve the Application and services  
-- Contact you with important updates, notices, or promotional content  
-- Retain personally identifiable information (e.g., developmentdesignsltd@gmail.com, lukeponga-dev) as needed for service functionality
+## Data Storage and Security
 
----
+Your session data is stored exclusively in your browser's localStorage. This means your data remains on your device and is not uploaded to any server. You have full control over this data and can clear it at any time by clearing your browser's cache or by deleting sessions within the application.
 
-## Third-Party Access
+We do not use cookies for tracking purposes.
 
-Aggregated, anonymized data may be shared with third-party services to enhance the Application. The Service Provider may disclose information:
+## Third-Party Services
 
-- To comply with legal obligations (e.g., subpoenas)  
-- To protect rights, safety, or investigate fraud  
-- To trusted service providers who adhere to this policy and act on behalf of the Service Provider
+The application uses the Google Gemini API to process your queries and generate diagnostic responses. When you send a message, the content of that message (including text and any attached media) is sent to Google for processing. We recommend reviewing Google's Privacy Policy to understand how they handle your data.
 
----
+## Changes to This Privacy Policy
 
-## Opt-Out Rights
-
-You may stop all information collection by uninstalling the Application using your device’s standard uninstall process.
-
----
-
-## Data Retention Policy
-
-User-provided data is retained as long as the Application is in use and for a reasonable period afterward. To request deletion of your data, contact:  
-📧 **developmentdesignsltd@gmail.com**
-
----
-
-## Children’s Privacy
-
-The Application is **not intended for children under 13**. The Service Provider does not knowingly collect personal data from children. If you believe a child has submitted personal information, please contact the Service Provider to take appropriate action.
-
-> Users must be at least **16 years old** to consent to data processing, unless permitted by local law through a parent or guardian.
-
----
-
-## Security
-
-The Service Provider implements physical, electronic, and procedural safeguards to protect your data.
-
----
-
-## Changes to This Policy
-
-This Privacy Policy may be updated periodically. Continued use of the Application constitutes acceptance of any changes. Please review this page regularly.
-
----
-
-## Your Consent
-
-By using the Application, you consent to the collection and use of information as described in this Privacy Policy.
-
----
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.
 
 ## Contact Us
 
-For questions or concerns about this policy, please contact:  
-📧 **developmentdesignsltd@gmail.com**
+If you have any questions about this Privacy Policy, please contact us. (Note: This is a demo application, no contact information is provided).

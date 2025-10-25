@@ -27,7 +27,7 @@ AI Mazda Mechanic is a specialized, mobile-first diagnostic assistant for Mazda 
 ## Tech Stack
 
 - **Frontend:** React 19, TypeScript, Vite
-- **AI Integration:** Google Gemini API (`gemini-2.5-flash`) for streaming responses, title generation, and context extraction.
+- **AI Integration:** Google Gemini API (`gemini-2.5-flash`, `gemini-2.5-pro`) for streaming responses, title generation, and context extraction.
 - **Styling:** Tailwind CSS for a utility-first design system.
 - **Web APIs:**
   - **Web Speech API:** For voice-to-text dictation.
@@ -83,13 +83,12 @@ The codebase is organized to be modular and maintainable:
 ├── hooks/          # Custom React hooks (useSpeechRecognition)
 ├── pages/          # Top-level page components for each route
 ├── services/       # API interaction logic (geminiService.ts)
-├── styles/         # Global CSS and Tailwind configuration
-└── types/          # TypeScript type definitions (Session, Message, etc.)
+└── types.ts        # TypeScript type definitions (Session, Message, etc.)
 ```
 
 ## Privacy & Data
 
 This application is designed with user privacy in mind:
-- **Session Data:** All your diagnostic chats, including messages and uploaded media previews, are stored **only in your browser's local storage**. This data is never sent to or stored on a server.
-- **API Calls:** When you send a message, the content is sent to the Google Gemini API for processing. Please refer to [Google's Privacy Policy](https://policies.google.com/privacy) for more information.
-- For more details, see the in-app Privacy Policy page.
+- **Local Data Storage:** All your diagnostic chats, including messages and uploaded media previews, are stored **only in your browser's local storage**. This data is never sent to or stored on a server controlled by this application.
+- **API Calls:** When you send a message, the content (text and media) is sent to the Google Gemini API for processing. Please refer to [Google's Privacy Policy](https://policies.google.com/privacy) for more information on how they handle data.
+- For more details, see the in-app Privacy Policy page or the `privacy-policy.md` file in this repository.
