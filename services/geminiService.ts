@@ -1,5 +1,50 @@
-import { GoogleGenAI, GenerateContentParameters, Type, Modality, LiveServerMessage, Blob } from "@google/genai";
+import { GoogleGenAI, GenerateContentParameters, Type, Modality, LiveServerMessage, Blob, GenerateContentResponse } from "@google/genai";
 import { Message, ContextData, GroundingSource, ArticleData, LiveTranscript } from "../types";
+
+// --- Custom Error Handling ---
+/**
+ * Custom error class for specific feedback on API failures.
+ */
+export class GeminiServiceError extends Error {
+  constructor(message: string, public cause?: any) {
+    super(message);
+    this.name = 'GeminiServiceError';
+  }
+}
+
+/**
+ * Parses known API errors into user-friendly messages.
+ * @param error The catched error object.
+ * @param context A string identifying the calling function for better logging.
+ * @returns A GeminiServiceError with a user-friendly message.
+ */
+const handleApiError = (error: unknown, context: string): GeminiServiceError => {
+  console.error(`Gemini API Error in ${context}:`, error);
+  if (error instanceof Error) {
+    const message = error.message.toLowerCase();
+    if (message.includes('fetch failed') || message.includes('network')) {
+      return new GeminiServiceError("Network connection error. Please check your internet and try again.", error);
+    }
+    if (message.includes('429')) {
+      return new GeminiServiceError("The AI service is currently busy. Please wait a moment and try again.", error);
+    }
+    if (message.includes('api key not valid')) {
+      return new GeminiServiceError("The API key is invalid. Please check your application configuration.", error);
+    }
+    if (message.includes('safety policies')) {
+      return new GeminiServiceError("The request was blocked for safety reasons. Please adjust your input.", error);
+    }
+    if (message.includes('500') || message.includes('503') || message.includes('server error')) {
+      return new GeminiServiceError("The AI service is temporarily unavailable. Please try again later.", error);
+    }
+    // Return the original message if it's informative enough
+    if ((error as any).message) {
+        return new GeminiServiceError((error as any).message, error);
+    }
+  }
+  return new GeminiServiceError(`An unexpected error occurred in ${context}.`, error);
+};
+
 
 const API_KEY = process.env.API_KEY;
 
@@ -126,253 +171,292 @@ const fileToGenerativePart = (base64Data: string, mimeType: string) => {
   };
 };
 
-export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message, isDeepAnalysis?: boolean): AsyncGenerator<string> {
-    const contents = history.map(msg => ({
-      role: msg.role,
-      parts: [{ text: msg.text }],
-    }));
-  
-    const latestUserParts = [{ text: latestMessage.text }];
-    if (latestMessage.image) {
-      const mimeType = latestMessage.image.match(/data:(.*);base64,/)?.[1] || 'image/jpeg';
-      latestUserParts.push(fileToGenerativePart(latestMessage.image, mimeType) as any);
-    } else if (latestMessage.video) {
-      const mimeType = latestMessage.video.match(/data:(.*);base64,/)?.[1] || 'video/mp4';
-      latestUserParts.push(fileToGenerativePart(latestMessage.video, mimeType) as any);
+/**
+ * Selects the appropriate Gemini model and configuration based on the user's input and settings.
+ * This function ensures the best model is used for each specific task, from quick chats to deep video analysis.
+ */
+const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean) => {
+    const baseConfig = { systemInstruction: SYSTEM_INSTRUCTION };
+
+    // FEATURE: Thinking Mode for complex queries.
+    // Uses the powerful gemini-2.5-pro model with a maximum thinking budget for in-depth analysis.
+    if (isDeepAnalysis) {
+        console.log('Using Deep Analysis model: gemini-2.5-pro');
+        return {
+            modelName: 'gemini-2.5-pro',
+            config: {
+                ...baseConfig,
+                thinkingConfig: { thinkingBudget: 32768 }
+            }
+        };
+    }
+
+    // FEATURE: Video Understanding.
+    // Automatically uses gemini-2.5-pro for analyzing video files, as it provides more accurate and detailed insights.
+    if (latestMessage.video) {
+        console.log('Using Video Analysis model: gemini-2.5-pro');
+        return {
+            modelName: 'gemini-2.5-pro',
+            config: baseConfig
+        };
     }
     
-    let modelName = 'gemini-2.5-flash';
-    const config: any = { systemInstruction: SYSTEM_INSTRUCTION };
+    // FEATURE: Chat Bot & Image Analysis.
+    // For standard text chats and image analysis, the fast and efficient gemini-2.5-flash is used.
+    console.log('Using Standard Chat/Image model: gemini-2.5-flash');
+    return {
+        modelName: 'gemini-2.5-flash',
+        config: baseConfig
+    };
+};
 
-    if (isDeepAnalysis) {
-        modelName = 'gemini-2.5-pro';
-        config.thinkingConfig = { thinkingBudget: 32768 };
-    } else if (latestMessage.video) {
-        // Use Pro for video analysis as it's more complex
-        modelName = 'gemini-2.5-pro';
+/**
+ * Generates a streaming diagnostic response from the Gemini API.
+ */
+export const getDiagnosticResponseStream = (history: Message[], latestMessage: Message, isDeepAnalysis?: boolean) => {
+    const { modelName, config } = getModelAndConfig(latestMessage, isDeepAnalysis);
+
+    const modelHistory = history.map(msg => ({
+        role: msg.role,
+        parts: [{ text: msg.text }]
+    }));
+
+    const parts = [];
+    if (latestMessage.text) {
+        parts.push({ text: latestMessage.text });
     }
-     
-    const request: GenerateContentParameters = {
-      model: modelName,
-      contents: [
-        ...contents,
-        { role: 'user', parts: latestUserParts }
-      ],
-      config: config
+    if (latestMessage.image) {
+        const [mimeType, ] = latestMessage.image.match(/data:(.*?);base64,/) || [];
+        if (mimeType) {
+            parts.push(fileToGenerativePart(latestMessage.image, mimeType.replace('data:', '')));
+        }
+    }
+    if (latestMessage.video) {
+        const [mimeType, ] = latestMessage.video.match(/data:(.*?);base64,/) || [];
+        if (mimeType) {
+            parts.push(fileToGenerativePart(latestMessage.video, mimeType.replace('data:', '')));
+        }
+    }
+    
+    const params: GenerateContentParameters = {
+        model: modelName,
+        contents: [...modelHistory, { role: 'user', parts }],
+        config,
     };
     
-    try {
-      const result = await model.generateContentStream(request);
-      for await (const chunk of result) {
-        if (chunk.text) {
-            yield chunk.text;
+    return (async function*() {
+        try {
+            const streamPromise = model.generateContentStream(params);
+            const stream = await streamPromise;
+            for await (const chunk of stream) {
+                if (chunk.text) {
+                    yield chunk.text;
+                }
+            }
+        } catch (error) {
+            throw handleApiError(error, 'getDiagnosticResponseStream');
         }
-      }
-    } catch (error) {
-      console.error("Error calling Gemini API:", error);
-      yield "Sorry, I encountered an error. Please check the console for details and try again.";
-    }
-  };
+    })();
+};
 
-export const generateSessionTitle = async (firstMessage: string): Promise<string> => {
-    const prompt = `Based on the following user query about a Mazda RX-8, create a concise and descriptive title of 5 words or less. For example: "Engine misfire on cold start" or "Coolant leak near radiator".\n\nQuery: "${firstMessage}"\n\nTitle:`;
+/**
+ * Generates a session title using a low-latency model.
+ */
+export const generateSessionTitle = async (firstUserMessage: string): Promise<string> => {
     try {
-        const result = await model.generateContent({
-            model: 'gemini-2.5-flash-lite',
-            contents: prompt,
+        const result: GenerateContentResponse = await model.generateContent({
+            model: 'gemini-flash-lite-latest',
+            contents: [{
+                role: 'user',
+                parts: [{ text: `Generate a concise, 4-5 word session title for the following user query: "${firstUserMessage}"` }]
+            }]
         });
-        return result.text.trim().replace(/"/g, ''); // Clean up response
+        return result.text.replace(/["']/g, "").trim();
     } catch (error) {
-        console.error("Error generating title:", error);
-        return "New Diagnosis Session";
+        console.error(handleApiError(error, 'generateSessionTitle'));
+        return "New Diagnosis";
     }
 };
 
-export const extractConversationContext = async (history: Message[]): Promise<ContextData> => {
-    const conversationText = history.map(msg => `${msg.role}: ${msg.text}`).join('\n');
-    const prompt = `Analyze the following conversation about a Mazda RX-8 diagnosis. Extract the key symptoms, mentioned parts, and suggested actions. If nothing is found for a category, return an empty array.
+/**
+ * Extracts context from a conversation using a low-latency model.
+ */
+export const extractConversationContext = async (messages: Message[]): Promise<ContextData> => {
+    const conversation = messages.map(m => `${m.role}: ${m.text}`).join('\n');
+    const prompt = `Analyze the following conversation about a Mazda RX-8 and extract key diagnostic information. Identify symptoms, mentioned car parts, and suggested actions.
+
+    - Symptoms should be observable problems (e.g., "Rough idle," "White smoke from exhaust").
+    - Parts should be specific components (e.g., "Ignition coils," "Apex seals").
+    - Actions should be recommended steps (e.g., "Check spark plugs," "Perform compression test").
+
+    Return a JSON object. If nothing is found for a category, return an empty array.
 
     Conversation:
-    ${conversationText}
-    `;
+    ${conversation}`;
 
     try {
-        const result = await model.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: prompt,
+        const result: GenerateContentResponse = await model.generateContent({
+            model: 'gemini-flash-lite-latest',
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
-                responseMimeType: "application/json",
+                responseMimeType: 'application/json',
                 responseSchema: {
                     type: Type.OBJECT,
                     properties: {
-                        symptoms: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING },
-                            description: "A list of symptoms described by the user (e.g., 'Rough idle', 'White smoke')."
-                        },
-                        parts: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING },
-                            description: "A list of specific car parts mentioned (e.g., 'Ignition coils', 'Apex seals')."
-                        },
-                        actions: {
-                            type: Type.ARRAY,
-                            items: { type: Type.STRING },
-                            description: "A list of actionable steps or tests suggested (e.g., 'Check spark plugs', 'Perform compression test')."
-                        }
-                    },
-                    required: ["symptoms", "parts", "actions"]
+                        symptoms: { type: Type.ARRAY, items: { type: Type.STRING } },
+                        parts: { type: Type.ARRAY, items: { type: Type.STRING } },
+                        actions: { type: Type.ARRAY, items: { type: Type.STRING } }
+                    }
                 }
             }
         });
 
-        const jsonText = result.text.trim();
-        return JSON.parse(jsonText) as ContextData;
+        return JSON.parse(result.text);
+
     } catch (error) {
-        console.error("Error extracting context:", error);
+        console.error(handleApiError(error, 'extractConversationContext'));
         return { symptoms: [], parts: [], actions: [] };
     }
 };
 
-export const generateQuickReplies = async (history: Message[]): Promise<string[]> => {
-    if (history.length === 0) return [];
-    
-    const lastMessage = history[history.length - 1];
-    if (lastMessage.role !== 'model' || !lastMessage.text) return [];
+/**
+ * Generates quick reply suggestions using a low-latency model.
+ */
+export const generateQuickReplies = async (messages: Message[]): Promise<string[]> => {
+    if (messages.length === 0) return [];
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role !== 'model') return [];
 
-    const prompt = `Based on the following AI response to a Mazda RX-8 query, suggest 3 brief and relevant follow-up questions or actions a user might take. Keep each suggestion under 6 words.
+    const conversationHistory = messages.slice(-4).map(m => `${m.role}: ${m.text}`).join('\n');
 
-    AI Response: "${lastMessage.text.substring(0, 500)}..." 
-    
-    Provide the suggestions as a JSON object.`;
+    const prompt = `Based on the last AI response in this conversation, generate 3-4 concise, relevant quick replies for the user. These should be logical next steps or questions a user might ask.
+
+    Rules:
+    - Replies should be short (2-5 words).
+    - They should be phrased as if the user is saying them.
+    - Examples: "How do I test that?", "Where is it located?", "What tools do I need?".
+
+    Conversation History:
+    ${conversationHistory}
+    `;
 
     try {
-        const result = await model.generateContent({
-            model: 'gemini-2.5-flash-lite',
-            contents: prompt,
+        const result: GenerateContentResponse = await model.generateContent({
+            model: 'gemini-flash-lite-latest',
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
-                responseMimeType: "application/json",
+                responseMimeType: 'application/json',
                 responseSchema: {
                     type: Type.OBJECT,
                     properties: {
                         replies: {
                             type: Type.ARRAY,
-                            items: {
-                                type: Type.STRING,
-                                description: "A short, relevant follow-up question or action."
-                            },
-                            description: "An array of 3 suggested replies for the user."
+                            items: { type: Type.STRING },
+                            description: "Array of 3-4 short reply suggestions for the user."
                         }
-                    },
-                    required: ["replies"]
+                    }
                 }
             }
         });
-
-        const jsonText = result.text.trim();
-        const parsed = JSON.parse(jsonText);
-        return (parsed.replies || []).slice(0, 3); // Ensure we only get up to 3
+        const parsed = JSON.parse(result.text);
+        return parsed.replies || [];
     } catch (error) {
-        console.error("Error generating quick replies:", error);
+        console.error(handleApiError(error, 'generateQuickReplies'));
         return [];
     }
 };
 
+/**
+ * Uses Google Search grounding to generate an article on a given topic.
+ */
 export const generateKnowledgeArticle = async (topic: string): Promise<ArticleData> => {
-    const prompt = `You are AI Mazda Mechanic, an expert on the Mazda RX-8 and its Renesis rotary engine.
-    Write a detailed knowledge base article on the following topic for a Mazda RX-8 enthusiast: "${topic}".
-    The article should be easy to understand but comprehensive.
-    Structure your response clearly using Markdown for formatting. Use bold text for headings (e.g., **My Heading**) and bullet points for lists (e.g., * My list item).
+    const prompt = `Generate a detailed but easy-to-understand article about "${topic}" specifically for a Mazda RX-8 owner. 
+    Explain what it is, why it's important for the Renesis engine, common symptoms of failure or issues, and recommended solutions or maintenance.
+    Structure the response with clear headings using Markdown (e.g., **What is it?**, **Common Symptoms**).`;
     
-    Include the following sections:
-    - **Overview**: A brief summary of the topic.
-    - **Common Symptoms**: A list of signs that this issue is occurring.
-    - **Diagnostic Steps**: How to confirm the problem.
-    - **Common Causes**: Why this problem happens.
-    - **Solutions & Repairs**: Step-by-step guide to fixing it.
-    - **Required Tools**: A list of necessary tools.
-    - **Preventative Maintenance**: Tips to avoid the issue in the future.`;
-
     try {
-        const result = await ai.models.generateContent({
+        const result: GenerateContentResponse = await model.generateContent({
             model: 'gemini-2.5-flash',
-            contents: prompt,
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
-              tools: [{googleSearch: {}}],
+                tools: [{ googleSearch: {} }]
+            }
+        });
+
+        const sources: GroundingSource[] = result.candidates?.[0]?.groundingMetadata?.groundingChunks
+            ?.map((chunk: any) => ({
+                uri: chunk.web?.uri,
+                title: chunk.web?.title
+            }))
+            .filter((source: any) => source.uri) || [];
+
+        return { text: result.text, sources };
+
+    } catch (error) {
+        throw handleApiError(error, 'generateKnowledgeArticle');
+    }
+};
+
+/**
+ * Generates speech from text using the TTS model.
+ */
+export const generateSpeech = async (textToSpeak: string): Promise<string> => {
+    try {
+        const response: GenerateContentResponse = await model.generateContent({
+            model: "gemini-2.5-flash-preview-tts",
+            contents: [{ parts: [{ text: textToSpeak }] }],
+            config: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName: 'Kore' },
+                    },
+                },
             },
         });
-        
-        const sources: GroundingSource[] = result.candidates?.[0]?.groundingMetadata?.groundingChunks
-            ?.map((chunk: any) => chunk.web)
-            .filter(Boolean) || [];
-
-        return {
-            text: result.text.trim(),
-            sources: sources
-        };
+        const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        if (!base64Audio) {
+            throw new Error("No audio data returned from API.");
+        }
+        return base64Audio;
     } catch (error) {
-        console.error("Error generating knowledge article:", error);
-        return {
-            text: "Sorry, I was unable to generate an article on that topic. Please try again.",
-            sources: []
-        };
+        throw handleApiError(error, 'generateSpeech');
     }
 };
 
-export const generateSpeech = async (text: string): Promise<string> => {
-    try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: `Say: ${text}` }] }],
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Kore' },
-            },
-          },
-        },
-      });
-      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-      if (!base64Audio) {
-        throw new Error("No audio data received from TTS API.");
-      }
-      return base64Audio;
-    } catch (error) {
-      console.error("Error generating speech:", error);
-      throw error;
-    }
-};
-
-export const startLiveSession = (
-    onMessage: (message: LiveServerMessage) => void,
-    onOpen: () => void,
-    onError: (e: ErrorEvent) => void,
-    onClose: (e: CloseEvent) => void
-) => {
-    return ai.live.connect({
-        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
-        callbacks: {
-            onopen: onOpen,
-            onmessage: onMessage,
-            onerror: onError,
-            onclose: onClose,
-        },
-        config: {
-            responseModalities: [Modality.AUDIO],
-            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
-            systemInstruction: `You are AI Mazda Mechanic. Be concise and conversational. Keep your answers brief and to the point, as if you're speaking to someone working on their car.`,
-            outputAudioTranscription: {},
-            inputAudioTranscription: {},
-        },
-    });
-};
-
+/**
+ * Live conversation service wrapper.
+ */
 export const live = {
-    startSession: startLiveSession,
+    startSession: (
+        onMessage: (message: LiveServerMessage) => void,
+        onOpen: () => void,
+        onError: (e: ErrorEvent) => void,
+        onClose: (e: CloseEvent) => void,
+    ) => {
+        return ai.live.connect({
+            model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+            callbacks: {
+                onopen: onOpen,
+                onmessage: onMessage,
+                onerror: onError,
+                onclose: onClose,
+            },
+            config: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } },
+                },
+                systemInstruction: "You are AI Mazda Mechanic. Keep your responses concise and conversational for this live audio session.",
+                inputAudioTranscription: {},
+                outputAudioTranscription: {},
+            },
+        });
+    },
     utils: {
+        encode,
         decode,
         decodeAudioData,
         createBlob,
-    },
+    }
 };

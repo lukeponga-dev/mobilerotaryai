@@ -63,9 +63,9 @@ export const useTTSPlayer = () => {
             sourceRef.current = source;
             setIsPlaying(true);
 
-        } catch (err) {
+        } catch (err: any) {
             console.error("TTS playback error:", err);
-            setError("Failed to play audio.");
+            setError(err.message || "Failed to play audio.");
             setIsPlaying(false);
         } finally {
             setIsLoading(false);

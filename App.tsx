@@ -146,15 +146,16 @@ const App: React.FC = () => {
             const replies = await generateQuickReplies(finalMessages);
             updateSessionData(sessionId, { context, quickReplies: replies });
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error handling stream in App.tsx", error);
+            const errorMessage = error.message || 'An error occurred while streaming the response.';
             setSessions(prev => prev.map(session =>
                 session.id === sessionId
                     ? {
                         ...session,
                         messages: session.messages.map(msg =>
                             msg.id === modelMessageId
-                                ? { ...msg, text: 'An error occurred while streaming the response.' }
+                                ? { ...msg, text: `Sorry, I ran into a problem: ${errorMessage}` }
                                 : msg
                         ),
                     }
@@ -226,7 +227,6 @@ const App: React.FC = () => {
         }
     };
 
-    // FIX: Destructure the rendered page element directly to fix TypeScript prop type mismatch issues.
     const { page, headerText, showExport } = renderContent();
     const activeSessionId = route.startsWith('#/session/') ? route.split('/')[2] : null;
 

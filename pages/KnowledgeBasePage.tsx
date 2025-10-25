@@ -66,9 +66,17 @@ const KnowledgeBasePage: React.FC = () => {
     if (!searchTerm.trim() || isLoading) return;
     setIsLoading(true);
     setArticle(null);
-    const generatedArticle = await generateKnowledgeArticle(searchTerm);
-    setArticle(generatedArticle);
-    setIsLoading(false);
+    try {
+        const generatedArticle = await generateKnowledgeArticle(searchTerm);
+        setArticle(generatedArticle);
+    } catch (error: any) {
+        setArticle({
+            text: `**Error Generating Article**\n\nI couldn't generate the article on "${searchTerm}".\n\n**Reason:** ${error.message || 'An unknown error occurred.'}`,
+            sources: []
+        });
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   const clearSearch = () => {
