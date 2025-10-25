@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon, PhotoIcon } from './icons';
+import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon, PhotoIcon, XCircleIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import Button from './Button';
 
@@ -160,9 +160,18 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
               </div>
           )}
           {(errorMessage || isAttaching) && (
-              <div className="text-xs text-center mb-2 px-2">
-                  {errorMessage && <span className="text-red-500">{errorMessage}</span>}
-                  {isAttaching && !errorMessage && <span className="text-slate-500 dark:text-slate-400">Loading attachment preview...</span>}
+              <div className="mb-2 px-2">
+                {errorMessage && 
+                    <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 p-2 rounded-md animate-fade-in-up" style={{animationDuration: '0.2s'}}>
+                        <XCircleIcon className="w-5 h-5 flex-shrink-0" />
+                        <span>{errorMessage}</span>
+                    </div>
+                }
+                {isAttaching && !errorMessage && 
+                    <div className="text-sm text-center text-slate-500 dark:text-slate-400">
+                        Loading attachment preview...
+                    </div>
+                }
               </div>
           )}
           <div className="flex items-end gap-2 md:gap-3">
