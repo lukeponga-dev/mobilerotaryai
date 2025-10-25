@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
   const getIsActive = (route: string) => {
     if (route === '#/sessions') {
       // This correctly highlights "My Sessions" for both the list page and individual session pages.
-      return activeRoute.startsWith('#/session'); 
+      return activeRoute === '#/sessions' || activeRoute.startsWith('#/session/');
     }
     if (route === '#/') {
       // Exact match for the dashboard to prevent it from being active on other pages.
@@ -41,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
             <RotorIcon className="w-7 h-7 text-rose-500"/>
-            <h2 className="text-lg font-semibold">RotorWise AI</h2>
+            <h2 className="text-lg font-semibold">AI Mazda Mechanic</h2>
           </a>
           <button onClick={onToggleSidebar} className="md:hidden p-1" aria-label="Close sidebar">
             <XIcon className="w-6 h-6" />

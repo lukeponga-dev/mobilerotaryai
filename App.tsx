@@ -38,7 +38,7 @@ const App: React.FC = () => {
         messages: [{
             id: `msg_${Date.now()}`,
             role: 'model',
-            text: 'Welcome to RotorWise AI. How can I help you with your Mazda RX-8 today? Please describe the issue you are experiencing.'
+            text: 'Welcome to AI Mazda Mechanic. How can I help you with your Mazda RX-8 today? Please describe the issue you are experiencing.'
         }],
         createdAt: new Date().toISOString(),
         context: {symptoms: [], parts: [], actions: []}
@@ -158,7 +158,7 @@ const App: React.FC = () => {
         if (!session) return;
 
         doc.setFontSize(18);
-        doc.text("RotorWise AI Diagnostic Report", 14, 22);
+        doc.text("AI Mazda Mechanic Diagnostic Report", 14, 22);
         doc.setFontSize(11);
         doc.text(`Session: ${session.name}`, 14, 30);
         doc.line(14, 32, 196, 32);
@@ -168,13 +168,13 @@ const App: React.FC = () => {
             if (y > 280) { doc.addPage(); y = 20; }
             doc.setFont(undefined, message.role === 'user' ? 'bold' : 'normal');
             doc.setTextColor(message.role === 'user' ? '#be123c' : '#333333');
-            const prefix = message.role === 'user' ? 'You:' : 'RotorWise AI:';
+            const prefix = message.role === 'user' ? 'You:' : 'AI:';
             const splitText = doc.splitTextToSize(`${prefix} ${message.text}`, 180);
             doc.text(splitText, 14, y);
             y += (splitText.length * 5) + 5;
         });
         
-        doc.save(`RotorWise-AI-Report-${session.id}.pdf`);
+        doc.save(`AI-Mazda-Mechanic-Report-${session.id}.pdf`);
     };
 
     // --- Page Rendering ---

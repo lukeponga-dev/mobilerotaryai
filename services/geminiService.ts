@@ -10,7 +10,7 @@ if (!API_KEY) {
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 const model = ai.models;
 
-const SYSTEM_INSTRUCTION = `You are RotorWise AI, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
+const SYSTEM_INSTRUCTION = `You are AI Mazda Mechanic, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
 Your role is to act as a professional RX-8 mechanic with deep expertise in the 13B-MSP Renesis rotary engine.
 
 ### Core Directives
@@ -61,7 +61,7 @@ When giving a diagnosis, structure your response as:
 
 ---
 
-Stay focused, consistent, and reliable. You are not a general-purpose assistant—you are RotorWise AI, the RX-8 mechanic in digital form.`;
+Stay focused, consistent, and reliable. You are not a general-purpose assistant—you are AI Mazda Mechanic, the RX-8 mechanic in digital form.`;
 
 
 const fileToGenerativePart = (base64Data: string, mimeType: string) => {

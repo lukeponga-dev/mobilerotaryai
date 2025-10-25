@@ -81,10 +81,38 @@ export const ShieldCheckIcon = ({ className }: { className?: string }) => (
 );
 
 export const RotorIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className || 'w-6 h-6'}>
-    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM9.854 9.175a.75.75 0 0 0 1.06 0 6 6 0 0 1 7.086 7.086.75.75 0 1 0 1.06 1.06 7.5 7.5 0 0 0-8.146-8.146.75.75 0 0 0 0 1.06Zm-2.018-.49a.75.75 0 0 0-1.06 0 7.5 7.5 0 0 0 8.146 8.146.75.75 0 1 0 1.06-1.06 6 6 0 0 1-7.086-7.086.75.75 0 0 0 0-1.06Zm4.31-2.943a.75.75 0 0 0 0 1.06 6 6 0 0 1 7.086 7.086.75.75 0 1 0 1.06 1.06 7.5 7.5 0 0 0-8.146-8.146.75.75 0 0 0-.001 1.061Z" clipRule="evenodd" />
-  </svg>
+    <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 100 88" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="5" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className={className || 'w-6 h-6'}
+    >
+        <path d="M50 4 C75 4, 96 28, 96 44 C96 60, 75 84, 50 84 C25 84, 4 60, 4 44 C4 28, 25 4, 50 4 Z" />
+        <circle cx="50" cy="44" r="28" />
+        <path d="M35 32 A28 28 0 0 0 35 56" />
+        <path d="M65 32 A28 28 0 0 1 65 56" />
+        <circle cx="50" cy="44" r="16" />
+        
+        <g fill="currentColor" stroke="none">
+            <circle cx="50" cy="2" r="3" />
+            <circle cx="98" cy="44" r="3" />
+            <circle cx="2" cy="44" r="3" />
+            <circle cx="50" cy="34" r="2.5" />
+            <circle cx="50" cy="54" r="2.5" />
+            <circle cx="41.5" cy="37" r="2.5" />
+            <circle cx="58.5" cy="37" r="2.5" />
+            <circle cx="41.5" cy="51" r="2.5" />
+            <circle cx="58.5" cy="51" r="2.5" />
+            <circle cx="38" cy="44" r="2.5" />
+            <circle cx="62" cy="44" r="2.5" />
+        </g>
+    </svg>
 );
+
 
 export const SunIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>

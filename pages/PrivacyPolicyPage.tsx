@@ -14,11 +14,11 @@ const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onToggleSidebar }
       />
       <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
         <div className="max-w-3xl mx-auto text-slate-700 dark:text-slate-300">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Privacy Policy for RotorWise AI</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Privacy Policy for AI Mazda Mechanic</h1>
           <p className="mb-4"><strong>Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
           <p className="mb-4">
-            RotorWise AI ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+            AI Mazda Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
           </p>
 
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Information We Collect</h2>
