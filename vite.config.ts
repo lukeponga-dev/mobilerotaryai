@@ -16,7 +16,9 @@ export default defineConfig(({ mode }) => {
       'process.env.API_KEY': JSON.stringify(env.API_KEY)
     },
     server: {
-  allowedHosts: ['ai-mechanic-0gyf.onrender.com']
+      allowedHosts: 'all',
+      port: 5173,
+      open: true
     }
   };
 });
