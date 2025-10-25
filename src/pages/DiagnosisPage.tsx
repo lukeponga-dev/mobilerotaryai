@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Session } from '@/types/diagnosis';
-import Header from '@/components/Header';
-import ChatWindow from '@/components/ChatWindow';
-import InputBar from '@/components/InputBar';
-import DiagnosisSummary from '@/components/DiagnosisSummary';
+import { Session } from '../types/diagnosis';
+import Header from '../components/Header';
+import ChatWindow from '../components/ChatWindow';
+import InputBar from '../components/InputBar';
+import DiagnosisSummary from '../components/DiagnosisSummary';
 
 interface DiagnosisPageProps {
   session: Session;

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from '@/components/icons';
-import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 interface InputBarProps {
   onSendMessage: (text: string, image?: string, video?: string) => void;

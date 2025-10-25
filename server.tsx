@@ -1,8 +1,13 @@
-// FIX: Changed imports to `require` syntax to fix type resolution issues with Express middleware.
-import express = require('express');
-import path = require('path');
-import compression = require('compression');
-import helmet = require('helmet');
+// FIX: Changed CommonJS `require` imports to ES module `import` syntax.
+import express from 'express';
+import path from 'path';
+import compression from 'compression';
+import helmet from 'helmet';
+import { fileURLToPath } from 'url';
+
+// FIX: Define __dirname in ES module scope, as it's not available by default.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from '@/components/icons';
-import ThemeToggle from '@/components/ThemeToggle';
+import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
+import ThemeToggle from './ThemeToggle';
 
 interface SidebarProps {
   onNewSession: () => void;

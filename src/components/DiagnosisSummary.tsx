@@ -1,6 +1,6 @@
 import React from 'react';
-import { ContextData } from '@/types/diagnosis';
-import { XIcon } from '@/components/icons';
+import { ContextData } from '../types/diagnosis';
+import { XIcon } from './icons';
 
 interface DiagnosisSummaryProps {
   context?: ContextData;

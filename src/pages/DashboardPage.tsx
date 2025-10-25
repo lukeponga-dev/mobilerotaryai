@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '@/components/Header';
-import { Session } from '@/types/diagnosis';
-import { PlusIcon, BookmarkSquareIcon } from '@/components/icons';
+import Header from '../components/Header';
+import { Session } from '../types/diagnosis';
+import { PlusIcon, BookmarkSquareIcon } from '../components/icons';
 
 interface DashboardPageProps {
   sessions: Session[];

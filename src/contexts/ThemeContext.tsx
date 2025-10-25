@@ -37,7 +37,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
-    {/* FIX: Corrected typo in closing provider tag. 'Theme' is a type, not the context object. */}
     </ThemeContext.Provider>
   );
 };

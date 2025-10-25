@@ -1,6 +1,6 @@
 import React from 'react';
-import { Message as MessageType } from '@/types/diagnosis';
-import { RotorIcon } from '@/components/icons';
+import { Message as MessageType } from '../types/diagnosis';
+import { RotorIcon } from './icons';
 
 interface MessageProps {
   message: MessageType;
