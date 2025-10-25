@@ -178,7 +178,7 @@ export const generateSessionTitle = async (firstMessage: string): Promise<string
     const prompt = `Based on the following user query about a Mazda RX-8, create a concise and descriptive title of 5 words or less. For example: "Engine misfire on cold start" or "Coolant leak near radiator".\n\nQuery: "${firstMessage}"\n\nTitle:`;
     try {
         const result = await model.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             contents: prompt,
         });
         return result.text.trim().replace(/"/g, ''); // Clean up response
@@ -248,7 +248,7 @@ export const generateQuickReplies = async (history: Message[]): Promise<string[]
 
     try {
         const result = await model.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
@@ -316,6 +316,31 @@ export const generateKnowledgeArticle = async (topic: string): Promise<ArticleDa
             text: "Sorry, I was unable to generate an article on that topic. Please try again.",
             sources: []
         };
+    }
+};
+
+export const generateSpeech = async (text: string): Promise<string> => {
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ parts: [{ text: `Say: ${text}` }] }],
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: 'Kore' },
+            },
+          },
+        },
+      });
+      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (!base64Audio) {
+        throw new Error("No audio data received from TTS API.");
+      }
+      return base64Audio;
+    } catch (error) {
+      console.error("Error generating speech:", error);
+      throw error;
     }
 };
 
