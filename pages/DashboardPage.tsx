@@ -31,16 +31,16 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         
         {/* Main Call to Action Section */}
-        <div className="text-center py-10 md:py-16 xl:py-20">
-          <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
-          <p className="text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-2xl xl:max-w-3xl mx-auto">
+        <div className="text-center py-8 md:py-16 xl:py-20">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
+          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-2xl xl:max-w-3xl mx-auto">
             Click the button below to start a new session with RotorWise AI and get expert help for your Mazda RX-8.
           </p>
           <button
             onClick={onNewSession}
-            className="group inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-br from-rose-600 to-rose-700 rounded-lg shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-rose-600/40"
+            className="group inline-flex items-center justify-center gap-3 px-6 py-3 text-base sm:px-8 sm:py-4 sm:text-lg font-semibold text-white bg-gradient-to-br from-rose-600 to-rose-700 rounded-lg shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-rose-600/40"
           >
-            <PlusIcon className="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
+            <PlusIcon className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:rotate-90" />
             <span>Start New Diagnosis</span>
           </button>
         </div>
@@ -48,7 +48,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
           {/* Recent Sessions (takes 2 columns on lg) */}
-          <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
+          <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Recent Sessions</h2>
             {recentSessions.length > 0 ? (
               <ul className="space-y-3">
@@ -73,7 +73,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
           </div>
           
           {/* Knowledge Base & Quick Links */}
-          <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
+          <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg">
             <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-white dark:bg-slate-700/50 rounded-full">
                     <BookmarkSquareIcon className="w-6 h-6 text-rose-500" />
@@ -99,7 +99,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
           </div>
         
           {/* Warning Light Decoder */}
-          <div className="lg:col-span-3 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="lg:col-span-3 bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-center md:text-left">
               <div className="p-3 bg-white dark:bg-slate-700/50 rounded-full flex-shrink-0 hidden sm:block">
                   <InformationCircleIcon className="w-8 h-8 text-amber-500" />

@@ -53,7 +53,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {commonIssues.map((issue, index) => (
-            <div key={index} className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-900/40">
+            <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-900/40">
                 <h2 className="text-xl font-semibold text-rose-500 mb-4">{issue.title}</h2>
                 
                 <div className="space-y-4 flex-grow">

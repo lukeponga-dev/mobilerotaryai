@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       onClick={onClose}
     >
       <div
-        className="relative bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 w-full max-w-md p-6 m-4"
+        className="relative bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700/50 w-full max-w-md p-4 md:p-6 m-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between">

@@ -16,10 +16,10 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
               <MenuIcon className="w-6 h-6" />
           </button>
           <a href="#/" aria-label="Go to dashboard" className="mr-3 flex-shrink-0">
-            <RotorIcon className="w-8 h-8 text-rose-500" />
+            <RotorIcon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
           </a>
           <div className="min-w-0">
-              <h1 className="text-xl font-bold truncate" title={sessionName}>{sessionName}</h1>
+              <h1 className="text-lg sm:text-xl font-bold truncate" title={sessionName}>{sessionName}</h1>
           </div>
         </div>
         <div className="flex items-center gap-2">
