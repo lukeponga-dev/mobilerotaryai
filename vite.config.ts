@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       // FIX: Changed 'all' to true to match the type definition for allowedHosts.
-      allowedHosts: true,
+      allowedHosts: 'https://ai-mechanic-0gyf.onrender.com/',
     }
   };
 });

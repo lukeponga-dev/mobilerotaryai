@@ -1,7 +1,7 @@
 import React from 'react';
 // FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
 import { Message as MessageType } from '../../src/types';
-import { RotorIcon } from './icons';
+import { RotorIcon } from './icons.tsx';
 
 interface MessageProps {
   message: MessageType;

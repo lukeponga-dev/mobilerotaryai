@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons';
+import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon } from './icons.tsx';
 import ThemeToggle from './ThemeToggle';
 
 interface SidebarProps {

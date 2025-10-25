@@ -1,5 +1,5 @@
 import React from 'react';
-import { DownloadIcon, MenuIcon, RotorIcon, BookmarkSquareIcon } from './icons';
+import { DownloadIcon, MenuIcon, RotorIcon, BookmarkSquareIcon } from './icons.tsx';
 
 interface HeaderProps {
   sessionName: string;

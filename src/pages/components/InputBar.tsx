@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons';
+import { SendIcon, PlusIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon } from './icons.tsx';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 interface InputBarProps {
