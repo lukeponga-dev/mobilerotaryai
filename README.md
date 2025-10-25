@@ -1,60 +1,20 @@
-# RotorWise AI
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-RotorWise AI is a specialized diagnostic assistant for Mazda RX-8 owners. It uses the Google Gemini API with expert knowledge from workshop manuals to help troubleshoot, diagnose, and understand the Renesis rotary engine through text, image, and voice inputs.
+# Run and deploy your AI Studio app
 
-## Features
+This contains everything you need to run your app locally.
 
--   **Specialized Knowledge:** Trained on Mazda RX-8 workshop manuals and rotary engine best practices.
--   **Multimodal Input:** Accepts text, images (e.g., engine components, warning lights), and videos (e.g., engine sounds).
--   **Systematic Diagnosis:** Follows a structured approach to identify root causes and provide actionable solutions.
--   **Session Management:** Saves your diagnostic conversations locally for future reference.
--   **PDF Export:** Export your session history as a PDF report.
+View your app in AI Studio: https://ai.studio/apps/drive/1WQiSiTIaK02zqPadWG6t6FEo29LTaPBT
 
-## Tech Stack
+## Run Locally
 
--   React
--   Vite
--   TypeScript
--   Tailwind CSS
--   Google Gemini API
+**Prerequisites:**  Node.js
 
-## Getting Started
 
-### Prerequisites
-
--   Node.js (v18 or higher)
--   A Google Gemini API Key
-
-### Installation & Setup
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-repo/mobilerotaryai.git
-    cd mobilerotaryai
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
-3.  **Set up your environment variables:**
-    Create a `.env` file in the root of the project and add your Gemini API key:
-    ```
-    API_KEY="YOUR_API_KEY_HERE"
-    ```
-
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-
-The application should now be running on `http://localhost:5173`.
-
-## Build for Production
-
-To create a production build, run:
-```bash
-npm run build
-```
-This will generate a `dist` folder with the optimized static assets. You can preview the production build with `npm run preview`.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
