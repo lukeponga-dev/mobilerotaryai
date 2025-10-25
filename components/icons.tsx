@@ -227,3 +227,10 @@ export const BoltIcon = ({ className }: { className?: string }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
     </svg>
 );
+
+export const LightBulbIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.311a7.5 7.5 0 0 1-7.5 0c-1.421-.42-2.54-1.223-3.375-2.172a11.95 11.95 0 0 1-.375-1.546m9.831.814a11.95 11.95 0 0 0 .375-1.546m-7.5 0a7.5 7.5 0 0 0 7.5 0M12 6.75a2.25 2.25 0 1 1 0-4.5 2.25 2.25 0 0 1 0 4.5Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a9.75 9.75 0 0 1-9-5.192A9.75 9.75 0 0 1 12 3c2.97 0 5.613 1.3 7.411 3.408A9.75 9.75 0 0 1 12 18.75Z" />
+    </svg>
+);

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import { Session } from '../types';
-import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon, WaveformIcon, BoltIcon } from '../components/icons';
+import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon, WaveformIcon, LightBulbIcon, WrenchIcon } from '../components/icons';
 import WarningLightGuideModal from '../components/WarningLightGuideModal';
 import Button from '../components/Button';
-
 
 interface DashboardPageProps {
   sessions: Session[];
@@ -14,15 +13,18 @@ interface DashboardPageProps {
 
 const quickLinks = [
     { title: 'Engine Flooding', href: '#/knowledge' },
-    { title: 'Ignition Coil Failure', href: '#/knowledge' },
+    { title: 'Ignition Coils', href: '#/knowledge' },
     { title: 'Low Compression', href: '#/knowledge' },
     { title: 'Oil Consumption', href: '#/knowledge' },
-    { title: 'Catalytic Converter', href: '#/knowledge' },
 ];
 
 const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, onToggleSidebar }) => {
-  const recentSessions = sessions.slice(0, 3);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  
+  const sortedSessions = [...sessions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const recentSessions = sortedSessions.slice(0, 3);
+  const latestSession = sortedSessions[0];
+  const hasRecentSessions = sessions.length > 0;
 
   return (
     <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-900">
@@ -35,98 +37,104 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2">Welcome Back</h1>
             <p className="text-base text-slate-500 dark:text-slate-400">
-              Ready to diagnose your RX-8? Here are your quick actions and recent activity.
+              Ready to diagnose your RX-8? Let's get started.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm transition-shadow hover:shadow-lg">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-amber-500/10 rounded-full">
-                  <BoltIcon className="w-6 h-6 text-amber-500" />
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              {hasRecentSessions && latestSession ? (
+                <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-amber-600 p-6 rounded-lg border border-amber-500/20 shadow-xl h-full flex flex-col justify-between">
+                   <WrenchIcon className="absolute -right-6 -bottom-10 w-36 h-36 text-white/10 transform rotate-[-15deg] pointer-events-none" />
+                   <div>
+                        <h2 className="text-2xl font-bold text-white mb-2">Continue Your Diagnosis</h2>
+                        <p className="text-amber-100 mb-4 max-w-md">
+                            You were last working on: <strong className="font-semibold">{latestSession.name}</strong>
+                        </p>
+                   </div>
+                   <Button
+                        onClick={() => window.location.hash = `#/session/${latestSession.id}`}
+                        size="lg"
+                        className="w-full sm:w-auto bg-white/90 text-amber-600 hover:bg-white shadow-lg !ring-offset-amber-500"
+                    >
+                        Jump Back In
+                    </Button>
                 </div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Quick Actions</h2>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                Jump right into a diagnostic session. Use the standard text-based chat or go hands-free with a live voice conversation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  onClick={onNewSession}
-                  size="lg"
-                  className="w-full sm:w-auto group gap-3 bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg hover:shadow-xl hover:shadow-amber-500/30"
-                >
-                  <PlusIcon className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
-                  <span>New Text Diagnosis</span>
-                </Button>
-                <Button
-                    onClick={() => window.location.hash = '#/live'}
-                    variant="secondary"
-                    size="lg"
-                    className="w-full sm:w-auto gap-3"
-                >
-                    <WaveformIcon className="w-5 h-5" />
-                    <span>Start Voice Chat</span>
-                </Button>
-              </div>
-            </div>
-
-            <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-lg">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-red-500/10 rounded-full">
-                        <InformationCircleIcon className="w-6 h-6 text-red-500" />
-                    </div>
-                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Warning Lights</h2>
-                </div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                    Confused by a dashboard light? Use this quick guide to understand what it means.
-                </p>
-              </div>
-              <Button
-                onClick={() => setIsGuideOpen(true)}
-                variant="destructive"
-                className="w-full mt-2"
-              >
-                Open Decoder Guide
-              </Button>
-            </div>
-
-            <div className="lg:col-span-3 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm transition-shadow hover:shadow-lg">
-              <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Recent Sessions</h2>
-              {recentSessions.length > 0 ? (
-                <ul className="space-y-3">
-                  {recentSessions.map(session => (
-                    <li key={session.id}>
-                      <a
-                        href={`#/session/${session.id}`}
-                        className="block p-4 bg-white dark:bg-slate-700/50 rounded-md transition-all duration-300 hover:shadow-md hover:ring-2 hover:ring-amber-500/50 hover:-translate-y-0.5"
-                      >
-                        <p className="font-medium truncate text-slate-800 dark:text-slate-200">{session.name}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{new Date(session.createdAt).toLocaleDateString()}</p>
-                      </a>
-                    </li>
-                  ))}
-                  {sessions.length > 3 && (
-                    <li>
-                        <a href="#/sessions" className="block text-center mt-2 p-2 text-sm text-amber-500 hover:underline font-medium">View all sessions</a>
-                    </li>
-                  )}
-                </ul>
               ) : (
-                <div className="text-center py-6 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
-                    <p className="text-slate-500 dark:text-slate-500">No recent sessions found.</p>
-                    <p className="text-sm text-slate-400 dark:text-slate-600 mt-1">Start a new diagnosis to see it here.</p>
+                <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-lg border border-teal-500/20 shadow-xl h-full flex flex-col justify-between">
+                    <LightBulbIcon className="absolute -right-6 -bottom-10 w-36 h-36 text-white/10 transform rotate-[-15deg] pointer-events-none" />
+                    <div>
+                        <h2 className="text-2xl font-bold text-white mb-2">Pro Tip of the Day</h2>
+                        <p className="text-teal-100 mb-4 max-w-md">
+                            To prevent engine flooding, always allow your RX-8 to reach normal operating temperature before shutting it off.
+                        </p>
+                    </div>
+                    <Button
+                        onClick={onNewSession}
+                        size="lg"
+                        className="w-full sm:w-auto bg-white/90 text-teal-600 hover:bg-white shadow-lg !ring-offset-teal-500"
+                    >
+                        Start First Diagnosis
+                    </Button>
                 </div>
               )}
             </div>
 
-             <div className="lg:col-span-3 bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm transition-shadow hover:shadow-lg">
+            {/* Action Sidebar */}
+            <div className="lg:col-span-2 space-y-6">
+                <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm h-full flex flex-col">
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Start a New Session</h2>
+                    <div className="flex-grow space-y-3 flex flex-col">
+                        <Button onClick={onNewSession} variant="primary" className="w-full gap-3"><PlusIcon className="w-5 h-5" />New Text Diagnosis</Button>
+                        <Button onClick={() => window.location.hash = '#/live'} variant="secondary" className="w-full gap-3"><WaveformIcon className="w-5 h-5" />Start Voice Chat</Button>
+                    </div>
+                    <div className="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
+                        <Button onClick={() => setIsGuideOpen(true)} variant="ghost" className="w-full gap-3 text-red-500 hover:bg-red-500/10 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-500">
+                           <InformationCircleIcon className="w-5 h-5"/> Warning Light Decoder
+                        </Button>
+                    </div>
+                </div>
+            </div>
+          </div>
+          
+          {/* Recent Sessions */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-4 text-slate-900 dark:text-slate-100">Recent Sessions</h2>
+            {recentSessions.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {recentSessions.map(session => (
+                    <a
+                      key={session.id}
+                      href={`#/session/${session.id}`}
+                      className="group block p-5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 transition-all duration-300 hover:shadow-xl hover:ring-2 hover:ring-amber-500/80 hover:-translate-y-1"
+                    >
+                      <p className="font-semibold truncate text-slate-800 dark:text-slate-100 group-hover:text-amber-500 dark:group-hover:text-amber-400">{session.name}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{`Last updated: ${new Date(session.createdAt).toLocaleDateString()}`}</p>
+                    </a>
+                  ))}
+                  {sessions.length > 3 && (
+                    <a href="#/sessions" className="flex items-center justify-center p-5 bg-slate-100/50 dark:bg-slate-800/50 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-amber-500 hover:text-amber-500 transition-colors">
+                        View All Sessions...
+                    </a>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-10 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg">
+                    <p className="text-slate-500 dark:text-slate-400">No recent sessions found.</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Start a new diagnosis to see it here.</p>
+                </div>
+              )}
+          </div>
+          
+          {/* Quick Knowledge */}
+          <div className="mt-8">
+             <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-teal-500/10 rounded-full">
                         <BookmarkSquareIcon className="w-6 h-6 text-teal-500" />
                     </div>
-                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Common Issues</h2>
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Quick Knowledge</h2>
                 </div>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
                     Browse these common topics or search the full <a href="#/knowledge" className="text-amber-500 hover:underline font-medium">Knowledge Base</a> for more info.
@@ -144,6 +152,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
                 </div>
             </div>
           </div>
+
         </div>
       </div>
 
