@@ -40,36 +40,36 @@ const commonIssues = [
 
 const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }) => {
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-slate-900">
+    <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-slate-900">
       <Header
         sessionName="Knowledge Base"
         onToggleSidebar={onToggleSidebar}
       />
       <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold text-white mb-4">Common Renesis Engine Issues</h1>
-        <p className="text-slate-400 mb-8 max-w-3xl">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Common Renesis Engine Issues</h1>
+        <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-3xl">
           This page provides a quick reference for some of the most common problems encountered by Mazda RX-8 owners.
           For a specific diagnosis, please start a new diagnosis session.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {commonIssues.map((issue, index) => (
-            <div key={index} className="bg-slate-800 p-6 rounded-lg border border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-900/40">
+            <div key={index} className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-900/40">
                 <h2 className="text-xl font-semibold text-rose-500 mb-4">{issue.title}</h2>
                 
                 <div className="space-y-4 flex-grow">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Symptoms</h3>
-                        <p className="text-sm text-slate-400">{issue.description}</p>
+                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Symptoms</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">{issue.description}</p>
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Solution</h3>
-                        <p className="text-sm text-slate-400">{issue.solution}</p>
+                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Solution</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">{issue.solution}</p>
                     </div>
                 </div>
                 
-                <div className="mt-5 pt-4 border-t border-slate-700/70">
-                    <h3 className="text-sm font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
-                    <p className="text-sm text-slate-400 italic">{issue.imageSuggestion}</p>
+                <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700/70">
+                    <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 italic">{issue.imageSuggestion}</p>
                 </div>
             </div>
           ))}

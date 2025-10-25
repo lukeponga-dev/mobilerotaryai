@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Session } from '../types';
 import Header from '../components/Header';
 import ChatWindow from '../components/ChatWindow';
 import InputBar from '../components/InputBar';
-import ContextPanel from '../components/ContextPanel';
+import DiagnosisSummary from '../components/DiagnosisSummary';
 
 interface DiagnosisPageProps {
   session: Session;
@@ -20,6 +20,8 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
   onExportPDF,
   onToggleSidebar,
 }) => {
+  const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
+
   const handleSendMessage = (text: string, image?: string, video?: string) => {
     onSendMessage(session.id, text, image, video);
   };
@@ -34,13 +36,19 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
             sessionName={session.name}
             onExportPDF={handleExport}
             onToggleSidebar={onToggleSidebar}
+            onToggleContextPanel={() => setIsContextPanelOpen(true)}
         />
         <div className="flex-1 flex min-h-0">
             <div className="flex-1 flex flex-col min-w-0">
                 <ChatWindow messages={session.messages} isLoading={isLoading} />
                 <InputBar onSendMessage={handleSendMessage} isLoading={isLoading} />
             </div>
-            <ContextPanel context={session.context} isLoading={isLoading} />
+            <DiagnosisSummary
+              context={session.context}
+              isLoading={isLoading}
+              isOpen={isContextPanelOpen}
+              onClose={() => setIsContextPanelOpen(false)}
+            />
         </div>
     </div>
   );

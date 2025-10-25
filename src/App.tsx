@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
-import { Session, Message, ContextData } from './src/types';
-import Sidebar from './src/components/Sidebar';
+import { Session, Message, ContextData } from './types';
+import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
-import KnowledgeBasePage from './src/pages/KnowledgeBasePage';
+import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
