@@ -1,26 +1,49 @@
 import React from 'react';
 import { ContextData } from '../types';
+import { InformationCircleIcon, XCircleIcon, ExclamationTriangleIcon, Cog6ToothIcon } from './icons';
 
 interface ContextPanelProps {
   context?: ContextData;
   isLoading: boolean;
 }
 
+type ItemType = 'symptom' | 'action' | 'part';
+
+const getItemVisuals = (text: string, type: ItemType): { Icon: React.FC<any>, color: string } => {
+    const lowerText = text.toLowerCase();
+    
+    if (type === 'part') {
+        return { Icon: Cog6ToothIcon, color: 'text-slate-500 dark:text-slate-400' };
+    }
+
+    if (/\b(stop|immediately|failure|fail|overheat|critical|danger|do not drive|catastrophic|severe damage)\b/.test(lowerText)) {
+        return { Icon: XCircleIcon, color: 'text-rose-500' };
+    }
+    if (/\b(check|inspect|replace|misfire|leak|caution|warning|poor|low|weak|fault|scan)\b/.test(lowerText)) {
+        return { Icon: ExclamationTriangleIcon, color: 'text-amber-500' };
+    }
+    return { Icon: InformationCircleIcon, color: 'text-sky-500' };
+};
+
 const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
-  const renderList = (title: string, items: string[] | undefined) => {
+  const renderList = (title: string, items: string[] | undefined, type: ItemType) => {
     if (!items || items.length === 0) {
       return null;
     }
     return (
       <div>
         <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2 uppercase tracking-wider">{title}</h3>
-        <ul className="space-y-1.5">
-          {items.map((item, index) => (
-            <li key={index} className="text-sm text-slate-700 dark:text-slate-300 bg-slate-200/50 dark:bg-slate-700/50 rounded px-2.5 py-1.5">
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-2">
+          {items.map((item, index) => {
+             const { Icon, color } = getItemVisuals(item, type);
+             return (
+                <div key={index} className="flex items-start gap-3 bg-slate-200/50 dark:bg-slate-700/50 p-2.5 rounded-md border border-slate-200 dark:border-slate-700">
+                    <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${color}`} />
+                    <p className="flex-1 text-sm text-slate-700 dark:text-slate-300">{item}</p>
+                </div>
+             );
+          })}
+        </div>
       </div>
     );
   };
@@ -45,9 +68,9 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
       )}
       {hasContent ? (
         <div className="space-y-6">
-          {renderList('Symptoms', context?.symptoms)}
-          {renderList('Mentioned Parts', context?.parts)}
-          {renderList('Suggested Actions', context?.actions)}
+          {renderList('Symptoms', context?.symptoms, 'symptom')}
+          {renderList('Mentioned Parts', context?.parts, 'part')}
+          {renderList('Suggested Actions', context?.actions, 'action')}
         </div>
       ) : !isLoading && (
         <p className="text-sm text-slate-400 dark:text-slate-500 italic">As you chat, a summary of your diagnosis will appear here.</p>
