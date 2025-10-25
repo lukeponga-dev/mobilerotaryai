@@ -183,7 +183,7 @@ const App: React.FC = () => {
         session.messages.forEach(message => {
             if (y > 280) { doc.addPage(); y = 20; }
             doc.setFont(undefined, message.role === 'user' ? 'bold' : 'normal');
-            doc.setTextColor(message.role === 'user' ? '#be123c' : '#333333');
+            doc.setTextColor(message.role === 'user' ? '#d97706' : '#333333');
             const prefix = message.role === 'user' ? 'You:' : 'AI:';
             const splitText = doc.splitTextToSize(`${prefix} ${message.text}`, 180);
             doc.text(splitText, 14, y);
@@ -228,7 +228,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans relative">
+        <div className="h-screen w-screen flex bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-200 font-sans relative">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"

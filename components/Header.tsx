@@ -1,5 +1,5 @@
 import React from 'react';
-import { DownloadIcon, MenuIcon, RotorIcon } from './icons';
+import { DownloadIcon, MenuIcon, WrenchIcon } from './icons';
 import Button from './Button';
 
 interface HeaderProps {
@@ -11,7 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSidebar }) => {
   return (
     <header className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 flex-shrink-0">
-      <div className="flex items-center justify-between text-slate-900 dark:text-slate-100 py-3 pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] pt-[calc(0.75rem+env(safe-area-inset-top,0rem))]">
+      <div className="flex items-center justify-between text-slate-900 dark:text-slate-200 py-3 pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] pt-[calc(0.75rem+env(safe-area-inset-top,0rem))]">
         <div className="flex items-center min-w-0">
           <Button 
             variant="ghost" 
@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
               <MenuIcon className="w-6 h-6" />
           </Button>
           <a href="#/" aria-label="Go to dashboard" className="mr-4 flex-shrink-0">
-            <RotorIcon className="w-7 h-7 sm:w-8 sm:h-8 text-rose-500" />
+            <WrenchIcon className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
           </a>
           <div className="min-w-0">
               <h1 className="text-lg sm:text-xl font-bold truncate" title={sessionName}>{sessionName}</h1>

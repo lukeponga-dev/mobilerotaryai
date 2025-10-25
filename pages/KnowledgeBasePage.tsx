@@ -82,13 +82,13 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
   };
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950">
+    <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-900">
       <Header
         sessionName="Knowledge Base"
         onToggleSidebar={onToggleSidebar}
       />
       <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth">
-        <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
+        <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
             <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">
                 Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
@@ -99,7 +99,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search for a topic (e.g., 'SOHN adapter benefits')..."
-                    className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 transition"
+                    className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 transition"
                     disabled={isLoading}
                 />
                 <Button type="submit" variant="primary" size="icon" disabled={isLoading || !searchTerm.trim()} aria-label="Search">
@@ -129,7 +129,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
                                             href={source.uri} 
                                             target="_blank" 
                                             rel="noopener noreferrer"
-                                            className="text-rose-500 hover:underline text-sm"
+                                            className="text-amber-500 hover:underline text-sm"
                                         >
                                             {source.title || source.uri}
                                         </a>
@@ -145,8 +145,8 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
         {!article && !isLoading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {commonIssues.map((issue, index) => (
-                <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-2xl hover:shadow-rose-500/10">
-                    <h2 className="text-xl font-semibold text-rose-500 mb-4">{issue.title}</h2>
+                <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10">
+                    <h2 className="text-xl font-semibold text-amber-500 mb-4">{issue.title}</h2>
                     
                     <div className="space-y-4 flex-grow">
                         <div>

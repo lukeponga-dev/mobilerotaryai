@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message as MessageType } from '../types';
-import { RotorIcon, SpeakerWaveIcon, StopCircleIcon } from './icons';
+import { WrenchIcon, SpeakerWaveIcon, StopCircleIcon } from './icons';
 import { useTTSPlayer } from '../hooks/useTTSPlayer';
 import Button from './Button';
 
@@ -12,9 +12,9 @@ interface MessageProps {
 
 const LoadingDots = () => (
     <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
     </div>
 );
 
@@ -91,7 +91,7 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
             {isLoading ? (
                 <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
             ) : isPlaying ? (
-                <StopCircleIcon className="w-6 h-6 text-rose-500" />
+                <StopCircleIcon className="w-6 h-6 text-amber-500" />
             ) : (
                 <SpeakerWaveIcon className="w-6 h-6" />
             )}
@@ -103,7 +103,7 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-tr-lg'
+    ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-tr-lg'
     : 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-lg';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
@@ -111,7 +111,7 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
         {!isUser && (
             <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center flex-shrink-0 mt-1 self-start">
-                <RotorIcon className="w-5 h-5 text-rose-500" />
+                <WrenchIcon className="w-5 h-5 text-amber-500" />
             </div>
         )}
       <div className={`max-w-[85%] sm:max-w-md md:max-w-xl rounded-2xl shadow-md ${bubbleClasses}`}>

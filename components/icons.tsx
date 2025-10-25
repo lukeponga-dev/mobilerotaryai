@@ -86,30 +86,9 @@ export const ShieldCheckIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-export const RotorIcon = ({ className }: { className?: string }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className || 'w-6 h-6'}
-    >
-        {/* Gear Teeth */}
-        <path d="M12 14.5v-1.5m0 9v-1.5m-4.24-3.26h-1.5m9.98 0h-1.5m-6.7-2.8.98-.98m4.74 4.74.98-.98m-6.7-2.82-.98-.98m4.74-4.74-.98-.98" />
-        
-        {/* Wings */}
-        <path d="M3.5 13.5c-2-7 8-9 8.5-4" />
-        <path d="M20.5 13.5c2-7-8-9-8.5-4" />
-
-        {/* Wrench */}
-        <path d="M12 18V2" /> {/* Handle */}
-        <path d="M15.5 2a3.5 3.5 0 0 0-7 0v5h7V2z" /> {/* Head */}
-
-        {/* Gear center */}
-        <circle cx="12" cy="17" r="3" />
+export const WrenchIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.87-5.87m0 0L11.42 15.17m5.87-5.87L15.17 11.42m0 0L5.87 2.121A2.652 2.652 0 0 0 2.121 5.87l5.869 5.869m0 0L11.42 15.17" />
     </svg>
 );
 

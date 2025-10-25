@@ -151,7 +151,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                       <button
                           type="button"
                           onClick={clearAttachments}
-                          className="absolute -top-2 -right-2 bg-slate-500 dark:bg-slate-600 text-white rounded-full p-1 flex items-center justify-center border-2 border-slate-100 dark:border-slate-800 hover:bg-rose-600 transition-colors"
+                          className="absolute -top-2 -right-2 bg-slate-500 dark:bg-slate-600 text-white rounded-full p-1 flex items-center justify-center border-2 border-slate-100 dark:border-slate-800 hover:bg-red-600 transition-colors"
                           aria-label="Remove attachment"
                       >
                           <XIcon className="w-4 h-4" />
@@ -161,7 +161,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
           )}
           {(errorMessage || isAttaching) && (
               <div className="text-xs text-center mb-2 px-2">
-                  {errorMessage && <span className="text-rose-500">{errorMessage}</span>}
+                  {errorMessage && <span className="text-red-500">{errorMessage}</span>}
                   {isAttaching && !errorMessage && <span className="text-slate-500 dark:text-slate-400">Loading attachment preview...</span>}
               </div>
           )}
@@ -215,7 +215,7 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                       }
                   }}
                   placeholder="Describe your issue..."
-                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rose-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
+                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 max-h-40 transition overflow-y-auto border border-slate-300 dark:border-slate-600/50"
                   rows={1}
                   disabled={isLoading}
               />
@@ -224,12 +224,12 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={onToggleDeepAnalysis}
-                className={`relative rounded-full ${isDeepAnalysis ? 'text-rose-500' : ''}`}
+                className={`relative rounded-full ${isDeepAnalysis ? 'text-amber-500' : ''}`}
                 aria-label={isDeepAnalysis ? 'Disable deep analysis' : 'Enable deep analysis'}
                 title={isDeepAnalysis ? 'Deep analysis enabled' : 'Enable deep analysis for complex issues'}
                 disabled={isLoading}
               >
-                {isDeepAnalysis && <div className="absolute inset-0 bg-rose-500/20 rounded-full animate-pulse"></div>}
+                {isDeepAnalysis && <div className="absolute inset-0 bg-amber-500/20 rounded-full animate-pulse"></div>}
                 <BrainIcon className="w-6 h-6" />
               </Button>
               <Button
@@ -237,11 +237,11 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 variant="ghost"
                 size="icon"
                 onClick={toggleListening}
-                className={`relative rounded-full ${isListening ? 'text-rose-500' : ''}`}
+                className={`relative rounded-full ${isListening ? 'text-amber-500' : ''}`}
                 aria-label={isListening ? 'Stop listening' : 'Start listening'}
                 disabled={isLoading}
               >
-                {isListening && <div className="absolute inset-0 bg-rose-500/20 rounded-full animate-pulse"></div>}
+                {isListening && <div className="absolute inset-0 bg-amber-500/20 rounded-full animate-pulse"></div>}
                 <MicrophoneIcon className="w-6 h-6" />
               </Button>
               <Button

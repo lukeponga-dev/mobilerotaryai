@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, RotorIcon, ShieldCheckIcon, WaveformIcon } from './icons';
+import { PlusIcon, XIcon, HomeIcon, ChatBubbleLeftRightIcon, BookmarkSquareIcon, WrenchIcon, ShieldCheckIcon, WaveformIcon } from './icons';
 import ThemeToggle from './ThemeToggle';
 import Button from './Button';
 
@@ -33,13 +33,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
     <>
       <div className={`
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        fixed inset-y-0 left-0 z-30 w-64 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 flex flex-col border-r border-slate-200 dark:border-slate-700/50
+        fixed inset-y-0 left-0 z-30 w-64 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 flex flex-col border-r border-slate-200 dark:border-slate-700/50
         transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:flex-shrink-0
       `}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
-            <RotorIcon className="w-7 h-7 text-rose-500"/>
+            <WrenchIcon className="w-7 h-7 text-amber-500"/>
             <h2 className="text-lg font-semibold">AI Mazda Mechanic</h2>
           </a>
           <button onClick={onToggleSidebar} className="md:hidden p-1" aria-label="Close sidebar">
@@ -64,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                     <a href={item.route} key={item.route} onClick={onToggleSidebar}
                         className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                             getIsActive(item.route) 
-                            ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500' 
+                            ? 'bg-amber-500/10 text-amber-500 dark:text-amber-400 border-amber-500' 
                             : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                         }`}>
                         {item.icon}
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewSession, isSidebarOpen, onToggle
                 <a href="#/privacy" onClick={onToggleSidebar}
                     className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors border-l-4 ${
                         getIsActive('#/privacy') 
-                        ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500' 
+                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500' 
                         : 'text-slate-600 dark:text-slate-400 border-transparent hover:bg-slate-200/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-slate-100'
                     }`}>
                     <ShieldCheckIcon className="w-5 h-5" />

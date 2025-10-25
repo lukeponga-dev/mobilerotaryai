@@ -18,7 +18,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, quickRepli
   }, [messages, isLoading, quickReplies]);
 
   return (
-    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto bg-slate-50 dark:bg-slate-950 scroll-smooth">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto bg-slate-50 dark:bg-slate-900 scroll-smooth">
       {messages.map((msg, index) => {
         const isLastMessage = index === messages.length - 1;
         const showQuickReplies = isLastMessage && !isLoading && msg.role === 'model' && quickReplies && quickReplies.length > 0;
@@ -33,15 +33,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, quickRepli
             {showQuickReplies && (
               <div className="flex flex-wrap gap-2 mt-3 ml-11 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                   {quickReplies.map((reply, i) => (
-                      <Button
+                      <button
                           key={i}
-                          variant="secondary"
-                          size="sm"
-                          className="rounded-full !px-3 !py-1.5 transform-none active:scale-100"
+                          className="px-4 py-2 text-sm font-medium bg-slate-200 text-slate-700 rounded-full transition-all duration-200 transform hover:-translate-y-px hover:shadow-md hover:bg-amber-400/30 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-amber-500/20"
                           onClick={() => onQuickReply(reply)}
                       >
                           {reply}
-                      </Button>
+                      </button>
                   ))}
               </div>
             )}

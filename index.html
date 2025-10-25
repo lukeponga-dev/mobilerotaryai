@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF--8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e11d48' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 14.5v-1.5m0 9v-1.5m-4.24-3.26h-1.5m9.98 0h-1.5m-6.7-2.8.98-.98m4.74 4.74.98-.98m-6.7-2.82-.98-.98m4.74-4.74-.98-.98' /%3E%3Cpath d='M3.5 13.5c-2-7 8-9 8.5-4' /%3E%3Cpath d='M20.5 13.5c2-7-8-9-8.5-4' /%3E%3Cpath d='M12 18V2' /%3E%3Cpath d='M15.5 2a3.5 3.5 0 0 0-7 0v5h7V2z' /%3E%3Ccircle cx='12' cy='17' r='3' /%3E%3C/svg%3E" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 14.5v-1.5m0 9v-1.5m-4.24-3.26h-1.5m9.98 0h-1.5m-6.7-2.8.98-.98m4.74 4.74.98-.98m-6.7-2.82-.98-.98m4.74-4.74-.98-.98' /%3E%3Cpath d='M3.5 13.5c-2-7 8-9 8.5-4' /%3E%3Cpath d='M20.5 13.5c2-7-8-9-8.5-4' /%3E%3Cpath d='M12 18V2' /%3E%3Cpath d='M15.5 2a3.5 3.5 0 0 0-7 0v5h7V2z' /%3E%3Ccircle cx='12' cy='17' r='3' /%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>AI Mazda Mechanic</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,19 +24,32 @@
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
             },
+            borderRadius: {
+              'md': '10px',
+              'lg': '16px',
+            },
             colors: {
               slate: {
                 50: '#f8fafc',
                 100: '#f1f5f9',
-                200: '#e2e8f0',
+                200: '#e2e8f0', // ~Text
                 300: '#cbd5e1',
-                400: '#94a3b8',
+                400: '#9ca3af', // Muted
                 500: '#64748b',
                 600: '#475569',
                 700: '#334155',
-                800: '#1e293b',
-                900: '#0f172a',
+                800: '#1e293b', // ~Surface
+                900: '#0f172a', // ~Bg
                 950: '#020617',
+              },
+              amber: { // Accent
+                400: '#fbbf24',
+                500: '#f59e0b',
+                600: '#d97706',
+              },
+              red: { // Danger
+                500: '#ef4444',
+                600: '#dc2626',
               },
               rose: {
                 500: '#f43f5e',
@@ -72,7 +85,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 dark:bg-slate-950">
+  <body class="bg-slate-50 dark:bg-slate-900">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
