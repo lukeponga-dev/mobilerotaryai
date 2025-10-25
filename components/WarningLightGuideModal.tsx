@@ -70,7 +70,7 @@ interface WarningLightGuideModalProps {
 const WarningLightGuideModal: React.FC<WarningLightGuideModalProps> = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="RX-8 Warning Light Guide">
-      <div className="max-h-[70vh] overflow-y-auto pr-2 -mr-2">
+      <div className="max-h-[70vh] overflow-y-auto pr-2 -mr-2 scroll-smooth">
         <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
           A quick reference for common dashboard warning lights. For a detailed diagnosis, start a new session.
         </p>

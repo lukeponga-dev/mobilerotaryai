@@ -51,7 +51,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
   const hasContent = context && (context.symptoms.length > 0 || context.parts.length > 0 || context.actions.length > 0);
 
   return (
-    <aside className="hidden md:block w-72 lg:w-80 xl:w-96 bg-slate-100/80 dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700/50 p-4 flex-shrink-0 overflow-y-auto transition-all duration-300">
+    <aside className="hidden md:block w-72 lg:w-80 xl:w-96 bg-slate-100/80 dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700/50 p-4 flex-shrink-0 overflow-y-auto transition-all duration-300 scroll-smooth">
       <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Diagnosis Summary</h2>
       {isLoading && !hasContent && (
         <div className="space-y-6 animate-pulse">

@@ -45,7 +45,7 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
         sessionName="My Sessions"
         onToggleSidebar={onToggleSidebar}
       />
-      <div className="flex-1 p-4 md:p-6 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-6 overflow-y-auto scroll-smooth">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">All Diagnosis Sessions</h1>
         {sortedSessions.length > 0 ? (
             <div className="space-y-4">

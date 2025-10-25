@@ -65,8 +65,8 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-rose-600 to-rose-500 text-white rounded-br-none'
-    : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-none';
+    ? 'bg-gradient-to-br from-rose-500 to-rose-600 text-white rounded-br-none'
+    : 'bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-none';
 
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 

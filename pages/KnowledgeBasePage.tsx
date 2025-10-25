@@ -86,7 +86,7 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
         sessionName="Knowledge Base"
         onToggleSidebar={onToggleSidebar}
       />
-      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth">
         <div className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
             <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">

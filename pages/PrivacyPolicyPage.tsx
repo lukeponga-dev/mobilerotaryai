@@ -12,7 +12,7 @@ const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onToggleSidebar }
         sessionName="Privacy Policy"
         onToggleSidebar={onToggleSidebar}
       />
-      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth">
         <div className="max-w-3xl mx-auto text-slate-700 dark:text-slate-300">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Privacy Policy for AI Mazda Mechanic</h1>
           <p className="mb-4"><strong>Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>

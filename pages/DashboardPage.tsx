@@ -29,7 +29,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
         sessionName="Dashboard"
         onToggleSidebar={onToggleSidebar}
       />
-      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-8 overflow-y-auto scroll-smooth">
         
         <div className="text-center py-12 md:py-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
