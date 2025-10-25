@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import Header from '../components/Header';
 import { MessageContent } from '../components/Message';
 import { generateKnowledgeArticle } from '../services/geminiService';
 import Button from '../components/Button';
 import { SearchIcon, XIcon, LinkIcon } from '../components/icons';
 import { ArticleData } from '../types';
-
-interface KnowledgeBasePageProps {
-  onToggleSidebar: () => void;
-}
 
 const commonIssues = [
   {
@@ -61,7 +56,7 @@ const LoadingSkeleton = () => (
 );
 
 
-const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }) => {
+const KnowledgeBasePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [article, setArticle] = useState<ArticleData | null>(null);
@@ -82,92 +77,86 @@ const KnowledgeBasePage: React.FC<KnowledgeBasePageProps> = ({ onToggleSidebar }
   };
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-900">
-      <Header
-        sessionName="Knowledge Base"
-        onToggleSidebar={onToggleSidebar}
-      />
-      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth">
-        <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
-            <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">
-                Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
-            </p>
-            <form onSubmit={handleSearch} className="flex gap-2">
-                <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search for a topic (e.g., 'SOHN adapter benefits')..."
-                    className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
-                    disabled={isLoading}
-                />
-                <Button type="submit" variant="primary" size="icon" disabled={isLoading || !searchTerm.trim()} aria-label="Search">
-                    <SearchIcon className="w-5 h-5" />
-                </Button>
-            </form>
-        </div>
-
-        {isLoading && <LoadingSkeleton />}
-        
-        {article && (
-            <div>
-                <Button onClick={clearSearch} variant="secondary" className="mb-4 gap-2">
-                    <XIcon className="w-4 h-4" />
-                    Back to Common Issues
-                </Button>
-                <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200">
-                    <MessageContent text={article.text} />
-                     {article.sources && article.sources.length > 0 && (
-                        <div className="mt-8 pt-4 border-t border-slate-300 dark:border-slate-600">
-                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Sources</h3>
-                            <ul className="space-y-2 list-none p-0">
-                                {article.sources.map((source, index) => (
-                                    <li key={index} className="flex items-start gap-3">
-                                        <LinkIcon className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
-                                        <a 
-                                            href={source.uri} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            className="text-orange-500 hover:underline text-sm"
-                                        >
-                                            {source.title || source.uri}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            </div>
-        )}
-        
-        {!article && !isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {commonIssues.map((issue, index) => (
-                <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10">
-                    <h2 className="text-xl font-semibold text-orange-500 mb-4">{issue.title}</h2>
-                    
-                    <div className="space-y-4 flex-grow">
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Symptoms</h3>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">{issue.description}</p>
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Solution</h3>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">{issue.solution}</p>
-                        </div>
-                    </div>
-                    
-                    <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700/70">
-                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 italic">{issue.imageSuggestion}</p>
-                    </div>
-                </div>
-            ))}
-            </div>
-        )}
+    <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth bg-slate-50 dark:bg-slate-900">
+      <div className="sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Renesis Knowledge Base</h1>
+          <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-3xl">
+              Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
+          </p>
+          <form onSubmit={handleSearch} className="flex gap-2">
+              <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search for a topic (e.g., 'SOHN adapter benefits')..."
+                  className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+                  disabled={isLoading}
+              />
+              <Button type="submit" variant="primary" size="icon" disabled={isLoading || !searchTerm.trim()} aria-label="Search">
+                  <SearchIcon className="w-5 h-5" />
+              </Button>
+          </form>
       </div>
+
+      {isLoading && <LoadingSkeleton />}
+      
+      {article && (
+          <div>
+              <Button onClick={clearSearch} variant="secondary" className="mb-4 gap-2">
+                  <XIcon className="w-4 h-4" />
+                  Back to Common Issues
+              </Button>
+              <div className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 shadow-lg prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200">
+                  <MessageContent text={article.text} />
+                   {article.sources && article.sources.length > 0 && (
+                      <div className="mt-8 pt-4 border-t border-slate-300 dark:border-slate-600">
+                          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Sources</h3>
+                          <ul className="space-y-2 list-none p-0">
+                              {article.sources.map((source, index) => (
+                                  <li key={index} className="flex items-start gap-3">
+                                      <LinkIcon className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                                      <a 
+                                          href={source.uri} 
+                                          target="_blank" 
+                                          rel="noopener noreferrer"
+                                          className="text-orange-500 hover:underline text-sm"
+                                      >
+                                          {source.title || source.uri}
+                                      </a>
+                                  </li>
+                              ))}
+                          </ul>
+                      </div>
+                  )}
+              </div>
+          </div>
+      )}
+      
+      {!article && !isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {commonIssues.map((issue, index) => (
+              <div key={index} className="bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 rounded-lg border border-slate-200 dark:border-slate-700/50 flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10">
+                  <h2 className="text-xl font-semibold text-orange-500 mb-4">{issue.title}</h2>
+                  
+                  <div className="space-y-4 flex-grow">
+                      <div>
+                          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Symptoms</h3>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{issue.description}</p>
+                      </div>
+                      <div>
+                          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Solution</h3>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{issue.solution}</p>
+                      </div>
+                  </div>
+                  
+                  <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700/70">
+                      <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Diagnostic Media</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 italic">{issue.imageSuggestion}</p>
+                  </div>
+              </div>
+          ))}
+          </div>
+      )}
     </div>
   );
 };

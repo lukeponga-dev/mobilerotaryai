@@ -4,10 +4,10 @@ import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
-import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import LivePage from './pages/LivePage';
 import AdBanner from './components/AdBanner';
+import Header from './components/Header';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext, generateQuickReplies } from './services/geminiService';
 
 declare global {
@@ -74,7 +74,7 @@ const App: React.FC = () => {
             } else {
                 localStorage.removeItem('rotorwise_sessions');
             }
-        }, 1000); // Debounce save by 1 second
+        }, 1000);
 
         return () => clearTimeout(autoSave);
     }, [sessions]);
@@ -89,7 +89,7 @@ const App: React.FC = () => {
     const handleDeleteSession = (id: string) => {
         setSessions(prev => prev.filter(s => s.id !== id));
         if (route === `#/session/${id}`) {
-            navigate('#/sessions');
+            navigate('#/');
         }
     };
     
@@ -104,7 +104,6 @@ const App: React.FC = () => {
         const currentSession = sessions.find(s => s.id === sessionId);
         if (!currentSession) return;
         
-        // Clear previous quick replies when user sends a new message
         updateSessionData(sessionId, { quickReplies: [] });
 
         const userMessage: Message = { id: `msg_user_${Date.now()}`, role: 'user', text, image, video };
@@ -193,39 +192,43 @@ const App: React.FC = () => {
         doc.save(`AI-Mazda-Mechanic-Report-${session.id}.pdf`);
     };
 
+    const sortedSessions = [...sessions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
     // --- Page Rendering ---
-    const renderPage = () => {
+    const renderContent = () => {
         const sessionId = route.startsWith('#/session/') ? route.split('/')[2] : null;
-        const onToggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+        const activeSession = sessionId ? sessions.find(s => s.id === sessionId) : null;
         
-        if (sessionId) {
-            const session = sessions.find(s => s.id === sessionId);
-            if (!session) return <SessionsListPage sessions={sessions} onDeleteSession={handleDeleteSession} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;
-            return (
-                <DiagnosisPage
-                    session={session}
-                    isLoading={isLoading}
-                    onSendMessage={handleSendMessage}
-                    onExportPDF={handleExportPDF}
-                    onToggleSidebar={onToggleSidebar}
-                />
-            );
+        if (activeSession) {
+            return {
+                page: (
+                    <DiagnosisPage
+                        session={activeSession}
+                        isLoading={isLoading}
+                        onSendMessage={handleSendMessage}
+                    />
+                ),
+                headerText: activeSession.name,
+                showExport: true,
+            };
         }
 
         switch (route) {
-            case '#/sessions':
-                return <SessionsListPage sessions={sessions} onDeleteSession={handleDeleteSession} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;
             case '#/knowledge':
-                return <KnowledgeBasePage onToggleSidebar={onToggleSidebar} />;
+                return { page: <KnowledgeBasePage />, headerText: "Knowledge Base", showExport: false };
             case '#/live':
-                return <LivePage onToggleSidebar={onToggleSidebar} />;
+                return { page: <LivePage />, headerText: "Live Diagnosis", showExport: false };
             case '#/privacy':
-                return <PrivacyPolicyPage onToggleSidebar={onToggleSidebar} />;
+                return { page: <PrivacyPolicyPage />, headerText: "Privacy Policy", showExport: false };
             case '#/':
             default:
-                return <DashboardPage sessions={sessions} onNewSession={handleNewSession} onToggleSidebar={onToggleSidebar} />;
+                return { page: <DashboardPage onNewSession={handleNewSession} />, headerText: "Dashboard", showExport: false };
         }
     };
+
+    // FIX: Destructure the rendered page element directly to fix TypeScript prop type mismatch issues.
+    const { page, headerText, showExport } = renderContent();
+    const activeSessionId = route.startsWith('#/session/') ? route.split('/')[2] : null;
 
     return (
         <div className="h-screen w-screen flex bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-200 font-sans relative">
@@ -236,14 +239,21 @@ const App: React.FC = () => {
                 ></div>
             )}
             <Sidebar 
-                activeRoute={route}
+                sessions={sortedSessions}
+                activeSessionId={activeSessionId}
                 onNewSession={handleNewSession}
+                onDeleteSession={handleDeleteSession}
                 isSidebarOpen={isSidebarOpen}
                 onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
             />
             <div className="flex-1 flex flex-col min-w-0">
+                 <Header
+                    sessionName={headerText}
+                    onExportPDF={showExport && activeSessionId ? () => handleExportPDF(activeSessionId) : undefined}
+                    onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                />
                 <main className="flex-1 flex flex-col min-w-0">
-                    {renderPage()}
+                    {page}
                 </main>
                 <AdBanner />
             </div>

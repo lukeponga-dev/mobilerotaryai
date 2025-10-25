@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import Header from '../components/Header';
 import Button from '../components/Button';
 import { MicrophoneIcon, XCircleIcon } from '../components/icons';
 import { live } from '../services/geminiService';
@@ -15,7 +14,7 @@ declare global {
 
 type Status = 'idle' | 'connecting' | 'live' | 'error' | 'ended';
 
-const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }) => {
+const LivePage: React.FC = () => {
     const [status, setStatus] = useState<Status>('idle');
     const [error, setError] = useState<string | null>(null);
     const [transcript, setTranscript] = useState<LiveTranscript[]>([]);
@@ -188,50 +187,47 @@ const LivePage: React.FC<{ onToggleSidebar: () => void }> = ({ onToggleSidebar }
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950">
-            <Header sessionName="Live Diagnosis" onToggleSidebar={onToggleSidebar} />
-            <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-6 lg:p-8">
-                <div className="w-full max-w-3xl text-center">
-                    <h1 className="text-xl font-bold mb-1">Status: {renderStatusIndicator()}</h1>
-                    {error && <p className="text-rose-500 text-sm">{error}</p>}
-                </div>
+        <div className="flex-1 flex flex-col items-center justify-between p-4 md:p-6 lg:p-8 bg-slate-50 dark:bg-slate-950">
+            <div className="w-full max-w-3xl text-center">
+                <h1 className="text-xl font-bold mb-1">Status: {renderStatusIndicator()}</h1>
+                {error && <p className="text-rose-500 text-sm">{error}</p>}
+            </div>
 
-                <div className="flex-1 w-full max-w-3xl my-4 overflow-y-auto bg-slate-100 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700/50">
-                    {transcript.length === 0 && (
-                        <p className="text-slate-400 dark:text-slate-500 text-center italic mt-4">
-                            {status === 'idle' ? 'Start the session to begin conversation.' : 'Transcript will appear here...'}
-                        </p>
-                    )}
-                    <div className="space-y-4">
-                        {transcript.map((item) => (
-                            <div key={item.id} className={`flex ${item.speaker === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-red-500 text-white' : 'bg-slate-200 dark:bg-slate-700'}`}>
-                                    <p style={{ opacity: item.isFinal ? 1 : 0.7 }}>{item.text}</p>
-                                </div>
+            <div className="flex-1 w-full max-w-3xl my-4 overflow-y-auto bg-slate-100 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700/50">
+                {transcript.length === 0 && (
+                    <p className="text-slate-400 dark:text-slate-500 text-center italic mt-4">
+                        {status === 'idle' ? 'Start the session to begin conversation.' : 'Transcript will appear here...'}
+                    </p>
+                )}
+                <div className="space-y-4">
+                    {transcript.map((item) => (
+                        <div key={item.id} className={`flex ${item.speaker === 'user' ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`px-4 py-2 rounded-lg max-w-[80%] ${item.speaker === 'user' ? 'bg-red-500 text-white' : 'bg-slate-200 dark:bg-slate-700'}`}>
+                                <p style={{ opacity: item.isFinal ? 1 : 0.7 }}>{item.text}</p>
                             </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center gap-4">
-                     {status === 'live' && (
-                        <div className="text-center text-slate-500 dark:text-slate-400">
-                            <p>Speak into your microphone now.</p>
-                            <p className="text-xs">The AI will respond automatically.</p>
                         </div>
-                    )}
-                    {status === 'idle' || status === 'error' || status === 'ended' ? (
-                        <Button onClick={startSession} size="lg" className="gap-3 group">
-                            <MicrophoneIcon className="w-6 h-6" />
-                            <span>Start Conversation</span>
-                        </Button>
-                    ) : (
-                        <Button onClick={stopSession} variant="destructive" size="lg" className="gap-3">
-                            <XCircleIcon className="w-6 h-6" />
-                            <span>Stop Session</span>
-                        </Button>
-                    )}
+                    ))}
                 </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+                 {status === 'live' && (
+                    <div className="text-center text-slate-500 dark:text-slate-400">
+                        <p>Speak into your microphone now.</p>
+                        <p className="text-xs">The AI will respond automatically.</p>
+                    </div>
+                )}
+                {status === 'idle' || status === 'error' || status === 'ended' ? (
+                    <Button onClick={startSession} size="lg" className="gap-3 group">
+                        <MicrophoneIcon className="w-6 h-6" />
+                        <span>Start Conversation</span>
+                    </Button>
+                ) : (
+                    <Button onClick={stopSession} variant="destructive" size="lg" className="gap-3">
+                        <XCircleIcon className="w-6 h-6" />
+                        <span>Stop Session</span>
+                    </Button>
+                )}
             </div>
         </div>
     );
