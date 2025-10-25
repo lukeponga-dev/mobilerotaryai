@@ -28,9 +28,9 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sessions, onNewSession, o
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         
         {/* Main Call to Action Section */}
-        <div className="text-center py-10 md:py-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
-          <p className="text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
+        <div className="text-center py-10 md:py-16 xl:py-20">
+          <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold text-slate-900 dark:text-white mb-4">Ready to Diagnose?</h1>
+          <p className="text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-2xl xl:max-w-3xl mx-auto">
             Click the button below to start a new session with RotorWise AI and get expert help for your Mazda RX-8.
           </p>
           <button

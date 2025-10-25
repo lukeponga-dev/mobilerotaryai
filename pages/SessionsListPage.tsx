@@ -13,7 +13,8 @@ interface SessionsListPageProps {
 
 const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteSession, onNewSession, onToggleSidebar }) => {
   const [sessionToDelete, setSessionToDelete] = useState<Session | null>(null);
-  
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const sortedSessions = [...sessions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const handleDeleteClick = (session: Session) => {
@@ -22,8 +23,14 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
 
   const confirmDelete = () => {
     if (sessionToDelete) {
-      onDeleteSession(sessionToDelete.id);
-      setSessionToDelete(null);
+      setDeletingId(sessionToDelete.id);
+      setSessionToDelete(null); // Close modal immediately
+      
+      // Wait for animation to complete before removing from state
+      setTimeout(() => {
+        onDeleteSession(sessionToDelete.id);
+        setDeletingId(null);
+      }, 300); 
     }
   };
 
@@ -40,11 +47,23 @@ const SessionsListPage: React.FC<SessionsListPageProps> = ({ sessions, onDeleteS
       <div className="flex-1 p-4 md:p-6 overflow-y-auto">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">All Diagnosis Sessions</h1>
         {sortedSessions.length > 0 ? (
-            <div className="space-y-3">
-            {sortedSessions.map(session => (
-                <div key={session.id} className="group bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 flex items-center justify-between p-4 hover:bg-slate-200/60 dark:hover:bg-slate-700/50 transition-colors">
+            <div className="space-y-4">
+            {sortedSessions.map((session, index) => (
+                <div 
+                    key={session.id} 
+                    className={`
+                        group relative bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700/50 flex items-center justify-between p-4 
+                        transition-all duration-300 ease-in-out
+                        ${deletingId === session.id ? 'opacity-0 scale-95 -translate-x-8' : 'opacity-100'}
+                    `}
+                >
+                    {index === 0 && (
+                        <span className="absolute -top-2.5 right-3 text-xs font-bold bg-rose-500 text-white px-2.5 py-1 rounded-full shadow-md z-10 tracking-wider">
+                            RECENT
+                        </span>
+                    )}
                     <a href={`#/session/${session.id}`} className="flex-1 min-w-0">
-                        <p className="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-rose-400 transition-colors">{session.name}</p>
+                        <p className="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-rose-500 transition-colors">{session.name}</p>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             Created on {new Date(session.createdAt).toLocaleDateString()}
                         </p>

@@ -97,7 +97,7 @@ const App: React.FC = () => {
         updateSessionData(sessionId, { messages: messagesWithUser });
         setIsLoading(true);
 
-        if (currentSession.messages.length === 1 && text) {
+        if (currentSession.name === 'New Diagnosis...' && text.trim()) {
             const title = await generateSessionTitle(text);
             updateSessionData(sessionId, { name: title });
         }
