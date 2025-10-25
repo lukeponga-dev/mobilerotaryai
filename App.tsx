@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// FIX: Adjust import path for types, assuming the actual definitions are in `src/types.ts`
-import { Session, Message, ContextData } from './src/types';
-import Sidebar from './src/components/Sidebar';
+import { Session, Message, ContextData } from './types';
+import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
-import KnowledgeBasePage from './src/pages/KnowledgeBasePage';
+import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import SessionsListPage from './pages/SessionsListPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
@@ -211,7 +210,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans relative overflow-hidden">
+        <div className="h-screen w-screen flex bg-slate-900 text-slate-200 font-sans relative overflow-hidden">
             {isSidebarOpen && (
                 <div 
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"

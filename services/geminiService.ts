@@ -8,6 +8,7 @@ if (!API_KEY) {
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
+const model = ai.models;
 
 const SYSTEM_INSTRUCTION = `You are RotorWise AI, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
 Your role is to act as a professional RX-8 mechanic with deep expertise in the 13B-MSP Renesis rotary engine.
@@ -99,8 +100,7 @@ export async function* getDiagnosticResponseStream(history: Message[], latestMes
     };
     
     try {
-      // FIX: Use `ai.models.generateContentStream` directly instead of through a separate constant.
-      const result = await ai.models.generateContentStream(request);
+      const result = await model.generateContentStream(request);
       for await (const chunk of result) {
         if (chunk.text) {
             yield chunk.text;
@@ -115,12 +115,11 @@ export async function* getDiagnosticResponseStream(history: Message[], latestMes
 export const generateSessionTitle = async (firstMessage: string): Promise<string> => {
     const prompt = `Based on the following user query about a Mazda RX-8, create a concise and descriptive title of 5 words or less. For example: "Engine misfire on cold start" or "Coolant leak near radiator".\n\nQuery: "${firstMessage}"\n\nTitle:`;
     try {
-        // FIX: Use `ai.models.generateContent` directly and rename variable to `response`.
-        const response = await ai.models.generateContent({
+        const result = await model.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
         });
-        return response.text.trim().replace(/"/g, ''); // Clean up response
+        return result.text.trim().replace(/"/g, ''); // Clean up response
     } catch (error) {
         console.error("Error generating title:", error);
         return "New Diagnosis Session";
@@ -136,8 +135,7 @@ export const extractConversationContext = async (history: Message[]): Promise<Co
     `;
 
     try {
-        // FIX: Use `ai.models.generateContent` directly and rename variable to `response`.
-        const response = await ai.models.generateContent({
+        const result = await model.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
@@ -166,7 +164,7 @@ export const extractConversationContext = async (history: Message[]): Promise<Co
             }
         });
 
-        const jsonText = response.text.trim();
+        const jsonText = result.text.trim();
         return JSON.parse(jsonText) as ContextData;
     } catch (error) {
         console.error("Error extracting context:", error);
