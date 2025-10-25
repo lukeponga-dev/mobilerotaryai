@@ -1,5 +1,6 @@
 import React from 'react';
 import { Message as MessageType } from '../types';
+import { RotorIcon } from './icons';
 
 interface MessageProps {
   message: MessageType;
@@ -7,11 +8,10 @@ interface MessageProps {
   isLastMessage?: boolean;
 }
 
-const LoadingDots = () => (
-    <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+const LoadingIndicator = () => (
+    <div className="flex items-center space-x-3 text-slate-500 dark:text-slate-400">
+        <RotorIcon className="w-5 h-5 animate-spin" />
+        <span className="text-sm font-medium">RotorWise AI is thinking...</span>
     </div>
 );
 
@@ -43,7 +43,7 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
                 {showTypingIndicator && <BlinkingCursor />}
             </p>
         )}
-        {!message.text && showTypingIndicator && <LoadingDots />}
+        {!message.text && showTypingIndicator && <LoadingIndicator />}
       </div>
     </div>
   );
