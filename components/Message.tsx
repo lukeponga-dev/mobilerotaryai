@@ -23,11 +23,12 @@ const applyTooltips = (text: string): React.ReactNode[] => {
     });
 };
 
+// REFACTORED: Replaced the bar-style skeleton with a classic three-dot "thinking" animation.
 const SkeletonLoader = () => (
-    <div className="animate-pulse space-y-3 py-1">
-        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-5/6"></div>
-        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-full"></div>
-        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-3/4"></div>
+    <div className="flex items-center space-x-2 py-2">
+        <div className="h-2.5 w-2.5 bg-light-muted/50 dark:bg-dark-muted/50 rounded-full animate-pulse-soft" style={{ animationDelay: '0s' }}></div>
+        <div className="h-2.5 w-2.5 bg-light-muted/50 dark:bg-dark-muted/50 rounded-full animate-pulse-soft" style={{ animationDelay: '0.2s' }}></div>
+        <div className="h-2.5 w-2.5 bg-light-muted/50 dark:bg-dark-muted/50 rounded-full animate-pulse-soft" style={{ animationDelay: '0.4s' }}></div>
     </div>
 );
 
@@ -135,7 +136,7 @@ interface MessageProps {
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
   const bubbleClasses = isUser
-    ? 'bg-gradient-to-br from-accent to-warning text-white rounded-xl rounded-br-none'
+    ? 'bg-gradient-to-br from-accent to-teal text-white rounded-xl rounded-br-none'
     : 'bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text rounded-xl rounded-bl-none';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 

@@ -21,10 +21,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, quickRepli
     <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto bg-light-surface dark:bg-dark-surface scroll-smooth">
       {messages.map((msg, index) => {
         const isLastMessage = index === messages.length - 1;
+        const isSecondLast = index === messages.length - 2;
+
+        // REFACTORED: Fade out older messages when waiting for a new response to improve focus.
+        const isFaded = isLoading && !isLastMessage && !isSecondLast;
+        
         const showQuickReplies = isLastMessage && !isLoading && msg.role === 'model' && quickReplies && quickReplies.length > 0;
 
         return (
-          <div key={msg.id}>
+          <div key={msg.id} className={`transition-opacity duration-500 ${isFaded ? 'opacity-60' : 'opacity-100'}`}>
             <Message 
               message={msg} 
               isLoading={isLoading}

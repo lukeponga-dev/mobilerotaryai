@@ -30,7 +30,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNewSession }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Main Action Card */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-accent to-warning p-6 rounded-lg border border-accent/20 shadow-xl h-full flex flex-col justify-between">
+          <div className="relative overflow-hidden bg-gradient-to-br from-accent to-teal p-6 rounded-lg border border-accent/20 shadow-xl h-full flex flex-col justify-between">
               <LightBulbIcon className="absolute -right-6 -bottom-10 w-36 h-36 text-white/10 transform rotate-[-15deg] pointer-events-none" />
               <div>
                   <h2 className="text-2xl font-bold text-white mb-2">Pro Tip of the Day</h2>
@@ -41,7 +41,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNewSession }) => {
               <Button
                   onClick={onNewSession}
                   size="lg"
-                  className="w-full sm:w-auto bg-white/90 text-gray-900 hover:bg-white shadow-lg !ring-offset-warning"
+                  className="w-full sm:w-auto bg-white/90 text-gray-900 hover:bg-white shadow-lg !ring-offset-teal"
               >
                   Start First Diagnosis
               </Button>
