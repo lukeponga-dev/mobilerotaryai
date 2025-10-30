@@ -7,7 +7,7 @@ services:
   repo: https://github.com/lukeponga-dev/mobilerotaryai
   envVars:
   - key: GEMINI_API_KEY
-    sync: true
+    sync: false 
   buildCommand: yarn install; yarn build
   staticPublishPath: ./dist
   autoDeployTrigger: commit
