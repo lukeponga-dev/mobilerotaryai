@@ -7,7 +7,7 @@ import ContextPanel from '../components/ContextPanel';
 interface DiagnosisPageProps {
   session: Session;
   isLoading: boolean;
-  onSendMessage: (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean, isWebSearch?: boolean) => void;
+  onSendMessage: (sessionId: string, text: string, image?: string, video?: string, isThinkingMode?: boolean, isWebSearch?: boolean) => void;
 }
 
 const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
@@ -15,15 +15,15 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
   isLoading,
   onSendMessage,
 }) => {
-  const [isDeepAnalysis, setIsDeepAnalysis] = useState(false);
+  const [isThinkingMode, setIsThinkingMode] = useState(false);
   const [isWebSearch, setIsWebSearch] = useState(false);
 
   const handleSendMessage = (text: string, image?: string, video?: string) => {
-    onSendMessage(session.id, text, image, video, isDeepAnalysis, isWebSearch);
+    onSendMessage(session.id, text, image, video, isThinkingMode, isWebSearch);
   };
   
   const handleQuickReply = (replyText: string) => {
-    // A quick reply should not be a deep analysis or web search
+    // A quick reply should not use thinking mode or web search
     onSendMessage(session.id, replyText, undefined, undefined, false, false);
   };
 
@@ -39,8 +39,8 @@ const DiagnosisPage: React.FC<DiagnosisPageProps> = ({
             <InputBar 
               onSendMessage={handleSendMessage} 
               isLoading={isLoading} 
-              isDeepAnalysis={isDeepAnalysis}
-              onToggleDeepAnalysis={() => setIsDeepAnalysis(prev => !prev)}
+              isThinkingMode={isThinkingMode}
+              onToggleThinkingMode={() => setIsThinkingMode(prev => !prev)}
               isWebSearch={isWebSearch}
               onToggleWebSearch={() => setIsWebSearch(prev => !prev)}
             />

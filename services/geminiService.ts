@@ -260,7 +260,7 @@ const fileToGenerativePart = (base64Data: string, mimeType: string) => {
  * Selects the appropriate Gemini model and configuration based on the user's input and settings.
  * This function ensures the best model is used for each specific task, from quick chats to deep video analysis.
  */
-const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
+const getModelAndConfig = (latestMessage: Message, isThinkingMode?: boolean, isWebSearch?: boolean) => {
     const baseConfig: any = { systemInstruction: SYSTEM_INSTRUCTION };
 
     // FEATURE: Web Search Grounding for up-to-date information.
@@ -278,8 +278,8 @@ const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean, isW
 
     // FEATURE: Thinking Mode for complex queries.
     // Uses the powerful gemini-2.5-pro model with a maximum thinking budget for in-depth analysis.
-    if (isDeepAnalysis) {
-        console.log('Using Deep Analysis model: gemini-2.5-pro');
+    if (isThinkingMode) {
+        console.log('Using Thinking Mode model: gemini-2.5-pro');
         return {
             modelName: 'gemini-2.5-pro',
             config: {
@@ -315,8 +315,8 @@ const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean, isW
 // This allows for an explicit return type annotation (`AsyncGenerator<GenerateContentResponse>`),
 // which resolves a TypeScript type inference issue where the `stream` variable was incorrectly typed as `unknown`,
 // causing an error on the `for await...of` loop.
-export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean): AsyncGenerator<GenerateContentResponse> {
-    const { modelName, config } = getModelAndConfig(latestMessage, isDeepAnalysis, isWebSearch);
+export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message, isThinkingMode?: boolean, isWebSearch?: boolean): AsyncGenerator<GenerateContentResponse> {
+    const { modelName, config } = getModelAndConfig(latestMessage, isThinkingMode, isWebSearch);
 
     const modelHistory = history.map(msg => ({
         role: msg.role,

@@ -6,8 +6,8 @@ import Button from './Button';
 interface InputBarProps {
   onSendMessage: (text: string, image?: string, video?: string) => void;
   isLoading: boolean;
-  isDeepAnalysis?: boolean;
-  onToggleDeepAnalysis?: () => void;
+  isThinkingMode?: boolean;
+  onToggleThinkingMode?: () => void;
   isWebSearch?: boolean;
   onToggleWebSearch?: () => void;
 }
@@ -17,7 +17,7 @@ const MAX_VIDEO_SIZE_MB = 25;
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 
-const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAnalysis, onToggleDeepAnalysis, isWebSearch, onToggleWebSearch }) => {
+const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isThinkingMode, onToggleThinkingMode, isWebSearch, onToggleWebSearch }) => {
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -247,13 +247,13 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={onToggleDeepAnalysis}
-                className={`relative rounded-full ${isDeepAnalysis ? 'text-accent' : ''}`}
-                aria-label={isDeepAnalysis ? 'Disable deep analysis' : 'Enable deep analysis'}
-                title={isDeepAnalysis ? 'Deep analysis enabled' : 'Enable deep analysis for complex issues'}
+                onClick={onToggleThinkingMode}
+                className={`relative rounded-full ${isThinkingMode ? 'text-accent' : ''}`}
+                aria-label={isThinkingMode ? 'Disable thinking mode' : 'Enable thinking mode'}
+                title={isThinkingMode ? 'Thinking mode enabled' : 'Enable thinking mode for complex issues'}
                 disabled={isLoading}
               >
-                {isDeepAnalysis && <div className="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>}
+                {isThinkingMode && <div className="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>}
                 <BrainIcon className="w-6 h-6" />
               </Button>
               <Button

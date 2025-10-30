@@ -115,7 +115,7 @@ const App: React.FC = () => {
         ));
     };
 
-    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
+    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isThinkingMode?: boolean, isWebSearch?: boolean) => {
         const currentSession = sessions.find(s => s.id === sessionId);
         if (!currentSession) return;
         
@@ -138,7 +138,7 @@ const App: React.FC = () => {
         const history = currentSession.messages.slice(1);
         
         try {
-            const stream = getDiagnosticResponseStream(history, userMessage, isDeepAnalysis, isWebSearch);
+            const stream = getDiagnosticResponseStream(history, userMessage, isThinkingMode, isWebSearch);
             let fullResponse = '';
             const sources: GroundingSource[] = [];
 
