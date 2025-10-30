@@ -6,6 +6,8 @@ interface HeaderProps {
   sessionName: string;
   onExportPDF?: () => void;
   onToggleSidebar: () => void;
+  isEditable?: boolean;
+  onUpdateSessionName?: (newName: string) => void;
 }
 
 const NavMenu: React.FC<{onClose: () => void}> = ({ onClose }) => {
@@ -33,9 +35,23 @@ const NavMenu: React.FC<{onClose: () => void}> = ({ onClose }) => {
 };
 
 
-const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSidebar }) => {
+const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSidebar, isEditable, onUpdateSessionName }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(sessionName);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setEditedName(sessionName);
+  }, [sessionName]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.select();
+    }
+  }, [isEditing]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,6 +66,25 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
         document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isMenuOpen]);
+
+  const handleNameUpdate = () => {
+      if (editedName.trim() && editedName.trim() !== sessionName) {
+          onUpdateSessionName?.(editedName.trim());
+      } else {
+          setEditedName(sessionName);
+      }
+      setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+          handleNameUpdate();
+      } else if (e.key === 'Escape') {
+          setEditedName(sessionName);
+          setIsEditing(false);
+      }
+  };
+
 
   return (
     <header className="bg-light-surface dark:bg-dark-surface border-b border-light-border dark:border-dark-border flex-shrink-0">
@@ -67,8 +102,27 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
           <div className="mr-4 flex-shrink-0 hidden md:block">
             <WrenchIcon className="w-7 h-7 sm:w-8 sm:h-8 text-accent" />
           </div>
-          <div className="min-w-0">
-              <h1 className="text-lg sm:text-xl font-bold truncate" title={sessionName}>{sessionName}</h1>
+          <div className="min-w-0 flex-1">
+              {isEditing && isEditable ? (
+                  <input
+                      ref={inputRef}
+                      type="text"
+                      value={editedName}
+                      onChange={(e) => setEditedName(e.target.value)}
+                      onBlur={handleNameUpdate}
+                      onKeyDown={handleKeyDown}
+                      className="text-lg sm:text-xl font-bold bg-transparent border-b-2 border-accent focus:outline-none w-full text-light-text dark:text-dark-text"
+                      aria-label="Edit session name"
+                  />
+              ) : (
+                  <h1 
+                      className={`text-lg sm:text-xl font-bold truncate ${isEditable ? 'cursor-pointer hover:bg-light-panel-muted dark:hover:bg-dark-panel-muted rounded px-2 -mx-2' : ''}`}
+                      title={isEditable ? `Click to edit: ${sessionName}` : sessionName}
+                      onClick={() => isEditable && setIsEditing(true)}
+                  >
+                      {sessionName}
+                  </h1>
+              )}
           </div>
         </div>
         <div className="flex items-center gap-2">

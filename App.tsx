@@ -348,6 +348,8 @@ const App: React.FC = () => {
                     sessionName={headerText}
                     onExportPDF={showExport && activeSessionId ? () => handleExportPDF(activeSessionId) : undefined}
                     onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                    isEditable={!!activeSessionId}
+                    onUpdateSessionName={activeSessionId ? (newName) => updateSessionData(activeSessionId, { name: newName }) : undefined}
                 />
                 <main className="flex-1 flex flex-col min-w-0">
                     {page}

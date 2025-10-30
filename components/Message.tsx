@@ -3,12 +3,25 @@ import { Message as MessageType } from '../types';
 import { WrenchIcon, SpeakerWaveIcon, StopCircleIcon, LinkIcon } from './icons';
 import { useTTSPlayer } from '../hooks/useTTSPlayer';
 import Button from './Button';
+import Tooltip from './Tooltip';
+import { technicalTerms } from '../data/technicalTerms';
 
-interface MessageProps {
-  message: MessageType;
-  isLoading?: boolean;
-  isLastMessage?: boolean;
-}
+const termsKeys = Object.keys(technicalTerms);
+const termsRegex = new RegExp(`\\b(${termsKeys.join('|')})\\b`, 'gi');
+const termsMap = new Map(termsKeys.map(key => [key.toLowerCase(), technicalTerms[key]]));
+
+const applyTooltips = (text: string): React.ReactNode[] => {
+    if (!text) return [text];
+    const parts = text.split(termsRegex);
+    return parts.map((part, index) => {
+        const lowerCasePart = part.toLowerCase();
+        const definition = termsMap.get(lowerCasePart);
+        if (definition) {
+            return <Tooltip key={`${part}-${index}`} content={definition}>{part}</Tooltip>;
+        }
+        return part;
+    });
+};
 
 const LoadingDots = () => (
     <div className="flex items-center space-x-2">
@@ -42,7 +55,8 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                 return part.split('\n').map((line, lineIndex) => {
                     // Handle Headings like **Title:**
                     if (line.match(/^\*\*.*:\*\*$/) || line.match(/^\*\*.*:\*\*/)) {
-                        return <h3 key={`${index}-${lineIndex}`} className="font-semibold mt-3 mb-1.5">{line.replace(/\*\*/g, '')}</h3>;
+                        const content = line.replace(/\*\*/g, '');
+                        return <h3 key={`${index}-${lineIndex}`} className="font-semibold mt-3 mb-1.5">{applyTooltips(content)}</h3>;
                     }
 
                     // Handle list items
@@ -54,7 +68,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                                 <span className="mr-2 mt-1 shrink-0">•</span>
                                 <span className="flex-1">
                                     {boldParts.map((p, i) =>
-                                        p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{p.slice(2, -2)}</strong> : p
+                                        p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{applyTooltips(p.slice(2, -2))}</strong> : applyTooltips(p)
                                     )}
                                 </span>
                             </div>
@@ -66,7 +80,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                     return (
                         <p key={`${index}-${lineIndex}`} className={line.trim() === '' ? 'h-4' : 'my-0.5'}>
                             {boldParts.map((p, i) =>
-                                p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{p.slice(2, -2)}</strong> : p
+                                p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{applyTooltips(p.slice(2, -2))}</strong> : applyTooltips(p)
                             )}
                         </p>
                     );
@@ -111,6 +125,12 @@ const TTSButton: React.FC<{ text: string }> = ({ text }) => {
     );
 };
 
+// FIX: Defined missing MessageProps interface
+interface MessageProps {
+  message: MessageType;
+  isLoading: boolean;
+  isLastMessage: boolean;
+}
 
 const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) => {
   const isUser = message.role === 'user';
