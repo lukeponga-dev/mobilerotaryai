@@ -2,36 +2,41 @@ import React, { useState } from 'react';
 import { MessageContent } from '../components/Message';
 import { generateKnowledgeArticle } from '../services/geminiService';
 import Button from '../components/Button';
-import { SearchIcon, XIcon, LinkIcon } from '../components/icons';
+import { SearchIcon, XIcon, LinkIcon, SparkPlugIcon, BoltIcon, PressureGaugeIcon, ExhaustFumesIcon, OilCanIcon } from '../components/icons';
 import { ArticleData } from '../types';
 
 const commonIssues = [
   {
     title: 'Engine Flooding',
+    Icon: SparkPlugIcon,
     description: 'The Renesis engine is prone to flooding if shut off before reaching operating temperature. This happens because unburnt fuel washes oil from the rotor housings, causing a loss of compression.',
     solution: 'To prevent flooding, always let the engine warm up completely before shutting it down. If flooded, follow the "de-flooding" procedure: pull the fuel pump fuse, crank the engine to expel excess fuel, then reinstall the fuse and start again. In severe cases, spark plugs may need to be cleaned or replaced.',
     imageSuggestion: 'Upload a photo of your spark plugs after a failed start attempt. Wet, fuel-soaked plugs are a key indicator. A short video of the engine cranking without starting can also be helpful.'
   },
   {
     title: 'Ignition Coil Failure',
+    Icon: BoltIcon,
     description: 'Failing ignition coils are a very common issue, leading to misfires, poor performance, hesitation, and potentially catalytic converter damage. Coils should be considered a regular maintenance item.',
     solution: 'Test coils with a HEI spark tester. A weak or yellow spark indicates a failing coil. It is recommended to replace all four coils, spark plugs, and wires at the same time, typically every 30,000 miles (50,000 km).',
     imageSuggestion: 'Provide a clear picture of your ignition coils. Note any visible cracks or burn marks on the casing. If you have a spark tester, a photo or video of the weak, yellow spark would be definitive.'
   },
   {
     title: 'Low Compression / Apex Seal Wear',
+    Icon: PressureGaugeIcon,
     description: 'The apex seals at the tips of the rotors can wear down or get stuck due to carbon buildup, leading to low compression, difficulty starting when hot, and significant power loss.',
     solution: 'Regularly redlining the engine helps clear carbon. Using a fuel additive or performing a "seafoam" treatment can help. The ultimate solution for worn seals is an engine rebuild. A rotary-specific compression test is required for accurate diagnosis.',
     imageSuggestion: "A photo of the results from a rotary-specific compression tester is the most useful image. Also, a video of the engine struggling to start when it's hot can provide strong evidence."
   },
   {
     title: 'Catalytic Converter Clogging',
+    Icon: ExhaustFumesIcon,
     description: 'A failing ignition system or rich fuel mixture can send unburnt fuel into the exhaust, overheating and destroying the catalytic converter. Symptoms include a "rotten egg" smell, glowing red cat, and severe power loss.',
     solution: 'Address the root cause (ignition, fuel) immediately. If the cat is clogged, it must be replaced. A high-flow catalytic converter or mid-pipe is a common aftermarket upgrade, but may not be street legal in all areas.',
     imageSuggestion: "A picture of the catalytic converter, especially if it's glowing red after a drive, is a clear sign. A photo of the exhaust tip showing heavy carbon buildup can also be a clue."
   },
     {
     title: 'Oil Consumption',
+    Icon: OilCanIcon,
     description: 'The Renesis engine is designed to inject oil into the combustion chamber to lubricate the seals. It is normal for it to consume oil. Not monitoring oil levels is a primary cause of engine failure.',
     solution: 'Check the engine oil level every other fuel fill-up. Top up as needed with a conventional 5W-20 or 5W-30 oil (or a rotary-specific oil). Consider installing a SOHN adapter to inject clean 2-stroke oil instead of dirty engine oil.',
     imageSuggestion: 'While hard to photograph directly, you can upload a picture of your dipstick to show the oil level and condition. Also, a photo of any visible oil leaks around the engine bay or underneath the car is very helpful.'
@@ -144,7 +149,10 @@ const KnowledgeBasePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {commonIssues.map((issue, index) => (
               <div key={index} className="bg-light-surface dark:bg-dark-surface p-4 sm:p-6 rounded-lg border border-light-border dark:border-dark-border flex flex-col shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/10">
-                  <h2 className="text-xl font-semibold text-accent mb-4">{issue.title}</h2>
+                  <div className="flex items-start justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-accent pr-4">{issue.title}</h2>
+                    <issue.Icon className="w-8 h-8 text-light-muted dark:text-dark-muted flex-shrink-0" />
+                  </div>
                   
                   <div className="space-y-4 flex-grow">
                       <div>

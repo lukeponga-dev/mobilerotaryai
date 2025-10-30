@@ -175,8 +175,21 @@ const fileToGenerativePart = (base64Data: string, mimeType: string) => {
  * Selects the appropriate Gemini model and configuration based on the user's input and settings.
  * This function ensures the best model is used for each specific task, from quick chats to deep video analysis.
  */
-const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean) => {
-    const baseConfig = { systemInstruction: SYSTEM_INSTRUCTION };
+const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
+    const baseConfig: any = { systemInstruction: SYSTEM_INSTRUCTION };
+
+    // FEATURE: Web Search Grounding for up-to-date information.
+    // Uses gemini-2.5-flash with the googleSearch tool.
+    if (isWebSearch) {
+        console.log('Using Web Search model: gemini-2.5-flash');
+        return {
+            modelName: 'gemini-2.5-flash',
+            config: {
+                ...baseConfig,
+                tools: [{ googleSearch: {} }]
+            }
+        };
+    }
 
     // FEATURE: Thinking Mode for complex queries.
     // Uses the powerful gemini-2.5-pro model with a maximum thinking budget for in-depth analysis.
@@ -213,8 +226,8 @@ const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean) => 
 /**
  * Generates a streaming diagnostic response from the Gemini API.
  */
-export const getDiagnosticResponseStream = (history: Message[], latestMessage: Message, isDeepAnalysis?: boolean) => {
-    const { modelName, config } = getModelAndConfig(latestMessage, isDeepAnalysis);
+export const getDiagnosticResponseStream = (history: Message[], latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
+    const { modelName, config } = getModelAndConfig(latestMessage, isDeepAnalysis, isWebSearch);
 
     const modelHistory = history.map(msg => ({
         role: msg.role,
@@ -249,9 +262,7 @@ export const getDiagnosticResponseStream = (history: Message[], latestMessage: M
             const streamPromise = model.generateContentStream(params);
             const stream = await streamPromise;
             for await (const chunk of stream) {
-                if (chunk.text) {
-                    yield chunk.text;
-                }
+                yield chunk;
             }
         } catch (error) {
             throw handleApiError(error, 'getDiagnosticResponseStream');

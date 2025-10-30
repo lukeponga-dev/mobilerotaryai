@@ -4,6 +4,7 @@ export interface Message {
   text: string;
   image?: string; // base64 string
   video?: string; // base64 string
+  sources?: GroundingSource[];
 }
 
 export interface Session {

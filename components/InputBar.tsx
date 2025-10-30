@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon, PhotoIcon, XCircleIcon } from './icons';
+import { SendIcon, MicrophoneIcon, VideoCameraIcon, PaperclipIcon, XIcon, BrainIcon, PhotoIcon, XCircleIcon, SearchIcon } from './icons';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import Button from './Button';
 
@@ -8,6 +8,8 @@ interface InputBarProps {
   isLoading: boolean;
   isDeepAnalysis?: boolean;
   onToggleDeepAnalysis?: () => void;
+  isWebSearch?: boolean;
+  onToggleWebSearch?: () => void;
 }
 
 const MAX_IMAGE_SIZE_MB = 10;
@@ -15,7 +17,7 @@ const MAX_VIDEO_SIZE_MB = 25;
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 
-const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAnalysis, onToggleDeepAnalysis }) => {
+const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAnalysis, onToggleDeepAnalysis, isWebSearch, onToggleWebSearch }) => {
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -228,6 +230,19 @@ const InputBar: React.FC<InputBarProps> = ({ onSendMessage, isLoading, isDeepAna
                   rows={1}
                   disabled={isLoading}
               />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={onToggleWebSearch}
+                className={`relative rounded-full ${isWebSearch ? 'text-accent' : ''}`}
+                aria-label={isWebSearch ? 'Disable web search' : 'Enable web search'}
+                title={isWebSearch ? 'Web search enabled' : 'Enable web search for up-to-date info'}
+                disabled={isLoading}
+              >
+                {isWebSearch && <div className="absolute inset-0 bg-accent/20 rounded-full animate-pulse"></div>}
+                <SearchIcon className="w-6 h-6" />
+              </Button>
               <Button
                 type="button"
                 variant="ghost"

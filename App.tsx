@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Session, Message } from './types';
+import { Session, Message, GroundingSource } from './types';
 import Sidebar from './components/Sidebar';
 import DiagnosisPage from './pages/DiagnosisPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
@@ -114,7 +114,7 @@ const App: React.FC = () => {
         ));
     };
 
-    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean) => {
+    const handleSendMessage = async (sessionId: string, text: string, image?: string, video?: string, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
         const currentSession = sessions.find(s => s.id === sessionId);
         if (!currentSession) return;
         
@@ -137,10 +137,24 @@ const App: React.FC = () => {
         const history = currentSession.messages.slice(1);
         
         try {
-            const stream = getDiagnosticResponseStream(history, userMessage, isDeepAnalysis);
+            const stream = getDiagnosticResponseStream(history, userMessage, isDeepAnalysis, isWebSearch);
             let fullResponse = '';
+            const sources: GroundingSource[] = [];
+
             for await (const chunk of stream) {
-                fullResponse += chunk;
+                fullResponse += chunk.text;
+
+                // Aggregate grounding sources from chunks if web search is enabled
+                const chunkSources = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks
+                    ?.map((c: any) => ({ uri: c.web?.uri, title: c.web?.title }))
+                    .filter((s: any) => s.uri) || [];
+                
+                for (const source of chunkSources) {
+                    if (!sources.some(s => s.uri === source.uri)) {
+                        sources.push(source);
+                    }
+                }
+
                 setSessions(prev => prev.map(session =>
                     session.id === sessionId
                         ? {
@@ -155,7 +169,15 @@ const App: React.FC = () => {
                 ));
             }
             
-            const finalMessages = [...messagesWithUser, { ...modelMessagePlaceholder, text: fullResponse }];
+            const finalModelMessage: Message = { 
+                ...modelMessagePlaceholder, 
+                text: fullResponse, 
+                sources: sources.length > 0 ? sources : undefined 
+            };
+            const finalMessages = [...messagesWithUser, finalModelMessage];
+
+            updateSessionData(sessionId, { messages: finalMessages });
+
             const context = await extractConversationContext(finalMessages);
             const replies = await generateQuickReplies(finalMessages);
             updateSessionData(sessionId, { context, quickReplies: replies });

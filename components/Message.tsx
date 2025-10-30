@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message as MessageType } from '../types';
-import { WrenchIcon, SpeakerWaveIcon, StopCircleIcon } from './icons';
+import { WrenchIcon, SpeakerWaveIcon, StopCircleIcon, LinkIcon } from './icons';
 import { useTTSPlayer } from '../hooks/useTTSPlayer';
 import Button from './Button';
 
@@ -121,7 +121,7 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
-      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl shadow-md ${bubbleClasses}`}>
+      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl shadow-md flex flex-col ${bubbleClasses}`}>
         {message.image && (
           <img src={message.image} alt="User upload" className={`rounded-lg max-h-64 ${message.text ? 'mb-2' : ''}`} />
         )}
@@ -146,6 +146,27 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
               </div>
           )}
         </div>
+         {!isUser && message.sources && message.sources.length > 0 && !showTypingIndicator && (
+            <div className="px-4 pb-3 pt-2 border-t border-light-border/20 dark:border-dark-border/40">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-light-muted dark:text-dark-muted mb-2">Sources</h4>
+                <ul className="space-y-1.5">
+                    {message.sources.map((source, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                            <LinkIcon className="w-3.5 h-3.5 text-light-muted dark:text-dark-muted mt-0.5 flex-shrink-0" />
+                            <a 
+                                href={source.uri} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-accent hover:underline text-xs truncate"
+                                title={source.title || source.uri}
+                            >
+                                {source.title || source.uri}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )}
       </div>
     </div>
   );

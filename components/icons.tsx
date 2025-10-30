@@ -240,3 +240,38 @@ export const Squares2X2Icon = ({ className }: { className?: string }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 8.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6A2.25 2.25 0 0 1 15.75 3.75h2.25A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25A2.25 2.25 0 0 1 13.5 8.25V6ZM13.5 15.75A2.25 2.25 0 0 1 15.75 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
     </svg>
 );
+
+export const SparkPlugIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.375V12m0-3.375V3M9.75 6H12m2.25 0H12M12 6V3m-2.25 9h4.5M9.75 12h4.5m-4.5 3.375h4.5m-4.5 3h4.5M6.75 21v-2.625" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 21v-2.625" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 18.375a3.375 3.375 0 0 1-3.375-3.375V9.375A3.375 3.375 0 0 1 9 6h6a3.375 3.375 0 0 1 3.375 3.375v5.625A3.375 3.375 0 0 1 15 18.375H9z" />
+    </svg>
+);
+
+export const PressureGaugeIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9a3 3 0 0 0-3 3h6a3 3 0 0 0-3-3z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 13.5L12 12" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M18 17.25v1.5H6v-1.5" />
+    </svg>
+);
+
+export const OilCanIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h7.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25H6.75a.75.75 0 0 0-.75.75v8.25c0 .414.336.75.75.75h10.5a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-.75-.75z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 5.25V3.75h3V5.25" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12.75a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h4.5a.75.75 0 0 1 .75.75z" />
+    </svg>
+);
+
+export const ExhaustFumesIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className || 'w-6 h-6'}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75v-3a3 3 0 0 1 3-3h1.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 12a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v3.75a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-3.75z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12.75c.621 0 1.125.504 1.125 1.125s-.504 1.125-1.125 1.125" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 9.75c.621 0 1.125.504 1.125 1.125s-.504 1.125-1.125 1.125" />
+    </svg>
+);
