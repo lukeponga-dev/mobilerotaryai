@@ -1,4 +1,4 @@
-# Exported from Render on 2025-10-25T04:36:12Z
+# Exported from Render on 2025-10-30T11:59:47Z
 version: "1"
 services:
 - type: web
@@ -7,7 +7,7 @@ services:
   repo: https://github.com/lukeponga-dev/mobilerotaryai
   envVars:
   - key: GEMINI_API_KEY
-    sync: false
+    sync: true
   buildCommand: yarn install; yarn build
   staticPublishPath: ./dist
   autoDeployTrigger: commit
