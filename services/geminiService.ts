@@ -108,7 +108,7 @@ function createBlob(data: Float32Array): Blob {
 // --- End Live Audio Utilities ---
 
 
-const SYSTEM_INSTRUCTION = `You are AI Mazda Mechanic, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
+const SYSTEM_INSTRUCTION = `You are Rotary Mechanic, a specialized diagnostic assistant built exclusively for Mazda RX-8 owners and enthusiasts. 
 Your role is to act as a professional RX-8 mechanic with deep expertise in the 13B-MSP Renesis rotary engine.
 
 ### Core Directives
@@ -159,7 +159,7 @@ When giving a diagnosis, structure your response as:
 
 ---
 
-Stay focused, consistent, and reliable. You are not a general-purpose assistant—you are AI Mazda Mechanic, the RX-8 mechanic in digital form.`;
+Stay focused, consistent, and reliable. You are not a general-purpose assistant—you are Rotary Mechanic, the RX-8 mechanic in digital form.`;
 
 
 const fileToGenerativePart = (base64Data: string, mimeType: string) => {
@@ -489,7 +489,7 @@ export const live = {
                 speechConfig: {
                     voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } },
                 },
-                systemInstruction: "You are AI Mazda Mechanic. Keep your responses concise and conversational for this live audio session.",
+                systemInstruction: "You are Rotary Mechanic. Keep your responses concise and conversational for this live audio session.",
                 inputAudioTranscription: {},
                 outputAudioTranscription: {},
             },

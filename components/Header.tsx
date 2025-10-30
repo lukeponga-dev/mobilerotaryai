@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DownloadIcon, MenuIcon, WrenchIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon, PlusIcon } from './icons';
+import { DownloadIcon, MenuIcon, RotorIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon, PlusIcon } from './icons';
 import Button from './Button';
 
 interface HeaderProps {
@@ -100,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
               <MenuIcon className="w-6 h-6" />
           </Button>
           <div className="mr-4 flex-shrink-0 hidden md:block">
-            <WrenchIcon className="w-7 h-7 sm:w-8 sm:h-8 text-accent" />
+            <RotorIcon className="w-7 h-7 sm:w-8 sm:h-8 text-accent" />
           </div>
           <div className="min-w-0 flex-1">
               {isEditing && isEditable ? (

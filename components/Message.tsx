@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message as MessageType } from '../types';
-import { WrenchIcon, SpeakerWaveIcon, StopCircleIcon, LinkIcon } from './icons';
+import { SpeakerWaveIcon, StopCircleIcon, LinkIcon } from './icons';
 import { useTTSPlayer } from '../hooks/useTTSPlayer';
 import Button from './Button';
 import Tooltip from './Tooltip';

@@ -1,13 +1,13 @@
-# Contributing to AI Mazda Mechanic
+# Contributing to Rotary Mechanic
 
-First off, thank you for considering contributing to AI Mazda Mechanic! Your help is appreciated. Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open-source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
+First off, thank you for considering contributing to Rotary Mechanic! Your help is appreciated. Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open-source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
 
 ## How Can I Contribute?
 
 ### Reporting Bugs
 
-- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/your-username/ai-mazda-mechanic/issues).
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/your-username/ai-mazda-mechanic/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample or an executable test case** demonstrating the expected behavior that is not occurring.
+- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/your-username/rotary-mechanic/issues).
+- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/your-username/rotary-mechanic/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample or an executable test case** demonstrating the expected behavior that is not occurring.
 
 ### Suggesting Enhancements
 

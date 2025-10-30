@@ -1,4 +1,4 @@
-# AI Mazda Mechanic
+# Rotary Mechanic
 
 ![React](https://img.shields.io/badge/Frontend-React_19-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript)
@@ -7,7 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwind-css)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-AI Mazda Mechanic is a specialized, mobile-first diagnostic assistant for Mazda RX-8 owners. Powered by the Google Gemini API, it leverages expert knowledge from workshop manuals and community best practices to help users troubleshoot, diagnose, and understand the unique complexities of the Renesis rotary engine.
+Rotary Mechanic is a specialized, mobile-first diagnostic assistant for Mazda RX-8 owners. Powered by the Google Gemini API, it leverages expert knowledge from workshop manuals and community best practices to help users troubleshoot, diagnose, and understand the unique complexities of the Renesis rotary engine.
 
 ---
 
@@ -47,8 +47,8 @@ To run this project on your local machine, follow these steps.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/ai-mazda-mechanic.git
-    cd ai-mazda-mechanic
+    git clone https://github.com/your-username/rotary-mechanic.git
+    cd rotary-mechanic
     ```
 
 2.  **Install dependencies:**

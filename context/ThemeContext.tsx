@@ -12,7 +12,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-        const savedTheme = localStorage.getItem('rotorwise_theme');
+        const savedTheme = localStorage.getItem('rotary_mechanic_theme');
         if (savedTheme === 'light') {
             return 'light';
         }
@@ -24,7 +24,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const root = window.document.documentElement;
     root.classList.remove(theme === 'dark' ? 'light' : 'dark');
     root.classList.add(theme);
-    localStorage.setItem('rotorwise_theme', theme);
+    localStorage.setItem('rotary_mechanic_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

@@ -1,8 +1,8 @@
-# Privacy Policy for AI Mazda Mechanic
+# Privacy Policy for Rotary Mechanic
 
 **Last updated:** October 25, 2025
 
-AI Mazda Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+Rotary Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
 
 ## Information We Collect
 

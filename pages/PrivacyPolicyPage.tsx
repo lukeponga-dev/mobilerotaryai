@@ -4,11 +4,11 @@ const PrivacyPolicyPage: React.FC = () => {
   return (
     <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto scroll-smooth bg-light-surface dark:bg-dark-surface">
       <div className="max-w-3xl mx-auto text-light-text dark:text-dark-text">
-        <h1 className="text-3xl font-bold text-light-text dark:text-dark-text mb-6">Privacy Policy for AI Mazda Mechanic</h1>
+        <h1 className="text-3xl font-bold text-light-text dark:text-dark-text mb-6">Privacy Policy for Rotary Mechanic</h1>
         <p className="mb-4 text-light-muted dark:text-dark-muted"><strong>Last updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
         <p className="mb-4">
-          AI Mazda Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+          Rotary Mechanic ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
         </p>
 
         <h2 className="text-2xl font-semibold text-light-text dark:text-dark-text mt-8 mb-4">Information We Collect</h2>

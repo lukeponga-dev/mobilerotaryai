@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Session } from '../types';
-import { PlusIcon, XIcon, WrenchIcon, TrashIcon, ChatBubbleLeftRightIcon } from './icons';
+import { PlusIcon, XIcon, RotorIcon, TrashIcon, ChatBubbleLeftRightIcon } from './icons';
 import ThemeToggle from './ThemeToggle';
 import Button from './Button';
 import Modal from './Modal';
@@ -40,8 +40,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sessions, activeSessionId, onNewSessi
       `}>
         <div className="flex items-center justify-between p-4 border-b border-light-border dark:border-dark-border">
           <a href="#/" onClick={onToggleSidebar} className="flex items-center gap-2" aria-label="Go to dashboard">
-            <WrenchIcon className="w-7 h-7 text-accent"/>
-            <h2 className="text-lg font-semibold">AI Mazda Mechanic</h2>
+            <RotorIcon className="w-7 h-7 text-accent"/>
+            <h2 className="text-lg font-semibold">Rotary Mechanic</h2>
           </a>
           <button onClick={onToggleSidebar} className="md:hidden p-1" aria-label="Close sidebar">
             <XIcon className="w-6 h-6" />

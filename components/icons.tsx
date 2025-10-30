@@ -92,6 +92,11 @@ export const WrenchIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+export const RotorIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className || 'w-6 h-6'}>
+      <path d="M 19 17.5 A 14 14 0 0 0 5 17.5 A 14 14 0 0 0 12 5 A 14 14 0 0 0 19 17.5 Z" />
+    </svg>
+);
 
 export const SunIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || 'w-6 h-6'}>

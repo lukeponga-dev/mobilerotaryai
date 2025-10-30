@@ -54,7 +54,7 @@ const App: React.FC = () => {
         messages: [{
             id: `msg_${Date.now()}`,
             role: 'model',
-            text: 'Welcome to AI Mazda Mechanic. How can I help you with your Mazda RX-8 today? Please describe the issue you are experiencing.'
+            text: 'Welcome to Rotary Mechanic. How can I help you with your Mazda RX-8 today? Please describe the issue you are experiencing.'
         }],
         createdAt: new Date().toISOString(),
         context: {symptoms: [], parts: [], actions: []},
@@ -63,7 +63,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         try {
-            const savedSessions = localStorage.getItem('rotorwise_sessions');
+            const savedSessions = localStorage.getItem('rotary_mechanic_sessions');
             if (savedSessions) {
                 const parsedSessions: Session[] = JSON.parse(savedSessions);
                 setSessions(parsedSessions);
@@ -81,12 +81,12 @@ const App: React.FC = () => {
         const autoSave = setTimeout(() => {
             if (sessions.length > 0) {
                 try {
-                    localStorage.setItem('rotorwise_sessions', JSON.stringify(sessions));
+                    localStorage.setItem('rotary_mechanic_sessions', JSON.stringify(sessions));
                 } catch (error) {
                     console.error("Failed to auto-save sessions to localStorage", error);
                 }
             } else {
-                localStorage.removeItem('rotorwise_sessions');
+                localStorage.removeItem('rotary_mechanic_sessions');
             }
         }, 1000);
 
@@ -210,7 +210,7 @@ const App: React.FC = () => {
         if (!session) return;
 
         doc.setFontSize(18);
-        doc.text("AI Mazda Mechanic Diagnostic Report", 14, 22);
+        doc.text("Rotary Mechanic Diagnostic Report", 14, 22);
         doc.setFontSize(11);
         doc.text(`Session: ${session.name}`, 14, 30);
         doc.line(14, 32, 196, 32);
@@ -287,7 +287,7 @@ const App: React.FC = () => {
             y += 10; // Spacing between messages
         }
         
-        doc.save(`AI-Mazda-Mechanic-Report-${session.id}.pdf`);
+        doc.save(`Rotary-Mechanic-Report-${session.id}.pdf`);
     };
 
     const sortedSessions = [...sessions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
