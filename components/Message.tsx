@@ -23,11 +23,11 @@ const applyTooltips = (text: string): React.ReactNode[] => {
     });
 };
 
-const LoadingDots = () => (
-    <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-        <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+const SkeletonLoader = () => (
+    <div className="animate-pulse space-y-3 py-1">
+        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-5/6"></div>
+        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-full"></div>
+        <div className="h-4 bg-light-border dark:bg-dark-border rounded w-3/4"></div>
     </div>
 );
 
@@ -151,13 +151,13 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
         
         <div className="flex items-start justify-between gap-2 px-4 py-3">
           <div className="flex-1 min-w-0">
-            {message.text ? (
+            {showTypingIndicator && !message.text ? (
+                <SkeletonLoader />
+            ) : (
                 <div className="break-words">
                     <MessageContent text={message.text} />
                     {showTypingIndicator && message.text.length > 0 && <BlinkingCursor />}
                 </div>
-            ) : (
-                showTypingIndicator && <LoadingDots />
             )}
           </div>
           {!isUser && message.text && !showTypingIndicator && (

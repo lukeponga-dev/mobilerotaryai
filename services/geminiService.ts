@@ -272,17 +272,48 @@ export const getDiagnosticResponseStream = (history: Message[], latestMessage: M
 
 /**
  * Generates a session title using a low-latency model.
+ * REFACTORED: Validates title length and re-prompts for a better title if the first attempt is too long or short.
  */
 export const generateSessionTitle = async (firstUserMessage: string): Promise<string> => {
     try {
+        // First attempt to generate a title
         const result: GenerateContentResponse = await model.generateContent({
             model: 'gemini-flash-lite-latest',
             contents: [{
                 role: 'user',
-                parts: [{ text: `Generate a concise, 4-5 word session title for the following user query: "${firstUserMessage}"` }]
+                parts: [{ text: `Generate a concise, 4-5 word session title for this Mazda RX-8 query: "${firstUserMessage}"` }]
             }]
         });
-        return result.text.replace(/["']/g, "").trim();
+
+        let title = result.text.replace(/["']/g, "").trim();
+        const wordCount = title.split(/\s+/).filter(Boolean).length;
+
+        // If the title is already the correct length, return it
+        if (wordCount >= 4 && wordCount <= 5) {
+            return title;
+        }
+
+        // If the title is not the correct length, make a second attempt to refine it
+        console.warn(`Initial title "${title}" has incorrect word count (${wordCount}). Retrying.`);
+        
+        const refineResult: GenerateContentResponse = await model.generateContent({
+            model: 'gemini-flash-lite-latest',
+            contents: [{
+                role: 'user',
+                parts: [{ text: `The title "${title}" is not the right length. Create a new title that is exactly 4 or 5 words long, summarizing this user's Mazda RX-8 issue: "${firstUserMessage}"` }]
+            }]
+        });
+        
+        const refinedTitle = refineResult.text.replace(/["']/g, "").trim();
+        
+        // Use the refined title if it's not empty, as it's our best attempt.
+        if (refinedTitle) {
+            return refinedTitle;
+        }
+
+        // Fallback to the original title if refinement produces nothing.
+        return title;
+
     } catch (error) {
         console.error(handleApiError(error, 'generateSessionTitle'));
         return "New Diagnosis";

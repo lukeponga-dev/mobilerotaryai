@@ -80,6 +80,23 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
   
   const hasContent = context && (context.symptoms.length > 0 || context.parts.length > 0 || context.actions.length > 0);
 
+  const SkeletonList: React.FC<{ itemCount: number }> = ({ itemCount }) => (
+    <div>
+      <div className="h-4 bg-light-border dark:bg-dark-border rounded w-1/3 mb-3"></div>
+      <div className="space-y-2">
+        {[...Array(itemCount)].map((_, index) => (
+          <div key={index} className="flex items-start gap-3 p-3 rounded-md bg-light-panel-muted/50 dark:bg-dark-panel-muted/50">
+            <div className="w-5 h-5 bg-light-border dark:bg-dark-border rounded-full mt-0.5 flex-shrink-0"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-3 bg-light-border dark:bg-dark-border rounded w-full"></div>
+              <div className="h-3 bg-light-border dark:bg-dark-border rounded w-3/4"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <aside className="hidden md:block w-72 lg:w-80 xl:w-96 bg-light-surface dark:bg-dark-surface border-l border-light-border dark:border-dark-border p-6 flex-shrink-0 overflow-y-auto transition-all duration-300 scroll-smooth">
       <div className="flex items-center gap-3 mb-8">
@@ -88,16 +105,10 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ context, isLoading }) => {
       </div>
       
       {isLoading && !hasContent && (
-        <div className="space-y-6 animate-pulse">
-            <div>
-                <div className="h-4 bg-light-border dark:bg-dark-border rounded w-1/3 mb-3"></div>
-                <div className="h-16 bg-light-border dark:bg-dark-border rounded-lg w-full"></div>
-                <div className="h-16 bg-light-border dark:bg-dark-border rounded-lg w-full mt-3"></div>
-            </div>
-            <div>
-                <div className="h-4 bg-light-border dark:bg-dark-border rounded w-1/3 mt-6 mb-3"></div>
-                <div className="h-16 bg-light-border dark:bg-dark-border rounded-lg w-full"></div>
-            </div>
+        <div className="space-y-8 animate-pulse">
+          <SkeletonList itemCount={2} />
+          <SkeletonList itemCount={1} />
+          <SkeletonList itemCount={2} />
         </div>
       )}
 
