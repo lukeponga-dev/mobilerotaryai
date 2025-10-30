@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { MessageContent } from '../components/Message';
 import { generateKnowledgeArticle } from '../services/geminiService';
 import Button from '../components/Button';
 import { SearchIcon, XIcon, LinkIcon, SparkPlugIcon, BoltIcon, PressureGaugeIcon, ExhaustFumesIcon, OilCanIcon } from '../components/icons';
 import { ArticleData } from '../types';
+import { technicalTerms } from '../data/technicalTerms';
+import Tooltip from '../components/Tooltip';
 
 const commonIssues = [
   {
     title: 'Engine Flooding',
     Icon: SparkPlugIcon,
+    keywords: ['engine flooding', 'flooded engine', 'de-flooding'],
     description: 'The Renesis engine is prone to flooding if shut off before reaching operating temperature. This happens because unburnt fuel washes oil from the rotor housings, causing a loss of compression.',
     solution: 'To prevent flooding, always let the engine warm up completely before shutting it down. If flooded, follow the "de-flooding" procedure: pull the fuel pump fuse, crank the engine to expel excess fuel, then reinstall the fuse and start again. In severe cases, spark plugs may need to be cleaned or replaced.',
     imageSuggestion: 'Upload a photo of your spark plugs after a failed start attempt. Wet, fuel-soaked plugs are a key indicator. A short video of the engine cranking without starting can also be helpful.'
@@ -16,6 +19,7 @@ const commonIssues = [
   {
     title: 'Ignition Coil Failure',
     Icon: BoltIcon,
+    keywords: ['ignition coil failure', 'ignition coils', 'ignition coil'],
     description: 'Failing ignition coils are a very common issue, leading to misfires, poor performance, hesitation, and potentially catalytic converter damage. Coils should be considered a regular maintenance item.',
     solution: 'Test coils with a HEI spark tester. A weak or yellow spark indicates a failing coil. It is recommended to replace all four coils, spark plugs, and wires at the same time, typically every 30,000 miles (50,000 km).',
     imageSuggestion: 'Provide a clear picture of your ignition coils. Note any visible cracks or burn marks on the casing. If you have a spark tester, a photo or video of the weak, yellow spark would be definitive.'
@@ -23,6 +27,7 @@ const commonIssues = [
   {
     title: 'Low Compression / Apex Seal Wear',
     Icon: PressureGaugeIcon,
+    keywords: ['low compression', 'apex seal wear', 'apex seals', 'compression test'],
     description: 'The apex seals at the tips of the rotors can wear down or get stuck due to carbon buildup, leading to low compression, difficulty starting when hot, and significant power loss.',
     solution: 'Regularly redlining the engine helps clear carbon. Using a fuel additive or performing a "seafoam" treatment can help. The ultimate solution for worn seals is an engine rebuild. A rotary-specific compression test is required for accurate diagnosis.',
     imageSuggestion: "A photo of the results from a rotary-specific compression tester is the most useful image. Also, a video of the engine struggling to start when it's hot can provide strong evidence."
@@ -30,6 +35,7 @@ const commonIssues = [
   {
     title: 'Catalytic Converter Clogging',
     Icon: ExhaustFumesIcon,
+    keywords: ['catalytic converter clogging', 'catalytic converter', 'clogged cat'],
     description: 'A failing ignition system or rich fuel mixture can send unburnt fuel into the exhaust, overheating and destroying the catalytic converter. Symptoms include a "rotten egg" smell, glowing red cat, and severe power loss.',
     solution: 'Address the root cause (ignition, fuel) immediately. If the cat is clogged, it must be replaced. A high-flow catalytic converter or mid-pipe is a common aftermarket upgrade, but may not be street legal in all areas.',
     imageSuggestion: "A picture of the catalytic converter, especially if it's glowing red after a drive, is a clear sign. A photo of the exhaust tip showing heavy carbon buildup can also be a clue."
@@ -37,6 +43,7 @@ const commonIssues = [
     {
     title: 'Oil Consumption',
     Icon: OilCanIcon,
+    keywords: ['oil consumption', 'burning oil', 'oil level'],
     description: 'The Renesis engine is designed to inject oil into the combustion chamber to lubricate the seals. It is normal for it to consume oil. Not monitoring oil levels is a primary cause of engine failure.',
     solution: 'Check the engine oil level every other fuel fill-up. Top up as needed with a conventional 5W-20 or 5W-30 oil (or a rotary-specific oil). Consider installing a SOHN adapter to inject clean 2-stroke oil instead of dirty engine oil.',
     imageSuggestion: 'While hard to photograph directly, you can upload a picture of your dipstick to show the oil level and condition. Also, a photo of any visible oil leaks around the engine bay or underneath the car is very helpful.'
@@ -66,27 +73,83 @@ const KnowledgeBasePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [article, setArticle] = useState<ArticleData | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchTerm.trim() || isLoading) return;
+  const { keywordMap, techTermsMap, combinedRegex } = useMemo(() => {
+    const keywordMap = new Map<string, string>();
+    const allKeywords = commonIssues.flatMap(issue => issue.keywords);
+    commonIssues.forEach(issue => {
+        issue.keywords.forEach(keyword => {
+            keywordMap.set(keyword.toLowerCase(), issue.title);
+        });
+    });
+
+    const techTermsKeys = Object.keys(technicalTerms);
+    const techTermsMap = new Map(techTermsKeys.map(key => [key.toLowerCase(), technicalTerms[key]]));
+    
+    const allTerms = [...new Set([...techTermsKeys, ...allKeywords])];
+    allTerms.sort((a, b) => b.length - a.length);
+    const combinedRegex = new RegExp(`\\b(${allTerms.join('|')})\\b`, 'gi');
+
+    return { keywordMap, techTermsMap, combinedRegex };
+  }, []);
+
+  const handleSearch = async (term: string) => {
+    if (!term.trim() || isLoading) return;
     setIsLoading(true);
     setArticle(null);
+    setSearchTerm(term);
     try {
-        const generatedArticle = await generateKnowledgeArticle(searchTerm);
+        const generatedArticle = await generateKnowledgeArticle(term);
         setArticle(generatedArticle);
     } catch (error: any) {
         setArticle({
-            text: `**Error Generating Article**\n\nI couldn't generate the article on "${searchTerm}".\n\n**Reason:** ${error.message || 'An unknown error occurred.'}`,
+            text: `**Error Generating Article**\n\nI couldn't generate the article on "${term}".\n\n**Reason:** ${error.message || 'An unknown error occurred.'}`,
             sources: []
         });
     } finally {
         setIsLoading(false);
     }
   };
+  
+  const handleSearchFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch(searchTerm);
+  };
 
   const clearSearch = () => {
       setSearchTerm('');
       setArticle(null);
+  };
+
+  const renderArticleText = (text: string): React.ReactNode[] => {
+    if (!text) return [text];
+    
+    const parts = text.split(combinedRegex);
+
+    return parts.map((part, index) => {
+        const lowerPart = part.toLowerCase();
+        
+        // Priority 1: Check for internal link keyword
+        const topicTitle = keywordMap.get(lowerPart);
+        if (topicTitle && searchTerm.toLowerCase() !== topicTitle.toLowerCase()) {
+            return (
+                <button
+                    key={`${part}-${index}`}
+                    onClick={() => handleSearch(topicTitle)}
+                    className="text-accent hover:underline font-medium bg-transparent border-none p-0 cursor-pointer"
+                >
+                    {part}
+                </button>
+            );
+        }
+
+        // Priority 2: Check for technical term tooltip
+        const definition = techTermsMap.get(lowerPart);
+        if (definition) {
+             return <Tooltip key={`${part}-${index}`} content={definition}>{part}</Tooltip>;
+        }
+
+        return part; // Return plain text if no match
+    });
   };
 
   return (
@@ -96,7 +159,7 @@ const KnowledgeBasePage: React.FC = () => {
           <p className="text-light-muted dark:text-dark-muted mb-6 max-w-3xl">
               Browse common issues or search for a specific topic to get a detailed, AI-generated article grounded in up-to-date web results.
           </p>
-          <form onSubmit={handleSearch} className="flex gap-2">
+          <form onSubmit={handleSearchFormSubmit} className="flex gap-2">
               <input
                   type="text"
                   value={searchTerm}
@@ -120,7 +183,7 @@ const KnowledgeBasePage: React.FC = () => {
                   Back to Common Issues
               </Button>
               <div className="bg-light-surface dark:bg-dark-surface p-4 sm:p-6 rounded-lg border border-light-border dark:border-dark-border shadow-lg prose-slate dark:prose-invert max-w-none text-light-text dark:text-dark-text">
-                  <MessageContent text={article.text} />
+                  <MessageContent text={article.text} renderText={renderArticleText} />
                    {article.sources && article.sources.length > 0 && (
                       <div className="mt-8 pt-4 border-t border-light-border dark:border-dark-border">
                           <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-3">Sources</h3>

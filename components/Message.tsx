@@ -1,16 +1,17 @@
 import React from 'react';
-import { Message as MessageType } from '../types';
+import { Message as MessageType, ChartData } from '../types';
 import { SpeakerWaveIcon, StopCircleIcon, LinkIcon } from './icons';
 import { useTTSPlayer } from '../hooks/useTTSPlayer';
 import Button from './Button';
 import Tooltip from './Tooltip';
 import { technicalTerms } from '../data/technicalTerms';
+import DataChart from './DataChart';
 
 const termsKeys = Object.keys(technicalTerms);
 const termsRegex = new RegExp(`\\b(${termsKeys.join('|')})\\b`, 'gi');
 const termsMap = new Map(termsKeys.map(key => [key.toLowerCase(), technicalTerms[key]]));
 
-const applyTooltips = (text: string): React.ReactNode[] => {
+export const applyTooltips = (text: string): React.ReactNode[] => {
     if (!text) return [text];
     const parts = text.split(termsRegex);
     return parts.map((part, index) => {
@@ -36,17 +37,32 @@ const BlinkingCursor = () => (
     <span className="inline-block w-2 h-4 bg-light-muted dark:bg-dark-muted ml-1 animate-pulse align-bottom"></span>
 );
 
-export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
-    // Split by code blocks first to isolate them
+export const MessageContent: React.FC<{ text: string; renderText?: (text: string) => React.ReactNode[] }> = ({ text, renderText = applyTooltips }) => {
+    // Split by any code block to isolate them
     const parts = text.split(/(```[\s\S]*?```)/g).filter(Boolean);
 
     return (
         <div className="text-sm leading-relaxed">
             {parts.map((part, index) => {
+                // Check if it's a chart block
+                if (part.startsWith('```chart')) {
+                    const jsonString = part.slice('```chart'.length, -3).trim();
+                    try {
+                        const chartData: ChartData = JSON.parse(jsonString);
+                        if (chartData && chartData.type && chartData.labels && chartData.datasets) {
+                            return <DataChart key={`chart-${index}`} chartData={chartData} />;
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse chart JSON:", e);
+                        // Fallback to rendering as a normal code block if JSON is invalid
+                    }
+                }
+                
+                // Handle generic code blocks
                 if (part.startsWith('```') && part.endsWith('```')) {
                     const code = part.slice(3, -3).trim();
                     return (
-                        <pre key={index} className="bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text p-3 rounded-md my-2 font-mono text-xs overflow-x-auto">
+                        <pre key={`code-${index}`} className="bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text p-3 rounded-md my-2 font-mono text-xs overflow-x-auto">
                             <code>{code}</code>
                         </pre>
                     );
@@ -57,7 +73,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                     // Handle Headings like **Title:**
                     if (line.match(/^\*\*.*:\*\*$/) || line.match(/^\*\*.*:\*\*/)) {
                         const content = line.replace(/\*\*/g, '');
-                        return <h3 key={`${index}-${lineIndex}`} className="font-semibold mt-3 mb-1.5">{applyTooltips(content)}</h3>;
+                        return <h3 key={`${index}-${lineIndex}`} className="font-semibold mt-3 mb-1.5">{renderText(content)}</h3>;
                     }
 
                     // Handle list items
@@ -69,7 +85,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                                 <span className="mr-2 mt-1 shrink-0">•</span>
                                 <span className="flex-1">
                                     {boldParts.map((p, i) =>
-                                        p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{applyTooltips(p.slice(2, -2))}</strong> : applyTooltips(p)
+                                        p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{renderText(p.slice(2, -2))}</strong> : renderText(p)
                                     )}
                                 </span>
                             </div>
@@ -81,7 +97,7 @@ export const MessageContent: React.FC<{ text: string }> = ({ text }) => {
                     return (
                         <p key={`${index}-${lineIndex}`} className={line.trim() === '' ? 'h-4' : 'my-0.5'}>
                             {boldParts.map((p, i) =>
-                                p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{applyTooltips(p.slice(2, -2))}</strong> : applyTooltips(p)
+                                p.startsWith('**') && p.endsWith('**') ? <strong key={i}>{renderText(p.slice(2, -2))}</strong> : renderText(p)
                             )}
                         </p>
                     );

@@ -13,6 +13,53 @@ export class GeminiServiceError extends Error {
 }
 
 /**
+ * A utility function to retry an async operation with exponential backoff.
+ * @param fn The async function to execute.
+ * @param retries The maximum number of retries.
+ * @param delay The initial delay in milliseconds.
+ * @param backoffFactor The factor by which the delay increases.
+ * @returns The result of the async function.
+ */
+const withRetry = async <T>(
+  fn: () => Promise<T>,
+  retries = 3,
+  delay = 1000,
+  backoffFactor = 2
+): Promise<T> => {
+  let lastError: any;
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      lastError = error;
+      // Check for retryable errors.
+      const errorMessage = (error.message || '').toLowerCase();
+      // Look for status codes or specific text from the Gemini API and fetch errors
+      const isRetryable =
+        errorMessage.includes('503') || // Service Unavailable
+        errorMessage.includes('unavailable') ||
+        errorMessage.includes('overloaded') ||
+        errorMessage.includes('429') || // Too Many Requests
+        errorMessage.includes('busy') ||
+        errorMessage.includes('fetch failed') || // Network errors
+        errorMessage.includes('network');
+
+      if (isRetryable && i < retries - 1) {
+        console.warn(`Attempt ${i + 1} failed with retryable error. Retrying in ${delay}ms...`, error.message);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= backoffFactor;
+      } else {
+        // Not a retryable error, or max retries reached.
+        throw lastError;
+      }
+    }
+  }
+  // This line should not be reachable if retries >= 1, but it satisfies TypeScript.
+  throw lastError;
+};
+
+
+/**
  * Parses known API errors into user-friendly messages.
  * @param error The catched error object.
  * @param context A string identifying the calling function for better logging.
@@ -34,7 +81,7 @@ const handleApiError = (error: unknown, context: string): GeminiServiceError => 
     if (message.includes('safety policies')) {
       return new GeminiServiceError("The request was blocked for safety reasons. Please adjust your input.", error);
     }
-    if (message.includes('500') || message.includes('503') || message.includes('server error')) {
+    if (message.includes('500') || message.includes('503') || message.includes('server error') || message.includes('unavailable')) {
       return new GeminiServiceError("The AI service is temporarily unavailable. Please try again later.", error);
     }
     // Return the original message if it's informative enough
@@ -133,6 +180,44 @@ Your role is to act as a professional RX-8 mechanic with deep expertise in the 1
   - If video/audio is provided, comment on sounds, smoke color, or movement patterns.
   - Always connect observations back to RX-8 specific failure modes.
 
+### Data Visualization
+- When you are presenting structured numerical data (like compression test results, sensor readings over time, or fuel trim values), you MUST format it as a special JSON object within a "chart" code block.
+- This will allow the application to render a visual chart for the user.
+- Use the following JSON structure:
+
+**For Bar Charts (e.g., Compression Test):**
+` + "```chart" + `
+{
+  "type": "bar",
+  "title": "Rotor 1 Compression Results",
+  "unit": "PSI",
+  "labels": ["Face A", "Face B", "Face C"],
+  "datasets": [
+    {
+      "label": "PSI @ 250 RPM",
+      "data": [110, 112, 108]
+    }
+  ]
+}
+` + "```" + `
+
+**For Line Charts (e.g., Sensor Data):**
+` + "```chart" + `
+{
+  "type": "line",
+  "title": "O2 Sensor Voltage",
+  "unit": "V",
+  "labels": ["0s", "1s", "2s", "3s", "4s", "5s"],
+  "datasets": [
+    {
+      "label": "Sensor 1",
+      "data": [0.1, 0.85, 0.2, 0.9, 0.15, 0.8]
+    }
+  ]
+}
+` + "```" + `
+- Ensure the JSON is valid. Do not include any text outside the JSON object within the chart block.
+
 ### Communication Style
 - Be clear, approachable, and professional—like a trusted mechanic explaining to a car owner.
 - Avoid unnecessary jargon; when using technical terms, provide short explanations.
@@ -226,7 +311,11 @@ const getModelAndConfig = (latestMessage: Message, isDeepAnalysis?: boolean, isW
 /**
  * Generates a streaming diagnostic response from the Gemini API.
  */
-export const getDiagnosticResponseStream = (history: Message[], latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean) => {
+// FIX: Refactored from an immediately-invoked function expression (IIFE) to a standard async generator function.
+// This allows for an explicit return type annotation (`AsyncGenerator<GenerateContentResponse>`),
+// which resolves a TypeScript type inference issue where the `stream` variable was incorrectly typed as `unknown`,
+// causing an error on the `for await...of` loop.
+export async function* getDiagnosticResponseStream(history: Message[], latestMessage: Message, isDeepAnalysis?: boolean, isWebSearch?: boolean): AsyncGenerator<GenerateContentResponse> {
     const { modelName, config } = getModelAndConfig(latestMessage, isDeepAnalysis, isWebSearch);
 
     const modelHistory = history.map(msg => ({
@@ -257,17 +346,16 @@ export const getDiagnosticResponseStream = (history: Message[], latestMessage: M
         config,
     };
     
-    return (async function*() {
-        try {
-            const streamPromise = model.generateContentStream(params);
-            const stream = await streamPromise;
-            for await (const chunk of stream) {
-                yield chunk;
-            }
-        } catch (error) {
-            throw handleApiError(error, 'getDiagnosticResponseStream');
+    try {
+        // FIX: Explicitly provide the generic type argument to `withRetry` to fix a type inference issue
+        // where `stream` was being inferred as `unknown`.
+        const stream = await withRetry<AsyncGenerator<GenerateContentResponse>>(() => model.generateContentStream(params));
+        for await (const chunk of stream) {
+            yield chunk;
         }
-    })();
+    } catch (error) {
+        throw handleApiError(error, 'getDiagnosticResponseStream');
+    }
 };
 
 /**
@@ -277,13 +365,13 @@ export const getDiagnosticResponseStream = (history: Message[], latestMessage: M
 export const generateSessionTitle = async (firstUserMessage: string): Promise<string> => {
     try {
         // First attempt to generate a title
-        const result: GenerateContentResponse = await model.generateContent({
+        const result: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: 'gemini-flash-lite-latest',
             contents: [{
                 role: 'user',
                 parts: [{ text: `Generate a concise, 4-5 word session title for this Mazda RX-8 query: "${firstUserMessage}"` }]
             }]
-        });
+        }));
 
         let title = result.text.replace(/["']/g, "").trim();
         const wordCount = title.split(/\s+/).filter(Boolean).length;
@@ -296,13 +384,13 @@ export const generateSessionTitle = async (firstUserMessage: string): Promise<st
         // If the title is not the correct length, make a second attempt to refine it
         console.warn(`Initial title "${title}" has incorrect word count (${wordCount}). Retrying.`);
         
-        const refineResult: GenerateContentResponse = await model.generateContent({
+        const refineResult: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: 'gemini-flash-lite-latest',
             contents: [{
                 role: 'user',
                 parts: [{ text: `The title "${title}" is not the right length. Create a new title that is exactly 4 or 5 words long, summarizing this user's Mazda RX-8 issue: "${firstUserMessage}"` }]
             }]
-        });
+        }));
         
         const refinedTitle = refineResult.text.replace(/["']/g, "").trim();
         
@@ -337,7 +425,7 @@ export const extractConversationContext = async (messages: Message[]): Promise<C
     ${conversation}`;
 
     try {
-        const result: GenerateContentResponse = await model.generateContent({
+        const result: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: 'gemini-flash-lite-latest',
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
@@ -351,7 +439,7 @@ export const extractConversationContext = async (messages: Message[]): Promise<C
                     }
                 }
             }
-        });
+        }));
 
         return JSON.parse(result.text);
 
@@ -383,7 +471,7 @@ export const generateQuickReplies = async (messages: Message[]): Promise<string[
     `;
 
     try {
-        const result: GenerateContentResponse = await model.generateContent({
+        const result: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: 'gemini-flash-lite-latest',
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
@@ -399,7 +487,7 @@ export const generateQuickReplies = async (messages: Message[]): Promise<string[
                     }
                 }
             }
-        });
+        }));
         const parsed = JSON.parse(result.text);
         return parsed.replies || [];
     } catch (error) {
@@ -417,13 +505,13 @@ export const generateKnowledgeArticle = async (topic: string): Promise<ArticleDa
     Structure the response with clear headings using Markdown (e.g., **What is it?**, **Common Symptoms**).`;
     
     try {
-        const result: GenerateContentResponse = await model.generateContent({
+        const result: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: 'gemini-2.5-flash',
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
                 tools: [{ googleSearch: {} }]
             }
-        });
+        }));
 
         const sources: GroundingSource[] = result.candidates?.[0]?.groundingMetadata?.groundingChunks
             ?.map((chunk: any) => ({
@@ -444,7 +532,7 @@ export const generateKnowledgeArticle = async (topic: string): Promise<ArticleDa
  */
 export const generateSpeech = async (textToSpeak: string): Promise<string> => {
     try {
-        const response: GenerateContentResponse = await model.generateContent({
+        const response: GenerateContentResponse = await withRetry(() => model.generateContent({
             model: "gemini-2.5-flash-preview-tts",
             contents: [{ parts: [{ text: textToSpeak }] }],
             config: {
@@ -455,7 +543,7 @@ export const generateSpeech = async (textToSpeak: string): Promise<string> => {
                     },
                 },
             },
-        });
+        }));
         const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         if (!base64Audio) {
             throw new Error("No audio data returned from API.");

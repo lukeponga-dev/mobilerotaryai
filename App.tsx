@@ -6,6 +6,7 @@ import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import DashboardPage from './pages/DashboardPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import LivePage from './pages/LivePage';
+import LiveDashboardPage from './pages/LiveDashboardPage'; // Import the new page
 import AdBanner from './components/AdBanner';
 import Header from './components/Header';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext, generateQuickReplies } from './services/geminiService';
@@ -205,87 +206,210 @@ const App: React.FC = () => {
     // --- PDF Export ---
     const handleExportPDF = async (sessionId: string) => {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4'
+        });
         const session = sessions.find(s => s.id === sessionId);
         if (!session) return;
 
-        doc.setFontSize(18);
-        doc.text("Rotary Mechanic Diagnostic Report", 14, 22);
+        // --- Constants ---
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const margin = 15;
+        const contentW = pageW - (margin * 2);
+        const accentColor = '#6366f1';
+        const textColor = '#0F1724';
+        const mutedColor = '#64748b';
+        const lightGray = '#f1f5f9';
+        const rotorIconBase64 = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxwYXRoIGQ9Ik0gMTkgMTcuNSBBIDE0IDE0IDAgMCAwIDUgMTcuNSBBIDE0IDE0IDAgMCAwIDEyIDUgQSAxNCAxNCAwIDAgMCAxOSAxNy41IFoiIC8+Cjwvc3ZnPg==`;
+        let y = margin + 15; // Initial Y position after header
+
+        // --- Helper Functions ---
+        const addHeader = () => {
+            doc.addImage(rotorIconBase64, 'SVG', margin, 8, 8, 8);
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(textColor);
+            doc.text('Rotary Mechanic', margin + 10, 14);
+            doc.setFont(undefined, 'normal');
+            doc.setTextColor(mutedColor);
+            doc.text('Diagnostic Report', pageW - margin, 14, { align: 'right' });
+            doc.setDrawColor(mutedColor);
+            doc.line(margin, 20, pageW - margin, 20);
+        };
+
+        const addFooter = () => {
+            const pageCount = doc.internal.pages.length;
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setDrawColor(mutedColor);
+                doc.line(margin, pageH - 18, pageW - margin, pageH - 18);
+                doc.setFontSize(9);
+                doc.setTextColor(mutedColor);
+                doc.text(`Report generated on: ${new Date().toLocaleDateString()}`, margin, pageH - 12);
+                doc.text(`Page ${i} of ${pageCount}`, pageW - margin, pageH - 12, { align: 'right' });
+            }
+        };
+        
+        const checkPageBreak = (heightNeeded: number) => {
+            if (y + heightNeeded > pageH - 25) { // 25 for footer margin
+                doc.addPage();
+                addHeader();
+                y = margin + 15;
+            }
+        };
+
+        // --- PDF Content ---
+        addHeader();
+
+        // Title Section
+        doc.setFontSize(22);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(textColor);
+        doc.text(session.name, margin, y);
+        y += 8;
+
         doc.setFontSize(11);
-        doc.text(`Session: ${session.name}`, 14, 30);
-        doc.line(14, 32, 196, 32);
-        let y = 40;
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(mutedColor);
+        doc.text(`Session Date: ${new Date(session.createdAt).toLocaleString()}`, margin, y);
+        y += 12;
+        
+        // Diagnosis Summary
+        if (session.context && (session.context.symptoms.length > 0 || session.context.parts.length > 0 || session.context.actions.length > 0)) {
+            const summaryStartY = y;
+            let summaryContentHeight = 10; // For padding and title
+            const listToText = (items: string[]) => items.map(item => `- ${item}`);
+            
+            const symptoms = listToText(session.context.symptoms);
+            const parts = listToText(session.context.parts);
+            const actions = listToText(session.context.actions);
+
+            const calculateListHeight = (title: string, items: string[]) => {
+                if (items.length === 0) return 0;
+                let height = 8; // title height
+                items.forEach(item => {
+                    height += doc.splitTextToSize(item, contentW - 20).length * 5;
+                });
+                return height;
+            };
+
+            summaryContentHeight += calculateListHeight('Symptoms', symptoms);
+            summaryContentHeight += calculateListHeight('Mentioned Parts', parts);
+            summaryContentHeight += calculateListHeight('Suggested Actions', actions);
+            
+            checkPageBreak(summaryContentHeight + 10);
+            
+            doc.setFillColor(lightGray);
+            doc.setDrawColor(lightGray);
+            doc.roundedRect(margin, summaryStartY, contentW, summaryContentHeight, 3, 3, 'FD');
+
+            y = summaryStartY + 8;
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(textColor);
+            doc.text('Diagnosis Summary', margin + 5, y);
+            y += 8;
+
+            const renderList = (title: string, items: string[]) => {
+                if (items.length === 0) return;
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(mutedColor);
+                doc.text(title, margin + 5, y);
+                y += 5;
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(textColor);
+                items.forEach(item => {
+                    const splitText = doc.splitTextToSize(item, contentW - 20);
+                    checkPageBreak(splitText.length * 5);
+                    doc.text(splitText, margin + 5, y);
+                    y += splitText.length * 5;
+                });
+                y += 4;
+            };
+
+            renderList('Symptoms', symptoms);
+            renderList('Mentioned Parts', parts);
+            renderList('Suggested Actions', actions);
+
+            y = summaryStartY + summaryContentHeight + 10;
+        }
+
+        // Conversation Transcript
+        checkPageBreak(15);
+        doc.setFontSize(16);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(textColor);
+        doc.text('Conversation Transcript', margin, y);
+        y += 10;
 
         for (const message of session.messages) {
-            if (y > 270) {
-                doc.addPage();
-                y = 20;
-            }
+            let textHeight = 0;
+            let imageH = 0;
+            const bubblePadding = 3;
+            const bubbleW = contentW * 0.8;
 
-            doc.setFont(undefined, message.role === 'user' ? 'bold' : 'normal');
-            doc.setTextColor(message.role === 'user' ? '#d97706' : '#333333');
-            const prefix = message.role === 'user' ? 'You:' : 'AI:';
-
-            if (message.text) {
-                const splitText = doc.splitTextToSize(`${prefix} ${message.text}`, 180);
-                const textHeight = splitText.length * 5;
-                if (y + textHeight > 280) {
-                    doc.addPage();
-                    y = 20;
-                }
-                doc.text(splitText, 14, y);
-                y += textHeight;
-            } else {
-                doc.text(prefix, 14, y);
-                y += 5;
-            }
-
-            if (message.text && (message.image || message.video)) {
-                y += 3;
-            }
-
+            const splitText = message.text ? doc.setFontSize(10).splitTextToSize(message.text, bubbleW - (bubblePadding * 2)) : [];
+            textHeight = splitText.length * 4.5;
+            
             if (message.image) {
                 try {
                     const dims = await getImageDimensions(message.image);
-                    const maxWidth = 80;
                     const ratio = dims.width / dims.height;
-                    const width = Math.min(dims.width, maxWidth);
-                    const height = width / ratio;
-
-                    if (y + height > 280) {
-                        doc.addPage();
-                        y = 20;
-                    }
-
-                    doc.addImage(message.image, undefined, 14, y, width, height);
-                    y += height + 5;
+                    const width = Math.min(dims.width, bubbleW - (bubblePadding * 2));
+                    imageH = width / ratio;
                 } catch (e) {
-                    console.error("Could not add image to PDF", e);
-                    if (y > 280) { doc.addPage(); y = 20; }
-                    doc.saveState();
+                    imageH = 10; // Placeholder height for failed image
+                }
+            }
+             if (message.video) {
+                imageH += 10; // Placeholder height for video
+            }
+
+            const totalBubbleHeight = textHeight + imageH + (bubblePadding * 2) + (message.image && message.text ? 3 : 0);
+            checkPageBreak(totalBubbleHeight + 5);
+
+            const isUser = message.role === 'user';
+            const x = isUser ? pageW - margin - bubbleW : margin;
+            
+            // Draw bubble
+            doc.setFillColor(isUser ? accentColor : lightGray);
+            doc.roundedRect(x, y, bubbleW, totalBubbleHeight, 3, 3, 'F');
+            
+            // Draw text
+            if (message.text) {
+                doc.setTextColor(isUser ? '#FFFFFF' : textColor);
+                doc.text(splitText, x + bubblePadding, y + bubblePadding + 4);
+            }
+            
+            let mediaY = y + bubblePadding + (message.text ? textHeight + 3 : 0);
+
+            // Draw Image
+            if (message.image) {
+                try {
+                    doc.addImage(message.image, undefined, x + bubblePadding, mediaY, bubbleW - (bubblePadding*2), imageH);
+                } catch (e) {
                     doc.setFont(undefined, 'italic');
-                    doc.setTextColor('#888888');
-                    doc.text('[Image failed to load]', 14, y);
-                    doc.restoreState();
-                    y += 10;
+                    doc.setTextColor(isUser ? '#FFFFFF' : mutedColor);
+                    doc.text('[Image failed to load]', x + bubblePadding, mediaY + 5);
                 }
             }
-
+            
+            // Draw Video placeholder
             if (message.video) {
-                if (y > 280) {
-                    doc.addPage();
-                    y = 20;
-                }
-                doc.saveState();
                 doc.setFont(undefined, 'italic');
-                doc.setTextColor('#888888');
-                doc.text('[Video Attached - Not viewable in PDF]', 14, y);
-                doc.restoreState();
-                y += 10;
+                doc.setTextColor(isUser ? '#FFFFFF' : mutedColor);
+                doc.text('[Video Attached - Not viewable in PDF]', x + bubblePadding, mediaY + 5);
             }
-
-            y += 10; // Spacing between messages
+            
+            y += totalBubbleHeight + 5;
         }
+
+        // Add footer to all pages at the end
+        addFooter();
         
         doc.save(`Rotary-Mechanic-Report-${session.id}.pdf`);
     };
@@ -316,6 +440,8 @@ const App: React.FC = () => {
                 return { page: <KnowledgeBasePage />, headerText: "Knowledge Base", showExport: false };
             case '#/live':
                 return { page: <LivePage />, headerText: "Live Diagnosis", showExport: false };
+            case '#/live-dashboard':
+                return { page: <LiveDashboardPage />, headerText: "Live Dashboard", showExport: false };
             case '#/privacy':
                 return { page: <PrivacyPolicyPage />, headerText: "Privacy Policy", showExport: false };
             case '#/':

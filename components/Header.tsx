@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DownloadIcon, MenuIcon, RotorIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon, PlusIcon } from './icons';
+import { DownloadIcon, MenuIcon, RotorIcon, Squares2X2Icon, BookmarkSquareIcon, WaveformIcon, ShieldCheckIcon, PlusIcon, BoltIcon } from './icons';
 import Button from './Button';
 
 interface HeaderProps {
@@ -12,6 +12,7 @@ interface HeaderProps {
 
 const NavMenu: React.FC<{onClose: () => void}> = ({ onClose }) => {
     const navItems = [
+        { route: '#/live-dashboard', icon: <BoltIcon className="w-5 h-5" />, label: 'Live Dashboard' },
         { route: '#/knowledge', icon: <BookmarkSquareIcon className="w-5 h-5" />, label: 'Knowledge Base' },
         { route: '#/live', icon: <WaveformIcon className="w-5 h-5" />, label: 'Live Diagnosis' },
         { route: '#/privacy', icon: <ShieldCheckIcon className="w-5 h-5" />, label: 'Privacy Policy' },

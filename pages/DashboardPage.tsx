@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Session } from '../types';
-import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon, WaveformIcon, LightBulbIcon } from '../components/icons';
+import { PlusIcon, BookmarkSquareIcon, InformationCircleIcon, WaveformIcon, LightBulbIcon, BoltIcon } from '../components/icons';
 import WarningLightGuideModal from '../components/WarningLightGuideModal';
 import Button from '../components/Button';
 
@@ -53,6 +53,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onNewSession }) => {
               <div className="flex-grow space-y-3 flex flex-col">
                   <Button onClick={onNewSession} variant="primary" className="w-full gap-3"><PlusIcon className="w-5 h-5" />New Text Diagnosis</Button>
                   <Button onClick={() => window.location.hash = '#/live'} variant="secondary" className="w-full gap-3"><WaveformIcon className="w-5 h-5" />Start Voice Chat</Button>
+                  <Button onClick={() => window.location.hash = '#/live-dashboard'} variant="secondary" className="w-full gap-3"><BoltIcon className="w-5 h-5" />Open Live Dashboard</Button>
               </div>
               <div className="mt-4 border-t border-light-border dark:border-dark-border pt-4">
                   <Button onClick={() => setIsGuideOpen(true)} variant="ghost" className="w-full gap-3 text-danger hover:bg-danger/10 hover:text-danger">

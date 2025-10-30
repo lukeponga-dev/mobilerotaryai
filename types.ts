@@ -38,3 +38,14 @@ export interface LiveTranscript {
     text: string;
     isFinal: boolean;
 }
+
+export interface ChartData {
+  type: 'bar' | 'line';
+  title: string;
+  unit?: string;
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+  }[];
+}
