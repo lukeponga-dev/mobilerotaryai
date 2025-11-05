@@ -49,3 +49,16 @@ export interface ChartData {
     data: number[];
   }[];
 }
+
+// --- Added for Live Dashboard ---
+export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
+
+export interface VehicleData {
+    rpm: number;
+    coolantTemp: number; // in Celsius
+    speed: number; // in km/h
+    throttlePos: number; // in %
+    stft: number; // Short Term Fuel Trim in %
+    voltage: number;
+}
+// --------------------------------

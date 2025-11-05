@@ -156,53 +156,59 @@ const Message: React.FC<MessageProps> = ({ message, isLoading, isLastMessage }) 
     : 'bg-light-panel-muted dark:bg-dark-panel-muted text-light-text dark:text-dark-text rounded-xl rounded-bl-none';
   const showTypingIndicator = !isUser && isLoading && isLastMessage;
 
+  const hasTextualContent = !!message.text || (message.sources && message.sources.length > 0);
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-5 animate-fade-in-up`}>
-      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl shadow-md flex flex-col ${bubbleClasses}`}>
+      <div className={`max-w-[85%] sm:max-w-md md:max-w-xl shadow-md flex flex-col overflow-hidden ${bubbleClasses}`}>
         {message.image && (
-          <img src={message.image} alt="User upload" className={`rounded-lg max-h-64 ${message.text ? 'mb-2' : ''}`} />
+          <img src={message.image} alt="User upload" className="w-full h-auto max-h-72 object-cover" />
         )}
         {message.video && (
-            <video src={message.video} controls className={`rounded-lg max-h-72 w-full ${message.text ? 'mb-2' : ''}`}></video>
+            <video src={message.video} controls className="w-full h-auto max-h-80"></video>
         )}
         
-        <div className="flex items-start justify-between gap-2 px-4 py-3">
-          <div className="flex-1 min-w-0">
-            {showTypingIndicator && !message.text ? (
-                <SkeletonLoader />
-            ) : (
-                <div className="break-words">
-                    <MessageContent text={message.text} />
-                    {showTypingIndicator && message.text.length > 0 && <BlinkingCursor />}
+        {(showTypingIndicator || hasTextualContent) && (
+            <>
+                <div className="flex items-start justify-between gap-2 px-4 py-3">
+                <div className="flex-1 min-w-0">
+                    {showTypingIndicator && !message.text ? (
+                        <SkeletonLoader />
+                    ) : (
+                        <div className="break-words">
+                            <MessageContent text={message.text} />
+                            {showTypingIndicator && message.text.length > 0 && <BlinkingCursor />}
+                        </div>
+                    )}
                 </div>
-            )}
-          </div>
-          {!isUser && message.text && !showTypingIndicator && (
-              <div className="flex-shrink-0 self-center -mr-2">
-                  <TTSButton text={message.text} />
-              </div>
-          )}
-        </div>
-         {!isUser && message.sources && message.sources.length > 0 && !showTypingIndicator && (
-            <div className="px-4 pb-3 pt-2 border-t border-light-border/20 dark:border-dark-border/40">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-light-muted dark:text-dark-muted mb-2">Sources</h4>
-                <ul className="space-y-1.5">
-                    {message.sources.map((source, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                            <LinkIcon className="w-3.5 h-3.5 text-light-muted dark:text-dark-muted mt-0.5 flex-shrink-0" />
-                            <a 
-                                href={source.uri} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-accent hover:underline text-xs truncate"
-                                title={source.title || source.uri}
-                            >
-                                {source.title || source.uri}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                {!isUser && message.text && !showTypingIndicator && (
+                    <div className="flex-shrink-0 self-center -mr-2">
+                        <TTSButton text={message.text} />
+                    </div>
+                )}
+                </div>
+                {!isUser && message.sources && message.sources.length > 0 && !showTypingIndicator && (
+                    <div className="px-4 pb-3 pt-2 border-t border-light-border/20 dark:border-dark-border/40">
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-light-muted dark:text-dark-muted mb-2">Sources</h4>
+                        <ul className="space-y-1.5">
+                            {message.sources.map((source, index) => (
+                                <li key={index} className="flex items-start gap-2">
+                                    <LinkIcon className="w-3.5 h-3.5 text-light-muted dark:text-dark-muted mt-0.5 flex-shrink-0" />
+                                    <a 
+                                        href={source.uri} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-accent hover:underline text-xs truncate"
+                                        title={source.title || source.uri}
+                                    >
+                                        {source.title || source.uri}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </>
         )}
       </div>
     </div>
