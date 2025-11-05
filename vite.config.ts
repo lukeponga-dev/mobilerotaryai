@@ -13,21 +13,10 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
+        // FIX: __dirname is not available in an ES module scope by default.
+        // Replaced with path.resolve('.') which resolves to the current
+        // working directory, which is the project root when running Vite.
         '@': path.resolve('.'),
-      },
-    },
-    server: {
-      allowedHosts: ['aimechanic.netlify.app'],
-      cors: {
-        origin: ['https://aimechanic.netlify.app'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true,
-      },
-      https: false, // Set to true if using local HTTPS with certs
-      headers: {
-        'Access-Control-Allow-Origin': 'https://aimechanic.netlify.app',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
-        'Access-Control-Allow-Credentials': 'true',
       },
     },
   };
