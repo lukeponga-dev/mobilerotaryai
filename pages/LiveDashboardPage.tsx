@@ -11,15 +11,11 @@ const LiveDashboardPage: React.FC = () => {
     useEffect(() => {
         // Ensure disconnection when the component unmounts
         return () => {
-            disconnect();
+            if (status !== 'disconnected') {
+                disconnect();
+            }
         };
-    }, [disconnect]);
-
-    const getCoolantStatusColor = () => {
-        if (data.coolantTemp > 100) return 'text-danger';
-        if (data.coolantTemp > 95) return 'text-warning';
-        return 'text-light-text dark:text-dark-text';
-    };
+    }, [status, disconnect]);
 
     const renderContent = () => {
         if (status === 'disconnected' || status === 'error') {
@@ -56,17 +52,36 @@ const LiveDashboardPage: React.FC = () => {
                 <div className="text-center mb-6">
                     <p className="text-success font-semibold">Connected to: {deviceName}</p>
                 </div>
-                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    <div className="col-span-2 md:col-span-3 lg:col-span-2 row-span-2">
+                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <div className="col-span-2">
                         <Gauge value={data.rpm} label="Engine Speed" unit="RPM" max={9000} redline={8500} />
                     </div>
-                    <div className="col-span-2 md:col-span-1 lg:col-span-2 row-span-2">
-                        <Gauge value={data.speed} label="Speed" unit="km/h" max={240} redline={200} />
+                    <div className="col-span-2">
+                        <Gauge value={data.speed} label="Speed" unit="km/h" max={240} />
                     </div>
-                    <DataBox value={data.coolantTemp} label="Coolant Temp" unit="°C" statusColor={getCoolantStatusColor()} />
+                    
+                    <Gauge 
+                        value={data.coolantTemp} 
+                        label="Coolant Temp" 
+                        unit="°C" 
+                        min={60} 
+                        max={120} 
+                        warning={98} 
+                        redline={105} 
+                    />
+                    <Gauge 
+                        value={data.voltage} 
+                        label="Voltage" 
+                        unit="V" 
+                        min={10} 
+                        max={16} 
+                        lowWarning={13.0}
+                        warning={14.8}
+                    />
+                    
                     <DataBox value={data.throttlePos} label="Throttle" unit="%" />
-                    <DataBox value={data.voltage} label="Voltage" unit="V" />
                     <DataBox value={data.stft} label="STFT" unit="%" />
+                    
                     <div className="col-span-full flex items-center justify-center p-4">
                         <Button onClick={disconnect} variant="destructive" className="w-full max-w-xs gap-2">
                             <XCircleIcon className="w-5 h-5" />
