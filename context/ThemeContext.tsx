@@ -9,6 +9,12 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// PWA theme colors for Android status bar
+const themeColors = {
+  dark: '#0B1220', // dark-surface color
+  light: '#FFFFFF', // light-surface color
+};
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
@@ -25,6 +31,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     root.classList.remove(theme === 'dark' ? 'light' : 'dark');
     root.classList.add(theme);
     localStorage.setItem('rotary_mechanic_theme', theme);
+
+    // Update the theme-color meta tag for PWA/Android consistency
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", themeColors[theme]);
+    }
+    
   }, [theme]);
 
   const toggleTheme = () => {

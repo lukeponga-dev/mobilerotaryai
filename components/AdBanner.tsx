@@ -21,7 +21,7 @@ const AdBanner: React.FC = () => {
 
   return (
     <footer 
-      className="flex-shrink-0 bg-light-surface dark:bg-dark-surface border-t border-light-border dark:border-dark-border flex items-center justify-center"
+      className="flex-shrink-0 bg-light-surface dark:bg-dark-surface border-t border-light-border dark:border-dark-border items-center justify-center hidden md:flex"
       style={{ height: '50px' }} // Standard banner ad height
       role="contentinfo"
       aria-label="Advertisement"

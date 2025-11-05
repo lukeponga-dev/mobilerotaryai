@@ -171,7 +171,7 @@ export const useOBD2 = () => {
     const connect = async () => {
         setError(null);
         if (!navigator.bluetooth) {
-            setError('Web Bluetooth API is not available on this browser. Try Chrome on Desktop or Android.');
+            setError('Web Bluetooth is not available. Please use a compatible browser like Chrome on Android or a desktop computer.');
             setStatus('error');
             return;
         }

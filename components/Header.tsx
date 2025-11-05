@@ -144,10 +144,11 @@ const Header: React.FC<HeaderProps> = ({ sessionName, onExportPDF, onToggleSideb
                 onClick={() => window.location.hash = '#/'}
                 aria-label="Start new diagnosis"
                 title="New Diagnosis"
+                className="hidden md:inline-flex"
             >
                 <PlusIcon className="w-6 h-6" />
             </Button>
-           <div className="relative" ref={menuRef}>
+           <div className="relative hidden md:block" ref={menuRef}>
                 <Button
                     variant="ghost"
                     size="icon"

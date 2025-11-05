@@ -9,6 +9,7 @@ import LivePage from './pages/LivePage';
 import LiveDashboardPage from './pages/LiveDashboardPage'; // Import the new page
 import AdBanner from './components/AdBanner';
 import Header from './components/Header';
+import BottomNavBar from './components/BottomNavBar';
 import { getDiagnosticResponseStream, generateSessionTitle, extractConversationContext, generateQuickReplies } from './services/geminiService';
 
 declare global {
@@ -477,11 +478,12 @@ const App: React.FC = () => {
                     isEditable={!!activeSessionId}
                     onUpdateSessionName={activeSessionId ? (newName) => updateSessionData(activeSessionId, { name: newName }) : undefined}
                 />
-                <main className="flex-1 flex flex-col min-w-0">
+                <main className="flex-1 flex flex-col min-w-0 pb-20 md:pb-0">
                     {page}
                 </main>
                 <AdBanner />
             </div>
+            <BottomNavBar activeRoute={route} onNewSession={handleNewSession} />
         </div>
     );
 };
